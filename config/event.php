@@ -7,15 +7,15 @@
 |
 | Unico punto in cui cambiare nome, date, luogo, contatti e percorsi.
 | I valori marcati "DA CONFERMARE" sono segnaposto: distanze e località
-| vengono dall'edizione 2026, la data 2027 non è ancora ufficiale.
+| vengono dall'edizione 2026.
 |
 */
 
 return [
     'name' => "Val d'Orcia Gravel",
     'edition_year' => 2027,
-    'date_label' => 'Ottobre 2027', // DA CONFERMARE
-    'date_iso' => null,             // es. '2027-10-17T08:00:00+02:00' quando ufficiale
+    'date_label' => '18 ottobre 2027',
+    'date_iso' => '2027-10-18',     // aggiungere l'ora quando c'è, es. '2027-10-18T08:00:00+02:00'
     'location' => "Castiglione d'Orcia",
     'region' => 'Siena, Toscana',
     'email' => 'info@valdorciagravel.it', // DA CONFERMARE

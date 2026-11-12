@@ -165,7 +165,7 @@
                 <div class="faq-accordion">
                     <div class="faq-item">
                         <button class="faq-question" aria-expanded="false"><span>Quando e dove si svolge?</span><span class="faq-icon">+</span></button>
-                        <div class="faq-answer"><p>A {{ config('event.location') }} ({{ config('event.region') }}), {{ config('event.date_label') }}. La data esatta e il programma della giornata verranno pubblicati qui e comunicati a tutti gli iscritti.</p></div>
+                        <div class="faq-answer"><p>Il {{ config('event.date_label') }} a {{ config('event.location') }} ({{ config('event.region') }}). Il programma della giornata verrà pubblicato qui e comunicato a tutti gli iscritti.</p></div>
                     </div>
                     <div class="faq-item">
                         <button class="faq-question" aria-expanded="false"><span>Che bici serve?</span><span class="faq-icon">+</span></button>
