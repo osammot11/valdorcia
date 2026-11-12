@@ -14,8 +14,8 @@
 return [
     'name' => "Val d'Orcia Gravel",
     'edition_year' => 2027,
-    'date_label' => '18 ottobre 2027',
-    'date_iso' => '2027-10-18',     // aggiungere l'ora quando c'è, es. '2027-10-18T08:00:00+02:00'
+    'date_label' => '17 ottobre 2027',
+    'date_iso' => '2027-10-17',     // aggiungere l'ora quando c'è, es. '2027-10-17T08:00:00+02:00'
     'location' => "Castiglione d'Orcia",
     'region' => 'Siena, Toscana',
     'email' => 'info@valdorciagravel.it', // DA CONFERMARE
