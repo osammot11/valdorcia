@@ -288,15 +288,9 @@
         }
 
         function updateTotal() {
-            const basePrice = {{ $currentPrice }};
-            const finalPricePerTicket = basePrice;
-
-            const ticketBlocks = document.querySelectorAll('.ticket-block');
-            const count = ticketBlocks.length;
-
-            const freeTickets = Math.floor(count / 11);
-            const paidTickets = count - freeTickets;
-            const total = paidTickets * finalPricePerTicket;
+            const pricePerTicket = {{ $currentPrice }};
+            const count = document.querySelectorAll('.ticket-block').length;
+            const total = count * pricePerTicket;
 
             const btn = document.getElementById('payment-button');
             btn.innerText = `Procedi al Pagamento - ${total}€`;

@@ -50,27 +50,14 @@ class CheckoutController extends Controller
         $discountAmount = 0;
         $appliedDiscountLabel = null;
 
-        // Prezzo standard per i biglietti paganti
+        // Ogni biglietto paga il prezzo pieno
         $finalPricePerTicket = max(0, $basePrice - $discountAmount);
-
-        // --- LOGICA PROMO GRUPPI (Ogni 11 biglietti, 1 è gratis) ---
-        $totalTickets = count($validatedData['tickets']);
-        $freeTicketsCount = floor($totalTickets / 11);
-        $paidTicketsCount = $totalTickets - $freeTicketsCount;
-
-        // Il totale dell'ordine si calcola ESCLUSIVAMENTE sui biglietti paganti
-        $totalAmount = $paidTicketsCount * $finalPricePerTicket;
+        $totalAmount = count($validatedData['tickets']) * $finalPricePerTicket;
 
         if ($validatedData['payment_method'] === 'stripe' && (blank(config('services.stripe.secret')) || blank(config('services.stripe.key')))) {
             return back()
                 ->withInput()
                 ->withErrors(['payment_method' => 'Stripe non è configurato: controlla STRIPE_SECRET e STRIPE_KEY nel file .env oppure la configurazione Laravel in cache.']);
-        }
-
-        // Aggiungiamo l'etichetta se è scattata la promo
-        if ($freeTicketsCount > 0) {
-            $promoLabel = "PROMO_11_GRATIS";
-            $appliedDiscountLabel = $appliedDiscountLabel ? $appliedDiscountLabel . ' + ' . $promoLabel : $promoLabel;
         }
 
         // 3. Creazione Ordine e Biglietti
@@ -85,14 +72,10 @@ class CheckoutController extends Controller
                 'status' => 'pending',
             ]);
 
-            foreach ($validatedData['tickets'] as $index => $data) {
-                // L'undicesimo biglietto (indice 10, 21, 32...) ha prezzo 0€
-                $isFreeTicket = (($index + 1) % 11 == 0);
-                $ticketPrice = $isFreeTicket ? 0 : $finalPricePerTicket;
-
+            foreach ($validatedData['tickets'] as $data) {
                 $order->tickets()->create(array_merge($data, [
                     'unique_ticket_code' => null,
-                    'price_paid' => $ticketPrice,
+                    'price_paid' => $finalPricePerTicket,
                     'payment_tag' => ucfirst($validatedData['payment_method']),
                     'status' => 'pending',
                 ]));
