@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Val d'Orcia Gravel">
+  <defs><clipPath id="c"><circle cx="32" cy="32" r="30"/></clipPath></defs>
+  <circle cx="32" cy="32" r="30" fill="#efe4cf"/>
+  <g clip-path="url(#c)">
+    <circle cx="44" cy="20" r="6" fill="#c8642d"/>
+    <path d="M0 38 C12 30 22 31 32 36 S52 40 64 33 V64 H0Z" fill="#d6a95c"/>
+    <path d="M0 46 C14 40 28 42 38 47 S56 50 64 45 V64 H0Z" fill="#8c8a4f"/>
+    <path d="M0 55 C16 51 30 52 42 56 S58 58 64 55 V64 H0Z" fill="#3d4630"/>
+    <path d="M22 64 C26 56 34 52 44 48" fill="none" stroke="#efe4cf" stroke-width="2.2" stroke-dasharray="3 2.4" stroke-linecap="round"/>
+    <path d="M17 41 C15 34 15.5 27 17 21 C18.5 27 19 34 17 41Z" fill="#2a3122"/>
+    <rect x="16.4" y="40" width="1.2" height="3" fill="#2a3122"/>
+  </g>
+  <circle cx="32" cy="32" r="30" fill="none" stroke="#2a2620" stroke-width="2.5"/>
+</svg>

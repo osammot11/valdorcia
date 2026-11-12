@@ -1,0 +1,100 @@
+/* Navbar — Val d'Orcia Gravel */
+
+.navbar {
+  position: relative;
+  z-index: 998;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  height: 76px;
+  padding: 0 var(--gutter);
+  background: var(--paper);
+  border-bottom: 1px solid var(--line);
+}
+
+.logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--ink);
+  text-decoration: none;
+}
+.logo img { width: 44px; height: 44px; }
+.logo span {
+  font-size: 21px;
+  font-stretch: 72%;
+  font-weight: 800;
+  letter-spacing: .01em;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.nav-links { display: flex; align-items: center; gap: 28px; }
+.nav-links a {
+  color: var(--ink);
+  font-size: 15px;
+  font-weight: 600;
+  text-decoration: none;
+}
+.nav-links a:hover { color: var(--clay); }
+
+.nav-cta {
+  padding: 11px 20px;
+  background: var(--clay);
+  color: #fff;
+  font-size: 14px;
+  font-stretch: 85%;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+.nav-cta:hover { background: var(--clay-dark); }
+
+.hamburger {
+  display: none;
+  padding: 6px;
+  border: 0;
+  background: none;
+  color: var(--ink);
+  cursor: pointer;
+}
+
+/* Menù laterale (mobile) */
+.side-menu {
+  position: fixed;
+  z-index: 999;
+  top: 0;
+  right: 0;
+  width: 0;
+  height: 100%;
+  overflow-x: hidden;
+  padding-top: 84px;
+  background: var(--cypress-dark);
+  transition: width .3s ease;
+}
+.side-menu a {
+  display: block;
+  padding: 12px 28px;
+  color: var(--paper);
+  font-size: 26px;
+  font-stretch: 72%;
+  font-weight: 800;
+  text-decoration: none;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.side-menu a:hover { color: var(--ochre); }
+.side-menu .closebtn { position: absolute; top: 20px; right: 16px; padding: 6px; }
+
+@media (max-width: 900px) {
+  .nav-links { display: none; }
+  .hamburger { display: inline-flex; }
+  .navbar-actions { display: flex; align-items: center; gap: 8px; }
+}
+
+@media (max-width: 420px) {
+  .logo span { font-size: 18px; }
+  .nav-cta { padding: 9px 14px; font-size: 13px; }
+}
