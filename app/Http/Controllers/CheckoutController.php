@@ -45,14 +45,15 @@ class CheckoutController extends Controller
         ]);
 
         // 2. Calcolo del prezzo
-        // Leggiamo il prezzo dal database. Se non dovesse esistere, usiamo il prezzo di riserva in config/event.php.
-        $basePrice = \App\Models\Setting::where('key', 'ticket_price')->value('value') ?? config('event.default_price');
+        // Ogni percorso ha il suo prezzo, impostato dall'admin (vedi Setting::routePrices()).
+        $routePrices = \App\Models\Setting::routePrices();
         $discountAmount = 0;
         $appliedDiscountLabel = null;
 
-        // Ogni biglietto paga il prezzo pieno
-        $finalPricePerTicket = max(0, $basePrice - $discountAmount);
-        $totalAmount = count($validatedData['tickets']) * $finalPricePerTicket;
+        foreach ($validatedData['tickets'] as $i => $ticket) {
+            $validatedData['tickets'][$i]['price_paid'] = max(0, $routePrices[$ticket['route_choice']] - $discountAmount);
+        }
+        $totalAmount = array_sum(array_column($validatedData['tickets'], 'price_paid'));
 
         if ($validatedData['payment_method'] === 'stripe' && (blank(config('services.stripe.secret')) || blank(config('services.stripe.key')))) {
             return back()
@@ -61,7 +62,7 @@ class CheckoutController extends Controller
         }
 
         // 3. Creazione Ordine e Biglietti
-        $order = DB::transaction(function () use ($request, $validatedData, $appliedDiscountLabel, $totalAmount, $finalPricePerTicket) {
+        $order = DB::transaction(function () use ($request, $validatedData, $appliedDiscountLabel, $totalAmount) {
             $order = Order::create([
                 'group_code' => 'WFU_' . strtoupper(\Illuminate\Support\Str::random(10)),
                 'total_amount' => $totalAmount,
@@ -75,7 +76,6 @@ class CheckoutController extends Controller
             foreach ($validatedData['tickets'] as $data) {
                 $order->tickets()->create(array_merge($data, [
                     'unique_ticket_code' => null,
-                    'price_paid' => $finalPricePerTicket,
                     'payment_tag' => ucfirst($validatedData['payment_method']),
                     'status' => 'pending',
                 ]));

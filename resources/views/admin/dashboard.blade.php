@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin - {{ config('event.name') }}</title>
-    <link rel="stylesheet" href="/css/admin.css?v=2">
+    <link rel="stylesheet" href="/css/admin.css?v=3">
 </head>
 
 <body>
@@ -29,14 +29,23 @@
 
         <div class="grid grid--3" style="gap: 24px;">
             <div class="card">
-                <h3>Prezzo Biglietto Default</h3>
-                <form action="{{ route('admin.update_price') }}" method="POST">
+                <h3>Prezzi dei percorsi</h3>
+                <form action="{{ route('admin.update_price') }}" method="POST" class="price-form">
                     @csrf
-                    <div class="inline-form" style="flex-wrap: nowrap; align-items: center;">
-                        <span class="muted">€</span>
-                        <input type="number" step="0.01" name="ticket_price" value="{{ $currentPrice }}" style="width: 100%;">
-                    </div>
-                    <button type="submit" class="btn btn--block" style="margin-top: 16px;">Aggiorna Prezzo</button>
+                    @foreach (config('event.routes') as $value => $route)
+                        <label class="price-row">
+                            <span>{{ $route['km'] }} km <small class="muted">{{ $route['name'] }}</small></span>
+                            <span class="price-row__input">
+                                <span class="muted">€</span>
+                                <input type="number" step="0.01" min="0" name="prices[{{ $value }}]" value="{{ old('prices.' . $value, number_format($routePrices[$value], 2, '.', '')) }}" required>
+                            </span>
+                        </label>
+                        @error('prices.' . $value)
+                            <p class="small error-text">{{ $message }}</p>
+                        @enderror
+                    @endforeach
+                    <button type="submit" class="btn btn--block" style="margin-top: 16px;">Salva prezzi</button>
+                    <p class="small muted" style="margin-top: 8px;">Valgono per le nuove iscrizioni: chi ha già pagato mantiene il suo importo.</p>
                 </form>
             </div>
 

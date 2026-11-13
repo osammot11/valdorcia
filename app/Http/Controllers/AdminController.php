@@ -38,10 +38,10 @@ class AdminController extends Controller
         }
 
         $activeTickets = $query->orderBy('created_at', 'desc')->get();
-        $currentPrice = \App\Models\Setting::where('key', 'ticket_price')->value('value') ?? config('event.default_price');
+        $routePrices = Setting::routePrices();
         $totalRevenue = $activeTickets->sum('price_paid');
 
-        return view('admin.dashboard', compact('activeTickets', 'currentPrice', 'totalRevenue'));
+        return view('admin.dashboard', compact('activeTickets', 'routePrices', 'totalRevenue'));
     }
 
     // --- 2. Esportazione CSV (Il Super CSV Completo, Filtrato e TUTTO MAIUSCOLO) ---
@@ -167,17 +167,24 @@ class AdminController extends Controller
 
     public function updatePrice(Request $request)
     {
-        $request->validate([
-            'ticket_price' => 'required|numeric|min:0'
-        ]);
+        $routes = array_keys(config('event.routes'));
 
-        // Aggiorna o crea l'impostazione del prezzo nel database
-        Setting::updateOrCreate(
-            ['key' => 'ticket_price'],
-            ['value' => $request->ticket_price]
-        );
+        $rules = [];
+        $labels = [];
+        foreach ($routes as $route) {
+            $rules['prices.' . $route] = 'required|numeric|min:0|max:9999';
+            $labels['prices.' . $route] = 'prezzo ' . config("event.routes.$route.km") . ' km';
+        }
+        $validated = $request->validate($rules, [], $labels);
 
-        return back()->with('success', 'Prezzo base aggiornato con successo!');
+        foreach ($routes as $route) {
+            Setting::updateOrCreate(
+                ['key' => Setting::routePriceKey($route)],
+                ['value' => number_format((float) $validated['prices'][$route], 2, '.', '')]
+            );
+        }
+
+        return back()->with('success', 'Prezzi dei percorsi aggiornati.');
     }
 
     // Mostra la pagina dei biglietti in attesa e il form di upload
@@ -222,7 +229,7 @@ class AdminController extends Controller
         ]);
 
         $count = 0;
-        $currentPrice = \App\Models\Setting::where('key', 'ticket_price')->value('value') ?? config('event.default_price');
+        $routePrices = Setting::routePrices();
 
         // 5. Leggiamo riga per riga (Ora con TUTTE le 18 colonne)
         while (($row = fgetcsv($handle, 1000, $delimiter)) !== false) {
@@ -247,6 +254,8 @@ class AdminController extends Controller
                 }
             }
 
+            $route = trim($row[3]) ?: array_key_first($routePrices);
+
             $order->tickets()->create([
                 // Dati Anagrafici Base
                 'first_name' => trim($row[0]) ?: 'Sconosciuto',
@@ -254,7 +263,7 @@ class AdminController extends Controller
                 'email' => trim($row[2]) ?: 'no-email@test.com',
                 
                 // Scelta percorso
-                'route_choice' => trim($row[3]) ?: array_key_first(config('event.routes')),
+                'route_choice' => $route,
                 'tshirt_size' => trim($row[9]) ?: 'L',
                 
                 // Dati di Nascita e Documenti
@@ -277,7 +286,7 @@ class AdminController extends Controller
                 'celiac' => $isTrue($row[17]),
                 
                 // Dati di Sistema
-                'price_paid' => $currentPrice,
+                'price_paid' => $routePrices[$route] ?? config('event.default_price'),
                 'payment_tag' => 'Importato CSV',
                 'status' => 'in-approvazione', 
             ]);

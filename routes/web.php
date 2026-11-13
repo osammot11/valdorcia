@@ -24,15 +24,10 @@ Route::get('/checkout/cancel/{order}', function($order) {
 Route::get('/ticket/{unique_code}/download', [CheckoutController::class, 'downloadTicket'])->name('ticket.download');
 
 Route::get('/iscrizione', function () {
-    // Recuperiamo il prezzo dal database, con il paracadute a 28€ se non esiste
-    try {
-        $currentPrice = Setting::where('key', 'ticket_price')->value('value') ?? config('event.default_price');
-    } catch (Throwable $e) {
-        $currentPrice = config('event.default_price');
-    }
+    // Prezzo di ogni percorso, impostato dall'admin (con riserva in config/event.php)
+    $routePrices = Setting::routePrices();
 
-    // Passiamo la variabile alla vista welcome
-    return view('welcome', compact('currentPrice'));
+    return view('welcome', compact('routePrices'));
 })->name('iscrizione');
 
 Route::redirect('/ticketing', '/iscrizione', 301);

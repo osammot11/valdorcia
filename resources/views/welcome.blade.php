@@ -61,10 +61,10 @@
 
                         <div class="label-box">
                             <label>Scelta del percorso</label>
-                            <select name="tickets[0][route_choice]" required>
+                            <select name="tickets[0][route_choice]" class="route-select" required onchange="updateTotal()">
                                 <option value="">Scegli il percorso</option>
                                 @foreach (config('event.routes') as $value => $route)
-                                    <option value="{{ $value }}" @selected(request('percorso') == $value)>{{ $route['km'] }} km — {{ $route['name'] }}</option>
+                                    <option value="{{ $value }}" data-price="{{ $routePrices[$value] }}" @selected(request('percorso') == $value)>{{ $route['km'] }} km — {{ $route['name'] }} · {{ number_format($routePrices[$value], 2, ',', '.') }} €</option>
                                 @endforeach
                             </select>
                         </div>
@@ -191,7 +191,7 @@
                   <input type="checkbox" value="1" checked required>Acconsento al trattamento dei miei dati particolari relativi alla salute (es. celiachia), forniti volontariamente, al fine di gestire correttamente le esigenze alimentari durante l’evento, ai sensi dell’art. 9 del Regolamento UE 2016/679 (GDPR).
               </label>
 
-              <button class="btn fullwidth" id="payment-button" type="submit">Procedi al Pagamento - {{ $currentPrice }}€</button>
+              <button class="btn fullwidth" id="payment-button" type="submit">Procedi al pagamento</button>
             </div>
         </form>
     </div>
@@ -287,13 +287,23 @@
             block.querySelector('.country-hidden').value = textInput.value;
         }
 
+        const euro = new Intl.NumberFormat('it-IT', { style: 'currency', currency: 'EUR' });
+
+        // Il totale è la somma dei prezzi dei percorsi scelti (il server lo ricalcola comunque)
         function updateTotal() {
-            const pricePerTicket = {{ $currentPrice }};
-            const count = document.querySelectorAll('.ticket-block').length;
-            const total = count * pricePerTicket;
+            let total = 0;
+            let missing = false;
+            document.querySelectorAll('.route-select').forEach(select => {
+                const option = select.selectedOptions[0];
+                if (option && option.dataset.price) {
+                    total += parseFloat(option.dataset.price);
+                } else {
+                    missing = true;
+                }
+            });
 
             const btn = document.getElementById('payment-button');
-            btn.innerText = `Procedi al Pagamento - ${total}€`;
+            btn.innerText = missing ? 'Procedi al pagamento' : `Procedi al pagamento - ${euro.format(total)}`;
         }
 
         let participantCount = 1;
