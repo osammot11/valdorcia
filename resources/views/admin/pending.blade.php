@@ -11,7 +11,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/controls.css?v=2">
-    <link rel="stylesheet" href="/css/admin.css?v=8">
+    <link rel="stylesheet" href="/css/admin.css?v=9">
 </head>
 <body>
 

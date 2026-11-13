@@ -11,7 +11,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/controls.css?v=2">
-    <link rel="stylesheet" href="/css/admin.css?v=8">
+    <link rel="stylesheet" href="/css/admin.css?v=9">
 </head>
 
 <body>
@@ -34,7 +34,7 @@
             <div class="alert alert--ok">{{ session('success') }}</div>
         @endif
 
-        <div class="grid grid--3" style="gap: 24px;">
+        <div class="grid grid--2" style="gap: 24px;">
             <div class="card">
                 <h3>Posti</h3>
                 <ul class="seats">
@@ -53,29 +53,6 @@
                 <h3>Creazione biglietti manuale</h3>
                 <a href="{{ route('admin.pending') }}" class="btn btn--soft btn--block">Gestione CSV & In Attesa</a>
                 <a href="{{ route('admin.create_ticket_form') }}" class="btn btn--soft-ok btn--block">Crea Biglietto Singolo</a>
-            </div>
-
-            <div class="card toolbar">
-                <form action="{{ route('admin.dashboard') }}" method="GET" class="inline-form">
-                    <div>
-                        <label class="label--small" for="search">Cerca (Nome, Email, Codice)</label>
-                        <input type="text" id="search" name="search" value="{{ request('search') }}" placeholder="Es. Mario o TK_...">
-                    </div>
-                    <div>
-                        <label class="label--small" for="date_from">Da Data</label>
-                        <input type="date" id="date_from" name="date_from" value="{{ request('date_from') }}">
-                    </div>
-                    <div>
-                        <label class="label--small" for="date_to">A Data</label>
-                        <input type="date" id="date_to" name="date_to" value="{{ request('date_to') }}">
-                    </div>
-                    <button type="submit" class="btn btn--dark btn--small">Filtra</button>
-                    <a href="{{ route('admin.dashboard') }}" class="small muted">Resetta</a>
-                </form>
-                <a href="{{ route('admin.export_csv', request()->query()) }}" class="btn btn--ok btn--small">
-                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
-                    Esporta CSV
-                </a>
             </div>
         </div>
 
@@ -135,7 +112,39 @@
         </div>
 
         <div class="card" style="margin-top: 32px;">
-            <h2>Iscritti Trovati ({{ $activeTickets->count() }})</h2>
+            @php $filtering = filled(request('search')) || filled(request('date_from')) || filled(request('date_to')); @endphp
+            <div class="card-head">
+                <h2>Iscritti {{ $filtering ? 'trovati' : '' }} <span class="count">{{ $activeTickets->count() }}</span></h2>
+                <a href="{{ route('admin.export_csv', request()->query()) }}" class="btn btn--ok btn--small">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                    Esporta CSV{{ $filtering ? ' (filtrati)' : '' }}
+                </a>
+            </div>
+
+            <form action="{{ route('admin.dashboard') }}" method="GET" class="filters" role="search">
+                <div class="filters__search">
+                    <label class="label--small" for="search">Cerca</label>
+                    <div class="search-input">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7" stroke-width="2"></circle><path stroke-linecap="round" stroke-width="2" d="M20 20l-3.5-3.5"></path></svg>
+                        <input type="search" id="search" name="search" value="{{ request('search') }}" placeholder="Nome, email o codice biglietto">
+                    </div>
+                </div>
+                <div>
+                    <label class="label--small" for="date_from">Iscritti dal</label>
+                    <input type="date" id="date_from" name="date_from" value="{{ request('date_from') }}">
+                </div>
+                <div>
+                    <label class="label--small" for="date_to">al</label>
+                    <input type="date" id="date_to" name="date_to" value="{{ request('date_to') }}">
+                </div>
+                <div class="filters__actions">
+                    <button type="submit" class="btn btn--dark btn--small">Filtra</button>
+                    @if ($filtering)
+                        <a href="{{ route('admin.dashboard') }}" class="link-reset">Azzera</a>
+                    @endif
+                </div>
+            </form>
+
             <div class="table-scroll">
                 <table>
                     <thead>
