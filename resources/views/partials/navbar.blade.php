@@ -1,10 +1,9 @@
-<link rel="stylesheet" href="/navbar/navbar.css?v=4">
+<link rel="stylesheet" href="/navbar/navbar.css?v=6">
 <script src="/navbar/navbar.js?v=3" defer></script>
 
 <nav class="navbar" aria-label="Principale">
     <a class="logo" href="/" aria-label="{{ config('event.name') }} - Homepage">
-        <img src="/images/valdorcia-gravel/logo.svg" alt="" width="44" height="44">
-        <span>{{ config('event.name') }}</span>
+        <img src="/images/valdorcia-gravel/logo-valdorcia-gravel.png" alt="" width="154" height="148">
     </a>
 
     <div class="nav-links">

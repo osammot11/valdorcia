@@ -5,18 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login Admin - {{ config('event.name') }}</title>
     <meta name="robots" content="noindex, nofollow">
-    <link rel="icon" type="image/svg+xml" href="/images/valdorcia-gravel/logo.svg">
+    <link rel="icon" type="image/png" href="/images/valdorcia-gravel/logo-valdorcia-gravel.png">
+    <link rel="apple-touch-icon" href="/images/valdorcia-gravel/logo-valdorcia-gravel.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/controls.css?v=1">
-    <link rel="stylesheet" href="/css/admin.css?v=5">
+    <link rel="stylesheet" href="/css/admin.css?v=6">
 </head>
 <body class="login">
 
     <div class="card">
         <header>
-            <img src="/images/valdorcia-gravel/logo.svg" alt="{{ config('event.name') }}" width="64" height="64">
+            <img src="/images/valdorcia-gravel/logo-valdorcia-gravel.png" alt="{{ config('event.name') }}" width="154" height="148">
             <h1>Area riservata</h1>
             <p class="muted">Inserisci le tue credenziali per accedere</p>
         </header>

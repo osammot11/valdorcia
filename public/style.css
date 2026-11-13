@@ -407,8 +407,8 @@ section { padding: clamp(64px, 9vw, 120px) var(--gutter); }
 .site-footer a:hover { color: var(--ochre); }
 .site-footer__top { display: grid; grid-template-columns: 1.4fr repeat(3, 1fr); gap: 32px; max-width: var(--max); margin: 0 auto; }
 .site-footer__brand { display: flex; gap: 16px; align-items: center; }
-.site-footer__brand img { width: 56px; height: 56px; }
-.site-footer__brand strong { display: block; font-size: 24px; font-stretch: 72%; font-weight: 800; text-transform: uppercase; line-height: 1; }
+.site-footer__brand { flex-direction: column; align-items: flex-start; }
+.site-footer__brand img { width: auto; height: 88px; }
 .site-footer__brand span { display: block; margin-top: 6px; font-size: 14px; opacity: .7; }
 .site-footer nav { display: flex; flex-direction: column; gap: 10px; font-size: 16px; }
 .site-footer__bottom {

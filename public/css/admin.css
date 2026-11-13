@@ -322,7 +322,7 @@ tbody tr:hover { background: #fff; }
 }
 .login .card { width: 100%; max-width: 420px; padding: 36px 32px; border-top: 4px solid var(--clay); }
 .login header { margin-bottom: 28px; text-align: center; }
-.login header img { width: 64px; height: 64px; margin: 0 auto 16px; }
+.login header img { width: auto; height: 80px; margin: 0 auto 20px; }
 .login h1 { font-size: 36px; }
 .login header p { margin-top: 8px; }
 .login .btn { margin-top: 24px; }

@@ -1,9 +1,8 @@
 <footer class="site-footer">
     <div class="site-footer__top">
         <div class="site-footer__brand">
-            <img src="/images/valdorcia-gravel/logo.svg" alt="" width="56" height="56" loading="lazy">
+            <img src="/images/valdorcia-gravel/logo-valdorcia-gravel.png" alt="{{ config('event.name') }}" width="154" height="148" loading="lazy">
             <div>
-                <strong>{{ config('event.name') }}</strong>
                 <span>{{ config('event.location') }} · {{ config('event.date_label') }}</span>
             </div>
         </div>
