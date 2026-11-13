@@ -282,12 +282,23 @@ tbody tr:hover { background: #fff; }
 .card h3 { margin-bottom: 16px; font-size: 22px; }
 .card .btn + .btn { margin-top: 8px; }
 
-/* Prezzi dei percorsi */
-.price-form { display: grid; gap: 10px; }
-.price-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin: 0; font-weight: 700; }
-.price-row small { margin-left: 4px; font-weight: 400; }
-.price-row__input { display: flex; align-items: center; gap: 8px; }
-.price-row__input input { width: 104px; text-align: right; font-variant-numeric: tabular-nums; }
+/* Posti per percorso */
+.seats { margin: 0; padding: 0; list-style: none; }
+.seats li { display: flex; justify-content: space-between; gap: 12px; padding: 8px 0; border-bottom: 1px solid var(--line); font-weight: 600; }
+.seats small { font-weight: 400; }
+.seats strong { font-variant-numeric: tabular-nums; }
+.seats__total { border-bottom: 0 !important; font-weight: 800 !important; }
+
+/* Scaglioni di prezzo */
+.tiers td { padding: 6px; vertical-align: middle; }
+.tiers input:not([type="checkbox"]) { min-height: 42px; padding: 8px 10px; font-size: 15px; }
+.tiers input[type="date"] { min-width: 150px; }
+.tiers td:first-child input { min-width: 170px; }
+.tiers td:nth-child(4) input { min-width: 130px; }
+.tiers .price-input { width: 96px; text-align: right; font-variant-numeric: tabular-nums; }
+.tiers input[type="checkbox"] { margin: 0; }
+.tiers__current td { background: var(--clay-soft); }
+.tiers__new td { background: #fff; }
 .error-text { margin: -4px 0 0; color: var(--danger); }
 
 /* --- Biglietti in attesa ------------------------------------------------- */

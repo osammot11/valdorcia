@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CheckoutController;
-use App\Models\Setting;
+use App\Services\Registration;
 use App\Http\Controllers\PageController;
 
 // Rotta per inviare i dati del modulo (POST)
@@ -24,11 +24,22 @@ Route::get('/checkout/cancel/{order}', function($order) {
 Route::get('/ticket/{unique_code}/download', [CheckoutController::class, 'downloadTicket'])->name('ticket.download');
 
 Route::get('/iscrizione', function () {
-    // Prezzo di ogni percorso, impostato dall'admin (con riserva in config/event.php)
-    $routePrices = Setting::routePrices();
-
-    return view('welcome', compact('routePrices'));
+    // Scaglione di prezzo valido oggi e posti rimasti (vedi App\Services\Registration)
+    return view('welcome', [
+        'publicTier' => Registration::publicTier(),
+        'reservedTier' => Registration::reservedTier(),
+        'nextTier' => Registration::nextPublicTier(),
+        'remaining' => Registration::remainingByRoute(),
+    ]);
 })->name('iscrizione');
+
+// Verifica del codice ex iscritti prima dell'invio, per non far perdere i dati del modulo
+Route::post('/iscrizione/codice', function (\Illuminate\Http\Request $request) {
+    $reserved = Registration::reservedTier();
+    $valid = $reserved && strcasecmp(trim((string) $request->input('code')), $reserved->access_code) === 0;
+
+    return response()->json(['valid' => $valid, 'required' => $reserved && ! Registration::publicTier()]);
+})->middleware('throttle:10,1')->name('iscrizione.codice');
 
 Route::redirect('/ticketing', '/iscrizione', 301);
 Route::redirect('/ticketing/index.php', '/iscrizione', 301);
@@ -67,8 +78,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/admin/ticket/{id}/edit', [AdminController::class, 'editTicket'])->name('admin.edit_ticket');
     Route::post('/admin/ticket/{id}/update', [AdminController::class, 'updateTicketData'])->name('admin.update_ticket');
     Route::get('/admin/ticket/{id}/pdf', [AdminController::class, 'downloadPdf'])->name('admin.download_pdf');
+    Route::get('/admin/ticket/{id}/certificato', [AdminController::class, 'downloadCertificate'])->name('admin.download_certificate');
 });
 
 Route::get('/', [PageController::class, 'show'])->name('home');
 Route::get('/{slug}', [PageController::class, 'show'])
-    ->where('slug', 'come-arrivare|contattaci|contatti|cookie-policy|gallery|orario|partnership|percorsi|privacy-policy|regolamento|ricettivita|styleguide|termini-condizioni|come-arrivare\.php|contattaci\.php|contatti\.php|cookie-policy\.php|gallery\.php|orario\.php|partnership\.php|percorsi\.php|privacy-policy\.php|regolamento\.php|ricettivita\.php|styleguide\.php|termini-condizioni\.php');
+    ->where('slug', 'programma|chi-siamo|faq|come-arrivare|contattaci|contatti|cookie-policy|gallery|orario|partnership|percorsi|privacy-policy|regolamento|ricettivita|styleguide|termini-condizioni|come-arrivare\.php|contattaci\.php|contatti\.php|cookie-policy\.php|gallery\.php|orario\.php|partnership\.php|percorsi\.php|privacy-policy\.php|regolamento\.php|ricettivita\.php|styleguide\.php|termini-condizioni\.php');

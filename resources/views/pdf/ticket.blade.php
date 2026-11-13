@@ -1,6 +1,10 @@
 @php
     $route = config('event.routes')[$ticket->route_choice] ?? null;
-    $routeLabel = $route ? $route['km'] . ' km — ' . $route['name'] : $ticket->route_choice;
+    $routeLabel = $route ? $route['name'] . ' — ' . $route['km'] . ' km, ' . $route['elevation'] . ' m D+' : $ticket->route_choice;
+    $startLabel = $route ? ($ticket->route_choice === 'luculliano'
+        ? config('event.saturday_label') . ' ore 12:00, ' . config('event.start_place')
+        : config('event.sunday_label') . ' ore ' . $route['start'] . ', ' . config('event.start_place')) : null;
+    $membershipLabel = $ticket->day_card ? 'Tessera giornaliera (inclusa)' : trim(($ticket->membership ?? '—') . ' ' . ($ticket->membership_number ?? ''));
 @endphp
 <!DOCTYPE html>
 <html lang="it">
@@ -36,9 +40,9 @@
             <table>
                 <tr><td class="label">Partecipante</td><td class="value">{{ $ticket->first_name }} {{ $ticket->last_name }}</td></tr>
                 <tr><td class="label">Percorso</td><td class="value">{{ $routeLabel }}</td></tr>
-                <tr><td class="label">Taglia maglia</td><td class="value">{{ $ticket->tshirt_size }}</td></tr>
-                <tr><td class="label">Pasto per celiaci</td><td class="value">{{ $ticket->celiac ? 'Sì' : 'No' }}</td></tr>
-                <tr><td class="label">Navetta</td><td class="value">{{ $ticket->shuttle_needed ? 'Sì' : 'No' }}</td></tr>
+                @if ($startLabel)<tr><td class="label">Partenza</td><td class="value">{{ $startLabel }}</td></tr>@endif
+                <tr><td class="label">Tessera</td><td class="value">{{ $membershipLabel }}</td></tr>
+                <tr><td class="label">Senza glutine</td><td class="value">{{ $ticket->celiac ? 'Sì' : 'No' }}</td></tr>
                 <tr><td class="label">Importo pagato</td><td class="value">{{ number_format((float) $ticket->price_paid, 2, ',', '.') }} €</td></tr>
             </table>
 
@@ -47,7 +51,7 @@
                 <div class="value">{{ $ticket->unique_ticket_code }}</div>
             </div>
 
-            <p class="note">Il biglietto è nominativo: presentalo alla partenza, stampato o in PDF sul telefono. Vale anche come ricevuta del pagamento elettronico dell'importo indicato. Per una fattura nominativa scrivi a {{ config('event.email') }} indicando nell'oggetto il codice biglietto.</p>
+            <p class="note">Il biglietto è nominativo e non cedibile: presentalo al ritiro del pacco gara, stampato o in PDF sul telefono. Ricorda casco omologato, kit per le forature, pompa e borraccia{{ $ticket->route_choice === 'luculliano' ? ', luci anteriori e posteriori' : '' }}. Vale anche come ricevuta del pagamento elettronico dell'importo indicato. Per una fattura nominativa scrivi a {{ config('event.email') }} indicando nell'oggetto il codice biglietto.</p>
         </div>
     </div>
 </body>

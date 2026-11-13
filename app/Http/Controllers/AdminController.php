@@ -3,7 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Ticket;
-use App\Models\Setting;
+use App\Models\PriceTier;
+use App\Services\Registration;
 use Illuminate\Http\Request;
 use App\Models\Order;
 use Illuminate\Support\Str;
@@ -38,10 +39,13 @@ class AdminController extends Controller
         }
 
         $activeTickets = $query->orderBy('created_at', 'desc')->get();
-        $routePrices = Setting::routePrices();
         $totalRevenue = $activeTickets->sum('price_paid');
+        $tiers = PriceTier::orderBy('starts_on')->get();
+        $taken = Registration::takenByRoute();
+        $remaining = Registration::remainingByRoute();
+        $currentTier = Registration::publicTier() ?? Registration::reservedTier();
 
-        return view('admin.dashboard', compact('activeTickets', 'routePrices', 'totalRevenue'));
+        return view('admin.dashboard', compact('activeTickets', 'totalRevenue', 'tiers', 'taken', 'remaining', 'currentTier'));
     }
 
     // --- 2. Esportazione CSV (Il Super CSV Completo, Filtrato e TUTTO MAIUSCOLO) ---
@@ -80,8 +84,8 @@ class AdminController extends Controller
                 'CODICE BIGLIETTO', 'GRUPPO ORDINE', 'NOME', 'COGNOME', 'EMAIL', 'TELEFONO', 
                 'DATA NASCITA', 'LUOGO NASCITA', 'NAZIONALITA', 'CODICE FISCALE', 
                 'INDIRIZZO', 'CITTA', 'CAP', 'PROVINCIA', 'REGIONE', 'PAESE', 
-                'PERCORSO', 'TAGLIA', 'NAVETTA', 'CELIACO', 
-                'ASSOCIAZIONE SPORTIVA', 'NOME ASSOCIAZIONE', 'CONVENZIONE',
+                'PERCORSO', 'TESSERA', 'NUMERO TESSERA', 'TESSERA GIORNALIERA', 'CERTIFICATO MEDICO', 'CELIACO',
+                'ASSOCIAZIONE SPORTIVA', 'NOME ASSOCIAZIONE', 'SCAGLIONE',
                 'METODO PAGAMENTO', 'IMPORTO PAGATO', 'TAG 1', 'TAG 2', 
                 'DATA ISCRIZIONE', 'ORA ISCRIZIONE'
             ], ';');
@@ -109,9 +113,11 @@ class AdminController extends Controller
                     $ticket->province,
                     $ticket->region,
                     $ticket->country,
-                    $ticket->route_choice,
-                    $ticket->tshirt_size,
-                    $ticket->shuttle_needed ? 'SI' : 'NO',
+                    config("event.routes.{$ticket->route_choice}.name", $ticket->route_choice),
+                    $ticket->membership ?? '-',
+                    $ticket->membership_number ?? '-',
+                    $ticket->day_card ? 'SI' : 'NO',
+                    $ticket->medical_certificate_path ? 'CARICATO' : 'MANCANTE',
                     $ticket->celiac ? 'SI' : 'NO',
                     $isAssoc,
                     $assocName,
@@ -149,11 +155,53 @@ class AdminController extends Controller
     public function updateTicketData(Request $request, $id)
     {
         $ticket = \App\Models\Ticket::findOrFail($id);
-        
-        // Aggiorniamo i dati modificabili (puoi aggiungere regole di validazione se vuoi)
-        $ticket->update($request->all());
+
+        $validated = $request->validate([
+            'tag_1' => 'nullable|string|max:255',
+            'tag_2' => 'nullable|string|max:255',
+            'first_name' => 'required|string|max:255',
+            'last_name' => 'required|string|max:255',
+            'email' => 'required|email',
+            'phone' => 'required|string|max:20',
+            'codice_fiscale' => 'nullable|string|max:16',
+            'route_choice' => ['required', \Illuminate\Validation\Rule::in(array_keys(config('event.routes')))],
+            'membership' => ['required', \Illuminate\Validation\Rule::in(array_merge(config('event.memberships'), ['giornaliera']))],
+            'membership_number' => 'nullable|string|max:50',
+            'medical_certificate' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:5120',
+            'residence_address' => 'required|string|max:255',
+            'city' => 'required|string|max:255',
+            'zip_code' => 'required|string|max:20',
+        ]);
+
+        $validated['day_card'] = $validated['membership'] === 'giornaliera';
+        if ($validated['day_card']) {
+            $validated['membership'] = null;
+            $validated['membership_number'] = null;
+        }
+
+        unset($validated['medical_certificate']);
+        if ($request->hasFile('medical_certificate')) {
+            $validated['medical_certificate_path'] = $request->file('medical_certificate')
+                ->store('certificates/' . ($ticket->order->group_code ?? 'manuali'), 'local');
+        }
+
+        $ticket->update($validated);
 
         return redirect()->route('admin.dashboard')->with('success', 'Dati di ' . $ticket->first_name . ' aggiornati con successo!');
+    }
+
+    // Certificato medico caricato dal partecipante (solo admin)
+    public function downloadCertificate($id)
+    {
+        $ticket = \App\Models\Ticket::findOrFail($id);
+        abort_unless($ticket->medical_certificate_path && \Illuminate\Support\Facades\Storage::disk('local')->exists($ticket->medical_certificate_path), 404);
+
+        $extension = pathinfo($ticket->medical_certificate_path, PATHINFO_EXTENSION);
+
+        return \Illuminate\Support\Facades\Storage::disk('local')->download(
+            $ticket->medical_certificate_path,
+            'Certificato_' . \Illuminate\Support\Str::slug($ticket->last_name . ' ' . $ticket->first_name, '_') . '.' . $extension
+        );
     }
 
     // --- 4. Download PDF Admin ---
@@ -165,26 +213,59 @@ class AdminController extends Controller
         return $pdf->download('Biglietto_' . $ticket->unique_ticket_code . '.pdf');
     }
 
+    // Salva gli scaglioni di prezzo (righe esistenti, nuove e da eliminare)
     public function updatePrice(Request $request)
     {
-        $routes = array_keys(config('event.routes'));
+        $routes = config('event.routes');
 
-        $rules = [];
-        $labels = [];
-        foreach ($routes as $route) {
-            $rules['prices.' . $route] = 'required|numeric|min:0|max:9999';
-            $labels['prices.' . $route] = 'prezzo ' . config("event.routes.$route.km") . ' km';
+        // Le righe nuove lasciate vuote non vanno validate
+        $request->merge(['tiers' => array_values(array_filter(
+            $request->input('tiers', []),
+            fn ($row) => filled($row['id'] ?? null) || filled($row['name'] ?? null)
+        ))]);
+
+        $rules = [
+            'tiers' => 'array',
+            'tiers.*.id' => 'nullable|integer|exists:price_tiers,id',
+            'tiers.*.delete' => 'nullable|boolean',
+            'tiers.*.name' => 'exclude_if:tiers.*.delete,1|required|string|max:100',
+            'tiers.*.starts_on' => 'exclude_if:tiers.*.delete,1|required|date',
+            'tiers.*.ends_on' => 'exclude_if:tiers.*.delete,1|required|date|after_or_equal:tiers.*.starts_on',
+            'tiers.*.access_code' => 'exclude_if:tiers.*.delete,1|nullable|string|max:50|alpha_dash',
+        ];
+        foreach (array_keys($routes) as $route) {
+            $rules["tiers.*.prices.$route"] = 'exclude_if:tiers.*.delete,1|nullable|numeric|min:0|max:9999';
         }
-        $validated = $request->validate($rules, [], $labels);
 
-        foreach ($routes as $route) {
-            Setting::updateOrCreate(
-                ['key' => Setting::routePriceKey($route)],
-                ['value' => number_format((float) $validated['prices'][$route], 2, '.', '')]
-            );
+        $validated = $request->validate($rules, [
+            'tiers.*.ends_on.after_or_equal' => 'In ogni scaglione la data di fine deve venire dopo quella di inizio.',
+            'tiers.*.access_code.alpha_dash' => 'Il codice può contenere solo lettere, numeri e trattini.',
+        ]);
+
+        foreach ($validated['tiers'] ?? [] as $row) {
+            $tier = filled($row['id'] ?? null) ? PriceTier::find($row['id']) : null;
+
+            if (! empty($row['delete'])) {
+                $tier?->delete();
+                continue;
+            }
+
+            $prices = [];
+            foreach (array_keys($routes) as $route) {
+                $value = $row['prices'][$route] ?? null;
+                $prices[$route] = $value === null || $value === '' ? null : round((float) $value, 2);
+            }
+
+            ($tier ?? new PriceTier())->fill([
+                'name' => $row['name'],
+                'starts_on' => $row['starts_on'],
+                'ends_on' => $row['ends_on'],
+                'access_code' => filled($row['access_code'] ?? null) ? strtoupper($row['access_code']) : null,
+                'prices' => $prices,
+            ])->save();
         }
 
-        return back()->with('success', 'Prezzi dei percorsi aggiornati.');
+        return back()->with('success', 'Scaglioni di prezzo aggiornati.');
     }
 
     // Mostra la pagina dei biglietti in attesa e il form di upload
@@ -229,7 +310,8 @@ class AdminController extends Controller
         ]);
 
         $count = 0;
-        $routePrices = Setting::routePrices();
+        // Prezzo dello scaglione pubblico di oggi (0 se le iscrizioni online sono chiuse)
+        $tier = Registration::publicTier();
 
         // 5. Leggiamo riga per riga (Ora con TUTTE le 18 colonne)
         while (($row = fgetcsv($handle, 1000, $delimiter)) !== false) {
@@ -254,7 +336,7 @@ class AdminController extends Controller
                 }
             }
 
-            $route = trim($row[3]) ?: array_key_first($routePrices);
+            $route = Registration::routeFromLabel($row[3]) ?? array_key_first(config('event.routes'));
 
             $order->tickets()->create([
                 // Dati Anagrafici Base
@@ -264,7 +346,7 @@ class AdminController extends Controller
                 
                 // Scelta percorso
                 'route_choice' => $route,
-                'tshirt_size' => trim($row[9]) ?: 'L',
+                'tshirt_size' => trim($row[9]) ?: null,
                 
                 // Dati di Nascita e Documenti
                 'dob' => $dob ?: '1990-01-01',
@@ -286,7 +368,7 @@ class AdminController extends Controller
                 'celiac' => $isTrue($row[17]),
                 
                 // Dati di Sistema
-                'price_paid' => $routePrices[$route] ?? config('event.default_price'),
+                'price_paid' => $tier?->priceFor($route) ?? 0,
                 'payment_tag' => 'Importato CSV',
                 'status' => 'in-approvazione', 
             ]);
@@ -360,11 +442,19 @@ class AdminController extends Controller
             ],
             'email' => 'required|email',
             'phone' => 'required|string|max:20',
-            'tshirt_size' => 'required|in:XS,S,M,L,XL,XXL',
-            'shuttle_needed' => 'required|boolean',
+            'membership' => ['required', \Illuminate\Validation\Rule::in(array_merge(config('event.memberships'), ['giornaliera']))],
+            'membership_number' => 'exclude_if:membership,giornaliera|nullable|string|max:50',
+            'medical_certificate' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:5120',
             'celiac' => 'required|boolean',
-            'price_paid' => 'required|numeric|min:0', // <-- NUOVO CAMPO IMPORTI
+            'price_paid' => 'required|numeric|min:0',
         ]);
+
+        $validated['day_card'] = $validated['membership'] === 'giornaliera';
+        if ($validated['day_card']) {
+            $validated['membership'] = null;
+            $validated['membership_number'] = null;
+        }
+        unset($validated['medical_certificate']);
 
         // 2. Creiamo un ordine fittizio con l'importo corretto
         $order = Order::create([
@@ -376,6 +466,7 @@ class AdminController extends Controller
 
         // 3. Creiamo il biglietto (Laravel prenderà 'price_paid' direttamente da $validated)
         $ticket = $order->tickets()->create(array_merge($validated, [
+            'medical_certificate_path' => $request->file('medical_certificate')?->store('certificates/' . $order->group_code, 'local'),
             'payment_tag' => 'Contanti / Manuale',
             'status' => 'active', 
             'unique_ticket_code' => 'TK_' . strtoupper(Str::random(8)) 

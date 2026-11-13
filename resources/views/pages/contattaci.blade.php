@@ -6,21 +6,32 @@
             <div class="inner">
                 <span class="kicker">Contatti</span>
                 <h1>Scrivici.</h1>
-                <p class="lead">Per iscrizioni, percorsi, logistica o richieste di fattura rispondiamo via email.</p>
+                <p class="lead">Per domande su iscrizioni, percorsi e logistica lo staff ti risponde via email o telefono.</p>
                 <a href="mailto:{{ config('event.email') }}" class="btn top-margin-xl mobile-fullwidth">{{ config('event.email') }}</a>
             </div>
         </section>
 
         <section>
-            <div class="inner grid-2">
+            <div class="inner grid-3">
                 <div class="card">
-                    <h2>Email</h2>
-                    <p class="top-margin-large"><a class="hyperlink" href="mailto:{{ config('event.email') }}">{{ config('event.email') }}</a>@if(config('event.phone'))<br>{{ config('event.phone') }}@endif</p>
-                    <p class="top-margin-mid">Per le richieste sui biglietti indica il codice che trovi nel PDF.</p>
+                    <h2>Organizzazione</h2>
+                    <p class="top-margin-large"><a class="hyperlink" href="mailto:{{ config('event.email') }}">{{ config('event.email') }}</a><br>
+                    {{ config('event.phone_contact') }}: <a class="hyperlink" href="tel:{{ str_replace(' ', '', config('event.phone')) }}">{{ config('event.phone') }}</a></p>
+                    <p class="top-margin-mid">Per le richieste sui biglietti indica il codice che trovi nel PDF. Reclami: <a class="hyperlink" href="mailto:{{ config('event.claims_email') }}">{{ config('event.claims_email') }}</a>.</p>
                 </div>
                 <div class="card">
-                    <h2>Dove</h2>
-                    <p class="top-margin-large">Partenza e arrivo a {{ config('event.location') }} ({{ config('event.region') }}). Il punto esatto del ritrovo verrà comunicato agli iscritti.</p>
+                    <h2>Dormire e mangiare</h2>
+                    <p class="top-margin-large">Pro Loco di {{ config('event.location') }}: <a class="hyperlink" href="mailto:prolococastiglionedorcia@gmail.com">prolococastiglionedorcia@gmail.com</a></p>
+                    <p class="top-margin-mid">Pro Loco di Radicofani (Luculliano): <a class="hyperlink" href="mailto:prolocoradicofani@gmail.com">prolocoradicofani@gmail.com</a></p>
+                </div>
+                <div class="card">
+                    <h2>Social</h2>
+                    <p class="top-margin-large">
+                        @foreach (config('event.social') as $name => $url)
+                            <a class="hyperlink" href="{{ $url }}" rel="noopener" target="_blank">{{ $name }}</a>@if (! $loop->last)<br>@endif
+                        @endforeach
+                    </p>
+                    <p class="top-margin-mid">{{ config('event.organizer') }}<br>{{ config('event.organizer_address') }}</p>
                 </div>
             </div>
         </section>

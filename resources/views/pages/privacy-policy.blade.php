@@ -13,8 +13,12 @@
         <section>
             <div class="inner grid-2">
             <div class="card">
+                <h2>Titolare</h2>
+                <p class="top-margin-large">{{ config('event.organizer') }}, {{ config('event.organizer_address') }}, P.IVA e C.F. {{ config('event.organizer_vat') }}. Email <a class="hyperlink" href="mailto:{{ config('event.email') }}">{{ config('event.email') }}</a>.</p>
+            </div>
+            <div class="card">
                 <h2>Dati raccolti</h2>
-                <p class="top-margin-large">Raccogliamo dati anagrafici, contatti, informazioni di iscrizione, preferenze operative e dati necessari alla gestione del pagamento e del biglietto.</p>
+                <p class="top-margin-large">Dati anagrafici e di contatto, tessera sportiva, certificato medico, eventuali esigenze alimentari e dati necessari alla gestione del pagamento e del biglietto. Certificato ed esigenze alimentari sono dati relativi alla salute (art. 9 GDPR), trattati solo con il tuo consenso e solo per gestire la partecipazione.</p>
             </div>
             <div class="card">
                 <h2>Finalità</h2>
@@ -22,7 +26,7 @@
             </div>
             <div class="card">
                 <h2>Conservazione</h2>
-                <p class="top-margin-large">I dati sono conservati per il tempo necessario alla gestione dell’evento e agli obblighi fiscali o legali applicabili.</p>
+                <p class="top-margin-large">I dati sono conservati per il tempo necessario alla gestione dell’evento e agli obblighi fiscali o legali applicabili. I certificati medici sono accessibili solo all'organizzazione. Il tracciamento durante l'evento è gestito da ENDU tramite l'app Whip Live.</p>
             </div>
             <div class="card">
                 <h2>Diritti</h2>

@@ -1,4 +1,4 @@
-<link rel="stylesheet" href="/navbar/navbar.css?v=6">
+<link rel="stylesheet" href="/navbar/navbar.css?v=7">
 <script src="/navbar/navbar.js?v=3" defer></script>
 
 <nav class="navbar" aria-label="Principale">
@@ -8,8 +8,10 @@
 
     <div class="nav-links">
         <a href="/#percorsi">Percorsi</a>
-        <a href="/#territorio">Il territorio</a>
+        <a href="/programma">Programma</a>
         <a href="/regolamento">Regolamento</a>
+        <a href="/#faq">FAQ</a>
+        <a href="/chi-siamo">Chi siamo</a>
         <a href="/contatti">Contatti</a>
         <a class="nav-cta" href="/iscrizione">Iscriviti</a>
     </div>
@@ -27,7 +29,9 @@
     </a>
     <a href="/" onclick="closeMenu()">Home</a>
     <a href="/#percorsi" onclick="closeMenu()">Percorsi</a>
-    <a href="/#territorio" onclick="closeMenu()">Il territorio</a>
+    <a href="/programma" onclick="closeMenu()">Programma</a>
+    <a href="/#faq" onclick="closeMenu()">FAQ</a>
+    <a href="/chi-siamo" onclick="closeMenu()">Chi siamo</a>
     <a href="/iscrizione">Iscrizione</a>
     <a href="/regolamento">Regolamento</a>
     <a href="/partnership">Partner</a>

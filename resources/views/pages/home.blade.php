@@ -13,11 +13,13 @@
         '@type' => 'SportsEvent',
         'name' => config('event.name') . ' ' . config('event.edition_year'),
         'sport' => 'Gravel cycling',
-        'startDate' => config('event.date_iso'),
+        'startDate' => config('event.start_date_iso'),
+        'endDate' => config('event.date_iso'),
+        'organizer' => ['@type' => 'SportsOrganization', 'name' => config('event.organizer'), 'email' => config('event.email'), 'telephone' => config('event.phone')],
         'eventAttendanceMode' => 'https://schema.org/OfflineEventAttendanceMode',
         'eventStatus' => 'https://schema.org/EventScheduled',
         'url' => url('/'),
-        'description' => 'Percorsi gravel da ' . min($kmValues) . ' a ' . $maxKm . " km sulle strade bianche della Val d'Orcia.",
+        'description' => "Manifestazione cicloturistica internazionale sulle strade bianche della Val d'Orcia: quattro percorsi da " . min($kmValues) . ' a ' . $maxKm . ' km.',
         'location' => [
             '@type' => 'Place',
             'name' => config('event.location'),
@@ -35,7 +37,7 @@
                 <span>{{ config('event.date_label') }}</span>
             </p>
             <h1 class="hero__title">Val d'Orcia<span>Gravel</span></h1>
-            <p class="lead hero__copy">Strade bianche, crete e filari di cipressi. {{ count($routes) }} percorsi da {{ min($kmValues) }} a {{ $maxKm }} km in uno dei paesaggi più fotografati d'Italia, da pedalare al tuo ritmo.</p>
+            <p class="lead hero__copy">Pedala sulle strade bianche più belle del mondo, patrimonio UNESCO. {{ count($routes) }} percorsi da {{ min($kmValues) }} a {{ $maxKm }} km, per ogni tipo di bici e ogni livello di esperienza.</p>
             <div class="hero__actions">
                 <a href="/iscrizione" class="btn">Iscriviti</a>
                 <a href="#percorsi" class="btn btn-ghost">Scegli il percorso</a>
@@ -61,22 +63,25 @@
 
     <div class="facts" aria-label="L'evento in breve">
         <div><strong>{{ count($routes) }} percorsi</strong><span>{{ implode(' · ', $kmValues) }} km</span></div>
-        <div><strong>Strade bianche</strong><span>Sterrato, crete e asfalto</span></div>
-        <div><strong>{{ config('event.location') }}</strong><span>Partenza e arrivo</span></div>
-        <div><strong>{{ config('event.date_label') }}</strong><span>{{ config('event.region') }}</span></div>
+        <div><strong>Ogni bici</strong><span>Gravel, strada, mtb, e-bike</span></div>
+        <div><strong>{{ config('event.location') }}</strong><span>Partenze da {{ config('event.start_place') }}</span></div>
+        <div><strong>{{ config('event.date_label') }}</strong><span>{{ config('event.edition_number') }} edizione</span></div>
     </div>
 
     <main>
         <section>
             <div class="inner intro">
                 <div>
-                    <span class="kicker">La pedalata</span>
-                    <h2>La valle si capisce solo sullo sterrato.</h2>
+                    <span class="kicker">La manifestazione</span>
+                    <h2>Cicloturismo, non cronometro.</h2>
                 </div>
                 <div class="intro__body">
-                    <p>La Val d'Orcia è patrimonio UNESCO dal 2004. La conosci dalle cartoline: colline morbide, poderi isolati, file di cipressi sul crinale. Quello che le cartoline non mostrano sono le strade bianche che le tengono insieme.</p>
-                    <p>{{ config('event.name') }} le mette in fila in un'unica giornata, con partenza e arrivo a {{ config('event.location') }}. Scegli la distanza che fa per te: si pedala per il paesaggio, i ristori e la compagnia, non per il cronometro.</p>
-                    <p class="counter"><strong>{{ $totalIscritti }}</strong> iscritti finora</p>
+                    <p>{{ config('event.name') }} è una manifestazione cicloturistica internazionale nata nel 2022 e organizzata da {{ config('event.organizer') }}, l'associazione di Castelnuovo dell'Abate che dal 1990 porta le bici fuori strada in Val d'Orcia. Nel 2025 i partecipanti sono stati 693.</p>
+                    <p>Non ci sono tratti cronometrati né chip: si pedala per il paesaggio, i ristori con i prodotti del territorio e la compagnia. Le strade restano aperte al traffico, quindi vale il codice della strada.</p>
+                    <p>La {{ config('event.edition_number') }} edizione si svolge su due giorni a {{ config('event.location') }}: il sabato il ritiro dei pacchi gara e la partenza del Luculliano, la domenica tutti gli altri percorsi.</p>
+                    @if ($totalIscritti > 0)
+                        <p class="counter"><strong>{{ $totalIscritti }}</strong> iscritti finora</p>
+                    @endif
                 </div>
             </div>
         </section>
@@ -86,9 +91,9 @@
                 <div class="routes__head">
                     <div>
                         <span class="kicker">Percorsi</span>
-                        <h2>Quattro distanze, una valle.</h2>
+                        <h2>Quattro percorsi, una valle.</h2>
                     </div>
-                    <p>Dalla mattinata tranquilla all'ultra dall'alba al tramonto. Tutti i tracciati partono e arrivano a {{ config('event.location') }}.</p>
+                    <p>Tracciati disegnati per le gravel ma percorribili anche con mtb ed e-bike. Frugale, Saporito e Goloso partono la domenica da {{ config('event.start_place') }}; il Luculliano è un viaggio di due giorni.</p>
                 </div>
 
                 <div class="route-list">
@@ -97,38 +102,54 @@
                             <p class="route__km">{{ $route['km'] }}<small>km</small></p>
                             <div class="route__info">
                                 <h3>{{ $route['name'] }} <span class="route__level">{{ $route['level'] }}</span></h3>
+                                <p class="route__stats">{{ number_format($route['elevation'], 0, ',', '.') }} m di dislivello · partenza {{ $route['start'] }}@if ($route['limit']) · max {{ $route['limit'] }} partecipanti @endif</p>
                                 <p>{{ $route['text'] }}</p>
                                 <div class="route__bar" style="--len: {{ round($route['km'] / $maxKm, 3) }}" aria-hidden="true"></div>
                             </div>
-                            <a href="/iscrizione?percorso={{ urlencode($value) }}" class="btn btn-ghost">Iscriviti alla {{ $route['km'] }}</a>
+                            <a href="/iscrizione?percorso={{ urlencode($value) }}" class="btn btn-ghost">Iscriviti al {{ $route['short_name'] ?? $route['name'] }}</a>
                         </article>
                     @endforeach
                 </div>
 
-                <p class="routes__note">Tracce GPX, dislivelli e punti ristoro verranno pubblicati prima dell'evento.</p>
+                <p class="routes__note">Frugale, Saporito e Goloso sono segnalati con cartelli gialli e frecce marroni; il Luculliano non è segnalato e si segue la traccia GPX. Le tracce possono cambiare per esigenze organizzative.</p>
             </div>
         </section>
 
         <section id="territorio" class="land">
             <div class="inner">
-                <span class="kicker">Il territorio</span>
-                <h2>Cosa trovi lungo la strada.</h2>
+                <span class="kicker">Cosa comprende l'iscrizione</span>
+                <h2>Pensate tu a pedalare.</h2>
 
                 <div class="land__grid">
                     <div class="land__item">
                         <span class="num">01</span>
-                        <h3>Strade bianche</h3>
-                        <p>Sterrati compatti tra campi di grano e poderi, alternati a tratti d'asfalto senza traffico. Fondo scorrevole con l'asciutto, impegnativo dopo la pioggia.</p>
+                        <h3>Punti ristoro</h3>
+                        <p>Prodotti della tradizione senese e toscana lungo il percorso, più un rinfresco all'arrivo. Saporito ha due ristori, Goloso quattro.</p>
                     </div>
                     <div class="land__item">
                         <span class="num">02</span>
-                        <h3>Borghi</h3>
-                        <p>Pietra, rocche e pievi romaniche: la valle è punteggiata di paesi arroccati che si vedono da chilometri e si guadagnano in salita.</p>
+                        <h3>Assistenza</h3>
+                        <p>Assistenza meccanica lungo il tracciato e assistenza sanitaria con ambulanze. Tutti i partecipanti sono seguiti in tempo reale con l'app Whip Live di ENDU.</p>
                     </div>
                     <div class="land__item">
                         <span class="num">03</span>
-                        <h3>Sapori</h3>
-                        <p>Pecorino, olio, salumi e vino del territorio. I ristori sono parte del viaggio quanto le salite.</p>
+                        <h3>Pacco gara</h3>
+                        <p>Numero da bici, road map con percorsi e ristori, prodotti del territorio e gadget tecnici, più un ricordo consegnato all'arrivo.</p>
+                    </div>
+                    <div class="land__item">
+                        <span class="num">04</span>
+                        <h3>Docce e lavaggio bici</h3>
+                        <p>All'arrivo trovi docce e postazioni per lavare la bicicletta prima di ripartire.</p>
+                    </div>
+                    <div class="land__item">
+                        <span class="num">05</span>
+                        <h3>Green zone</h3>
+                        <p>Zone dedicate ai rifiuti lungo il percorso: l'obiettivo è una manifestazione sempre più a basso impatto sulla valle.</p>
+                    </div>
+                    <div class="land__item">
+                        <span class="num">06</span>
+                        <h3>Luculliano</h3>
+                        <p>Per chi fa il viaggio di due giorni la quota include anche {{ $routes['luculliano']['includes'] }}.</p>
                     </div>
                 </div>
             </div>
@@ -142,21 +163,21 @@
                 <ol class="steps">
                     <li>
                         <h3>Iscriviti online</h3>
-                        <p>Scegli il percorso e paga con carta o PayPal. Puoi iscrivere più persone nello stesso ordine.</p>
+                        <p>Scegli il percorso, indica la tua tessera sportiva (o aggiungi la tessera giornaliera da 10 €) e carica il certificato medico. Paghi con carta o PayPal.</p>
                     </li>
                     <li>
                         <h3>Ricevi il biglietto</h3>
                         <p>Ogni partecipante riceve via email il biglietto nominativo in PDF, con il proprio codice.</p>
                     </li>
                     <li>
-                        <h3>Presentati alla partenza</h3>
-                        <p>Mostra il biglietto, digitale o stampato, al ritiro del pacco gara a {{ config('event.location') }}.</p>
+                        <h3>Ritira il pacco gara</h3>
+                        <p>Alla Pro Loco di {{ config('event.location') }}, il sabato o la domenica mattina prima della partenza: gli orari sono nel <a class="hyperlink" href="/programma">programma</a>.</p>
                     </li>
                 </ol>
             </div>
         </section>
 
-        <section class="faq">
+        <section class="faq" id="faq">
             <div class="inner faq__wrap">
                 <div>
                     <span class="kicker">Domande frequenti</span>
@@ -164,20 +185,40 @@
                 </div>
                 <div class="faq-accordion">
                     <div class="faq-item">
-                        <button class="faq-question" aria-expanded="false"><span>Quando e dove si svolge?</span><span class="faq-icon">+</span></button>
-                        <div class="faq-answer"><p>Il {{ config('event.date_label') }} a {{ config('event.location') }} ({{ config('event.region') }}). Il programma della giornata verrà pubblicato qui e comunicato a tutti gli iscritti.</p></div>
+                        <button class="faq-question" aria-expanded="false"><span>Serve il certificato medico?</span><span class="faq-icon">+</span></button>
+                        <div class="faq-answer"><p>Sì, per tutti, anche per chi ha la tessera. Per Saporito, Goloso e Luculliano serve il certificato di idoneità agonistica per il ciclismo; per il Frugale basta quello non agonistico. Lo carichi direttamente nel modulo di iscrizione.</p></div>
                     </div>
                     <div class="faq-item">
-                        <button class="faq-question" aria-expanded="false"><span>Che bici serve?</span><span class="faq-icon">+</span></button>
-                        <div class="faq-answer"><p>Una gravel è la scelta ideale. Sui percorsi più corti va bene anche una mountain bike o una bici da ciclocross. Consigliamo coperture di almeno 35 mm.</p></div>
+                        <button class="faq-question" aria-expanded="false"><span>Serve una tessera sportiva?</span><span class="faq-icon">+</span></button>
+                        <div class="faq-answer"><p>No. Se non sei tesserato FCI o con un ente convenzionato, nel modulo aggiungi la tessera giornaliera da 10 €, che include la copertura assicurativa per la manifestazione.</p></div>
                     </div>
                     <div class="faq-item">
-                        <button class="faq-question" aria-expanded="false"><span>Quale percorso scelgo?</span><span class="faq-icon">+</span></button>
-                        <div class="faq-answer"><p>Se è la tua prima gravel, parti dalla {{ array_values($routes)[0]['km'] }} km. Le distanze lunghe richiedono allenamento e autonomia: sulla {{ $maxKm }} km si pedala per buona parte della giornata.</p></div>
+                        <button class="faq-question" aria-expanded="false"><span>Ci sono tratti cronometrati o il chip?</span><span class="faq-icon">+</span></button>
+                        <div class="faq-answer"><p>No: tutti i percorsi sono cicloturistici, senza cronometraggio. Il tracciamento con l'app Whip Live di ENDU serve solo per la sicurezza ed è obbligatorio.</p></div>
+                    </div>
+                    <div class="faq-item">
+                        <button class="faq-question" aria-expanded="false"><span>Con che bici posso partecipare?</span><span class="faq-icon">+</span></button>
+                        <div class="faq-answer"><p>Con qualsiasi bici: gravel, strada, mountain bike ed e-bike.</p></div>
+                    </div>
+                    <div class="faq-item">
+                        <button class="faq-question" aria-expanded="false"><span>I percorsi sono segnalati?</span><span class="faq-icon">+</span></button>
+                        <div class="faq-answer"><p>Frugale, Saporito e Goloso sì, con cartelli gialli e frecce marroni e personale ai bivi. Il Luculliano non è segnalato: si segue la traccia GPX fornita a tutti gli iscritti.</p></div>
+                    </div>
+                    <div class="faq-item">
+                        <button class="faq-question" aria-expanded="false"><span>Le strade sono chiuse al traffico?</span><span class="faq-icon">+</span></button>
+                        <div class="faq-answer"><p>No. Essendo una manifestazione cicloturistica le strade restano aperte: si rispetta il codice della strada e si tiene sempre la destra.</p></div>
+                    </div>
+                    <div class="faq-item">
+                        <button class="faq-question" aria-expanded="false"><span>Cosa devo portare?</span><span class="faq-icon">+</span></button>
+                        <div class="faq-answer"><p>Casco rigido omologato (obbligatorio e sempre allacciato), attrezzi per smontare il copertone, camera d'aria di scorta, pompa o bomboletta e borraccia. Per il Luculliano anche luci anteriori e posteriori.</p></div>
+                    </div>
+                    <div class="faq-item">
+                        <button class="faq-question" aria-expanded="false"><span>Posso avere un rimborso?</span><span class="faq-icon">+</span></button>
+                        <div class="faq-answer"><p>La quota non è rimborsabile né cedibile. In caso di infortunio, con un certificato medico inviato entro il 1° ottobre, puoi spostare l'iscrizione all'edizione successiva.</p></div>
                     </div>
                     <div class="faq-item">
                         <button class="faq-question" aria-expanded="false"><span>Posso iscrivere un gruppo o un'associazione?</span><span class="faq-icon">+</span></button>
-                        <div class="faq-answer"><p>Sì. Nel modulo di iscrizione puoi aggiungere più partecipanti nello stesso ordine e indicare il nome dell'associazione sportiva. Ognuno riceverà il proprio biglietto nominativo.</p></div>
+                        <div class="faq-answer"><p>Sì. Nello stesso ordine puoi aggiungere più partecipanti e indicare il nome dell'associazione. Ognuno riceve il proprio biglietto nominativo.</p></div>
                     </div>
                 </div>
             </div>

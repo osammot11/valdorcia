@@ -13,7 +13,7 @@ class PageController extends Controller
         '' => [
             'view' => 'pages.home',
             'title' => "Val d'Orcia Gravel | Strade bianche in Val d'Orcia",
-            'description' => "Val d'Orcia Gravel: quattro percorsi gravel da 39 a 220 km sulle strade bianche intorno a Montalcino.",
+            'description' => "Val d'Orcia Gravel: manifestazione cicloturistica sulle strade bianche della Val d'Orcia, patrimonio UNESCO. Quattro percorsi da 45 a 220 km, il 16-17 ottobre 2027 a Castiglione d'Orcia.",
             'bodyClass' => 'home-page',
         ],
         'contattaci' => [
@@ -44,12 +44,22 @@ class PageController extends Controller
         'regolamento' => [
             'view' => 'pages.regolamento',
             'title' => "Regolamento | Val d'Orcia Gravel",
-            'description' => "Le regole essenziali per partecipare a Val d'Orcia Gravel.",
+            'description' => "Regolamento di Val d'Orcia Gravel: requisiti, certificato medico, tessera, quote, equipaggiamento obbligatorio.",
+        ],
+        'programma' => [
+            'view' => 'pages.programma',
+            'title' => "Programma | Val d'Orcia Gravel",
+            'description' => "Programma di Val d'Orcia Gravel: ritiro pacchi gara, orari di partenza dei percorsi ed eventi collaterali.",
+        ],
+        'chi-siamo' => [
+            'view' => 'pages.chi-siamo',
+            'title' => "Chi siamo | Val d'Orcia Gravel",
+            'description' => "ASD Team Orso on Bike, l'associazione di Montalcino che organizza Val d'Orcia Gravel.",
         ],
         'termini-condizioni' => [
             'view' => 'pages.regolamento',
             'title' => "Regolamento | Val d'Orcia Gravel",
-            'description' => "Le regole essenziali per partecipare a Val d'Orcia Gravel.",
+            'description' => "Regolamento di Val d'Orcia Gravel: requisiti, certificato medico, tessera, quote, equipaggiamento obbligatorio.",
         ],
     ];
 
@@ -57,6 +67,7 @@ class PageController extends Controller
         'come-arrivare',
         'gallery',
         'orario',
+        'faq',
         'percorsi',
         'ricettivita',
         'styleguide',
@@ -80,6 +91,14 @@ class PageController extends Controller
             'canonical' => url($slug === '' ? '/' : '/' . $slug),
             'bodyClass' => $page['bodyClass'] ?? '',
         ];
+
+        if ($page['view'] === 'pages.regolamento') {
+            try {
+                $data['tiers'] = \App\Models\PriceTier::orderBy('starts_on')->get();
+            } catch (Throwable $e) {
+                $data['tiers'] = collect();
+            }
+        }
 
         if ($page['view'] === 'pages.home') {
             try {

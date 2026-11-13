@@ -10,8 +10,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/css/controls.css?v=1">
-    <link rel="stylesheet" href="/css/admin.css?v=6">
+    <link rel="stylesheet" href="/css/controls.css?v=2">
+    <link rel="stylesheet" href="/css/admin.css?v=8">
 </head>
 <body>
 
@@ -35,7 +35,7 @@
         <div class="card card--roomy">
             <p class="intro">Compila tutti i dati dell'iscritto. Per motivi assicurativi è obbligatorio inserire correttamente i dati anagrafici e il codice fiscale. In fondo potrai specificare quanto ha pagato (es. contanti).</p>
 
-            <form action="{{ route('admin.store_ticket') }}" method="POST">
+            <form action="{{ route('admin.store_ticket') }}" method="POST" enctype="multipart/form-data">
                 @csrf
 
                 <h3 class="section-title">Dati Anagrafici e Contatti</h3>
@@ -63,34 +63,35 @@
                     <input type="text" name="country" placeholder="Nazione" value="{{ old('country', 'Italia') }}" required>
                 </div>
 
-                <h3 class="section-title">Opzioni Gara</h3>
-                <div class="grid grid--2">
-                    <select name="route_choice" required>
-                        <option value="">-- Scelta Percorso --</option>
-                        @foreach (config('event.routes') as $value => $route)
-                            <option value="{{ $value }}" @selected(old('route_choice') == $value)>{{ $route['km'] }} km — {{ $route['name'] }}</option>
-                        @endforeach
-                    </select>
+                <h3 class="section-title">Percorso</h3>
+                <select name="route_choice" required>
+                    <option value="">-- Scelta percorso --</option>
+                    @foreach (config('event.routes') as $value => $route)
+                        <option value="{{ $value }}" @selected(old('route_choice') == $value)>{{ $route['name'] }} — {{ $route['km'] }} km</option>
+                    @endforeach
+                </select>
 
-                    <select name="tshirt_size" required>
-                        <option value="">-- Taglia Maglia --</option>
-                        @foreach(['XS', 'S', 'M', 'L', 'XL', 'XXL'] as $size)
-                            <option value="{{ $size }}" {{ old('tshirt_size') == $size ? 'selected' : '' }}>{{ $size }}</option>
+                <h3 class="section-title">Tessera e certificato medico</h3>
+                <div class="grid grid--2">
+                    <select name="membership" required>
+                        <option value="">-- Tessera --</option>
+                        @foreach (config('event.memberships') as $membership)
+                            <option value="{{ $membership }}" @selected(old('membership') == $membership)>{{ $membership }}</option>
                         @endforeach
+                        <option value="giornaliera" @selected(old('membership') == 'giornaliera')>Tessera giornaliera</option>
                     </select>
+                    <input type="text" name="membership_number" placeholder="Numero tessera" value="{{ old('membership_number') }}">
+                </div>
+                <div class="field" style="margin-top: 16px;">
+                    <label class="label--small">Certificato medico (facoltativo, si può caricare dopo)</label>
+                    <input type="file" name="medical_certificate" accept=".pdf,.jpg,.jpeg,.png">
                 </div>
 
                 <div class="checks">
                     <label>
-                        <input type="hidden" name="shuttle_needed" value="0">
-                        <input type="checkbox" name="shuttle_needed" value="1" {{ old('shuttle_needed') ? 'checked' : '' }}>
-                        Necessità di Navetta
-                    </label>
-
-                    <label>
                         <input type="hidden" name="celiac" value="0">
                         <input type="checkbox" name="celiac" value="1" {{ old('celiac') ? 'checked' : '' }}>
-                        Pasto per Celiaci
+                        Alimenti senza glutine ai ristori
                     </label>
                 </div>
 

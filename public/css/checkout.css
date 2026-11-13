@@ -180,3 +180,27 @@ a:focus-visible, button:focus-visible { outline: 3px solid var(--clay); outline-
 label:has(> input[type="checkbox"]) { display: flex; align-items: flex-start; }
 label:has(> input[type="checkbox"]) > input[type="checkbox"] { margin-top: 1px; }
 .ticket-block > div:last-child label:has(> input[type="checkbox"]) { display: inline-flex; }
+
+/* --- Quote del periodo e sezioni del partecipante ------------------------ */
+
+.price-box { display: grid; gap: 12px; }
+.price-list { margin: 0; padding: 0; list-style: none; }
+.price-list li { display: flex; justify-content: space-between; gap: 16px; padding: 8px 0; border-bottom: 1px solid var(--line); }
+.price-list li:last-child { border-bottom: 0; }
+.price-list small { margin-left: 6px; color: var(--ink-soft); }
+.price-list strong { font-variant-numeric: tabular-nums; }
+.small-note { font-size: 14px; color: var(--ink-soft); }
+.label-box .small-note { margin-top: 6px; }
+
+.block-title {
+  margin: 28px 0 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--line);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--clay);
+}
+.ticket-block h3 + .block-title { margin-top: 18px; }
+.field-error { margin-top: 6px; font-size: 14px; font-weight: 600; color: var(--danger); }

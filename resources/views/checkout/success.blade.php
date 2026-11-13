@@ -18,7 +18,7 @@
             <div class="inner">
                 <span class="kicker">Iscrizione confermata</span>
                 <h1>Sei dei nostri.</h1>
-                <p class="lead">Ci vediamo il {{ config('event.date_label') }} a {{ config('event.location') }}. {{ $count > 1 ? 'Qui sotto trovi i biglietti di tutti i partecipanti.' : 'Qui sotto trovi il tuo biglietto.' }}</p>
+                <p class="lead">Ci vediamo a {{ config('event.location') }}, {{ config('event.date_label') }}. {{ $count > 1 ? 'Qui sotto trovi i biglietti di tutti i partecipanti.' : 'Qui sotto trovi il tuo biglietto.' }}</p>
             </div>
         </section>
 
@@ -48,7 +48,7 @@
                             <p class="ticket__km">{{ $route['km'] ?? '—' }}<small>km</small></p>
                             <div class="ticket__info">
                                 <h3>{{ $ticket->first_name }} {{ $ticket->last_name }}</h3>
-                                <p>{{ $route ? $route['name'] : $ticket->route_choice }} · Taglia {{ $ticket->tshirt_size }}</p>
+                                <p>{{ $route ? $route['name'] : $ticket->route_choice }} · {{ $ticket->day_card ? 'Tessera giornaliera' : ($ticket->membership ?? '') }}</p>
                                 <p class="ticket__code mono">{{ $ticket->unique_ticket_code }}</p>
                             </div>
                             <a href="{{ route('ticket.download', $ticket->unique_ticket_code) }}" class="btn">Scarica PDF</a>
@@ -56,7 +56,7 @@
                     @endforeach
                 </div>
 
-                <p class="confirm__note">{{ $count > 1 ? "Abbiamo mandato un'email a ogni partecipante" : "Ti abbiamo mandato un'email" }} con il link a questa pagina: puoi tornarci per scaricare {{ $count > 1 ? 'i biglietti' : 'il biglietto' }} quando vuoi. Alla partenza basta mostrarlo sul telefono, non serve stamparlo.</p>
+                <p class="confirm__note">{{ $count > 1 ? "Abbiamo mandato un'email a ogni partecipante" : "Ti abbiamo mandato un'email" }} con il link a questa pagina: puoi tornarci per scaricare {{ $count > 1 ? 'i biglietti' : 'il biglietto' }} quando vuoi. Al ritiro del pacco gara basta mostrarlo sul telefono, non serve stamparlo.</p>
 
                 <div class="confirm__actions">
                     <a href="/#percorsi" class="btn btn-ghost">Rivedi i percorsi</a>

@@ -28,14 +28,22 @@ class SendTicketEmail implements ShouldQueue
             "order_code" => $this->ticket->order->group_code,
         ]);
 
-        $htmlContent = "
-            <h2>Ciao {$this->ticket->first_name}, iscrizione confermata!</h2>
-            <p>La tua partecipazione a " . config("event.name") . " è ufficiale.</p>
-            <p>Puoi accedere alla tua area riservata per scaricare il tuo biglietto nominale in PDF in qualsiasi momento:</p>
-            <p><a href='{$thankYouLink}' style='padding: 10px 20px; background-color: #a9501f; color: white; text-decoration: none; border-radius: 0; display: inline-block; margin-top: 10px;'>Scarica il tuo Biglietto</a></p>
-            <p>A presto!</p>
+        $route = config("event.routes.{$this->ticket->route_choice}");
+        $name = e($this->ticket->first_name);
+        $routeLine = $route ? e($route['name'] . ' — ' . $route['km'] . ' km') : e($this->ticket->route_choice);
+        $when = e(config('event.date_label') . ', ' . config('event.location'));
+        $lights = $this->ticket->route_choice === 'luculliano' ? ' e luci anteriori e posteriori' : '';
 
-            <p>Se non riesci ad aprire il biglietto, copia e incolla nel browser questo link:</p>
+        $htmlContent = "
+            <h2>Ciao {$name}, iscrizione confermata!</h2>
+            <p>La tua partecipazione a " . e(config("event.name")) . " " . config('event.edition_year') . " è ufficiale.</p>
+            <p><strong>Percorso:</strong> {$routeLine}<br><strong>Quando e dove:</strong> {$when}</p>
+            <p>Puoi scaricare il tuo biglietto nominativo in PDF quando vuoi:</p>
+            <p><a href='{$thankYouLink}' style='padding: 10px 20px; background-color: #a9501f; color: white; text-decoration: none; border-radius: 0; display: inline-block; margin-top: 10px;'>Scarica il tuo biglietto</a></p>
+            <p>Ricorda casco omologato, kit per le forature, pompa e borraccia{$lights}. Il programma completo è su " . e(url('/programma')) . ".</p>
+            <p>A presto in Val d'Orcia!</p>
+
+            <p>Se il pulsante non funziona, copia e incolla nel browser questo link:</p>
 
             <p>{$thankYouLink}</p>
         ";

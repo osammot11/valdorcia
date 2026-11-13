@@ -5,51 +5,98 @@
 | Dati dell'evento
 |--------------------------------------------------------------------------
 |
-| Unico punto in cui cambiare nome, date, luogo, contatti e percorsi.
-| I valori marcati "DA CONFERMARE" sono segnaposto: distanze e località
-| vengono dall'edizione 2026.
+| Unico punto in cui cambiare nomi, date, luoghi, contatti e percorsi.
+| Fonte: sito ufficiale valdorciagravel.it (edizione 2026). Le date 2027
+| sono spostate di un anno sulla stessa formula: DA CONFERMARE con
+| l'organizzazione. I prezzi stanno nel database (Scaglioni nell'admin).
 |
 */
 
 return [
     'name' => "Val d'Orcia Gravel",
     'edition_year' => 2027,
-    'date_label' => '17 ottobre 2027',
-    'date_iso' => '2027-10-17',     // aggiungere l'ora quando c'è, es. '2027-10-17T08:00:00+02:00'
-    'location' => 'Montalcino',
-    'region' => 'Siena, Toscana',
-    'email' => 'info@valdorciagravel.it', // DA CONFERMARE
-    'phone' => null,
-    'organizer' => "Val d'Orcia Gravel", // DA CONFERMARE: ragione sociale / ASD
+    'edition_number' => 'VI',
 
-    // Prezzo usato solo se l'admin non ne ha salvato uno nel database
-    'default_price' => 28.00,
+    // Formula su due giorni: sabato ritiro pacchi e 1ª tappa del Luculliano, domenica tutti gli altri
+    'date_label' => '16-17 ottobre 2027',
+    'date_iso' => '2027-10-17',          // giorno delle partenze principali
+    'start_date_iso' => '2027-10-16',
+    'saturday_label' => 'Sabato 16 ottobre',
+    'sunday_label' => 'Domenica 17 ottobre',
+    'online_closes_label' => '14 ottobre 2027', // nel 2026: tre giorni prima della domenica
+
+    'location' => "Castiglione d'Orcia",
+    'start_place' => "Rocca d'Orcia",    // borgo medievale da cui partono Frugale, Saporito e Goloso
+    'region' => 'Siena, Toscana',
+
+    'email' => 'bike@bikemontalcino.it',
+    'claims_email' => 'info@bikemontalcino.it',
+    'phone' => '+39 347 053 5638',
+    'phone_contact' => 'Mauro',
+
+    'organizer' => 'ASD Team Orso on Bike',
+    'organizer_address' => "Castelnuovo dell'Abate, Montalcino (SI)",
+    'organizer_vat' => '01365130523',
+
+    'social' => [
+        'Instagram' => 'https://instagram.com/valdorciagravel',
+        'Facebook' => 'https://www.facebook.com/valdorciagravel/',
+    ],
+
+    // Posti disponibili
+    'capacity' => 900,
+
+    // Tessera giornaliera per chi non è tesserato a FCI o a un ente convenzionato
+    'day_card_price' => 10.00,
+    'memberships' => ['FCI', 'ACSI', 'US ACLI', 'CSI', 'CSAIN', 'AICS', 'LIBERTAS', 'CSEN', 'UISP', 'OPES (con Bike Card)', 'ASI (con Bike Card)'],
+
+    // Iscrizione il sabato in loco (solo Frugale, Saporito, Goloso)
+    'onsite_price' => 50.00,
 
     // La chiave è il valore salvato in database e validato dai controller.
     'routes' => [
-        'Gravel 39K' => [
-            'km' => 39,
-            'name' => 'Corta',
+        'frugale' => [
+            'name' => 'Frugale',
+            'km' => 45,                   // il sito ufficiale riporta sia 39 sia 45 km: DA CONFERMARE
+            'elevation' => 800,
             'level' => 'Per tutti',
-            'text' => "Il giro più breve tra le crete e i borghi intorno a Montalcino. Adatto a chi si avvicina al gravel.",
+            'certificate' => 'non agonistico',
+            'start' => '9:00',
+            'limit' => null,
+            'text' => "Il percorso breve, adatto a tutti: in una mattinata tocca molti dei luoghi simbolo della Val d'Orcia, tra filari di cipressi e strade bianche, con un ristoro speciale lungo la strada.",
         ],
-        'Gravel 73K' => [
+        'saporito' => [
+            'name' => 'Saporito',
             'km' => 73,
-            'name' => 'Media',
-            'level' => 'Allenati',
-            'text' => 'Una mattinata piena di strade bianche, salite brevi e panorami sulla valle.',
+            'elevation' => 1550,
+            'level' => 'Equilibrato',
+            'certificate' => 'agonistico',
+            'start' => '8:00',
+            'limit' => null,
+            'text' => "Il più equilibrato: impegnativo il giusto, attraversa i paesaggi più famosi della valle con due ristori dai sapori tipici.",
         ],
-        'Gravel 118K' => [
+        'goloso' => [
+            'name' => 'Goloso',
             'km' => 118,
-            'name' => 'Lunga',
-            'level' => 'Esperti',
-            'text' => "Una giornata in sella che attraversa la Val d'Orcia da un capo all'altro.",
+            'elevation' => 2400,
+            'level' => 'Allenati',
+            'certificate' => 'agonistico',
+            'start' => '7:00',
+            'limit' => 300,
+            'text' => "Una giornata intera in sella per chi è allenato: distanza e dislivello si fanno sentire, ripagati da passaggi come il castello di Contignano e quattro ristori, tra cui quello nel borgo di Castelnuovo dell'Abate.",
         ],
-        'Gravel 220K' => [
+        'luculliano' => [
+            'name' => 'Luculliano – Il Viaggio',
+            'short_name' => 'Luculliano',
             'km' => 220,
-            'name' => 'Ultra',
-            'level' => 'Endurance',
-            'text' => 'Per chi vuole vedere tutta la valle in un giorno, dall’alba al tramonto.',
+            'elevation' => 4800,
+            'level' => 'Due giorni',
+            'certificate' => 'agonistico',
+            'start' => 'sabato 12:00',
+            'limit' => 100,
+            'stages' => "Sabato circa 100 km da Rocca d'Orcia a Radicofani, domenica circa 120 km da Radicofani a Castiglione d'Orcia.",
+            'includes' => 'cena del sabato a Radicofani, colazione della domenica e trasporto bagagli da e per Radicofani',
+            'text' => "Un viaggio in bikepacking su due giorni: il primo nel foliage del Monte Amiata, il secondo dentro la Val d'Orcia. Percorso non segnalato, con traccia GPX fornita a tutti; luci anteriori e posteriori obbligatorie.",
         ],
     ],
 ];
