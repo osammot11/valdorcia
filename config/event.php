@@ -16,7 +16,7 @@ return [
     'edition_year' => 2027,
     'date_label' => '17 ottobre 2027',
     'date_iso' => '2027-10-17',     // aggiungere l'ora quando c'è, es. '2027-10-17T08:00:00+02:00'
-    'location' => "Castiglione d'Orcia",
+    'location' => 'Montalcino',
     'region' => 'Siena, Toscana',
     'email' => 'info@valdorciagravel.it', // DA CONFERMARE
     'phone' => null,
@@ -31,7 +31,7 @@ return [
             'km' => 39,
             'name' => 'Corta',
             'level' => 'Per tutti',
-            'text' => "Il giro più breve tra le crete e i borghi intorno a Castiglione d'Orcia. Adatto a chi si avvicina al gravel.",
+            'text' => "Il giro più breve tra le crete e i borghi intorno a Montalcino. Adatto a chi si avvicina al gravel.",
         ],
         'Gravel 73K' => [
             'km' => 73,

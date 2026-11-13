@@ -13,7 +13,7 @@ class PageController extends Controller
         '' => [
             'view' => 'pages.home',
             'title' => "Val d'Orcia Gravel | Strade bianche in Val d'Orcia",
-            'description' => "Val d'Orcia Gravel: quattro percorsi gravel da 39 a 220 km sulle strade bianche intorno a Castiglione d'Orcia.",
+            'description' => "Val d'Orcia Gravel: quattro percorsi gravel da 39 a 220 km sulle strade bianche intorno a Montalcino.",
             'bodyClass' => 'home-page',
         ],
         'contattaci' => [
