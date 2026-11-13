@@ -8,7 +8,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>{{ $siteTitle }}</title>
+    <title>@hasSection('title')@yield('title')@else{{ $siteTitle }}@endif</title>
     <meta name="description" content="{{ $siteDescription }}">
     @isset($canonical)
         <link rel="canonical" href="{{ $canonical }}">
@@ -29,7 +29,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="/style.css?v=100">
+    <link rel="stylesheet" href="/style.css?v=101">
     @stack('head')
 </head>
 

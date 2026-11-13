@@ -280,31 +280,6 @@ tbody tr:hover { background: var(--surface-alt); }
 .login .back a { color: var(--ink-soft); text-decoration: none; }
 .login .back a:hover { text-decoration: underline; }
 
-/* --- Conferma iscrizione ------------------------------------------------- */
-
-.success { padding: 48px 24px; }
-.success .card { padding: 0; overflow: hidden; }
-.success-head { background: var(--ok); color: #fff; text-align: center; padding: 24px; }
-.success-head h1 { font-size: 1.9rem; }
-.success-head p { margin-top: 6px; opacity: .9; }
-.success-body { padding: 32px; }
-.group-code { text-align: center; padding-bottom: 24px; margin-bottom: 32px; border-bottom: 1px solid var(--line); }
-.group-code .kicker { text-transform: uppercase; letter-spacing: .12em; font-size: .8rem; font-weight: 700; color: var(--ink-soft); }
-.group-code h2 { font-family: var(--mono); font-size: 1.5rem; }
-.ticket-list > * + * { margin-top: 12px; }
-.ticket-row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 16px;
-    padding: 16px;
-    border: 1px solid var(--line);
-    border-radius: var(--radius);
-    background: var(--surface-alt);
-}
-.ticket-row .name { font-weight: 700; }
-.note { margin-top: 40px; padding: 16px; border-left: 4px solid var(--warn-line); background: var(--warn-soft); color: var(--warn); font-size: .875rem; }
-
 /* --- Responsive ---------------------------------------------------------- */
 
 @media (max-width: 900px) {
@@ -315,7 +290,6 @@ tbody tr:hover { background: var(--surface-alt); }
     body { padding: 16px; }
     .grid--2 { grid-template-columns: 1fr; }
     .page-head h1 { font-size: 1.4rem; }
-    .card--roomy, .success-body { padding: 20px; }
+    .card--roomy { padding: 20px; }
     .revenue { text-align: left; }
-    .success { padding: 16px; }
 }
