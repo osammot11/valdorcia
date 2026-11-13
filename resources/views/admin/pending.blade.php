@@ -4,7 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestione CSV & Attesa - {{ config('event.name') }}</title>
-    <link rel="stylesheet" href="/css/admin.css?v=3">
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="icon" type="image/svg+xml" href="/images/valdorcia-gravel/logo.svg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/controls.css?v=1">
+    <link rel="stylesheet" href="/css/admin.css?v=5">
 </head>
 <body>
 
@@ -51,13 +57,13 @@
                         <div class="pending-actions">
                             <form action="{{ route('admin.approve_ticket', $ticket->id) }}" method="POST">
                                 @csrf
-                                <button type="submit" class="btn btn--ok btn--small btn--block">✓ Approva & Invia Email</button>
+                                <button type="submit" class="btn btn--ok btn--small btn--block">Approva e invia email</button>
                             </form>
 
                             <form action="{{ route('admin.delete_ticket', $ticket->id) }}" method="POST" onsubmit="return confirm('Sicuro di voler eliminare questo biglietto?');">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="btn btn--danger btn--small" title="Elimina">🗑️</button>
+                                <button type="submit" class="btn btn--danger btn--small" title="Elimina">Elimina</button>
                             </form>
                         </div>
                     </div>

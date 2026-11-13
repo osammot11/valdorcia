@@ -4,7 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin - {{ config('event.name') }}</title>
-    <link rel="stylesheet" href="/css/admin.css?v=3">
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="icon" type="image/svg+xml" href="/images/valdorcia-gravel/logo.svg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/controls.css?v=1">
+    <link rel="stylesheet" href="/css/admin.css?v=5">
 </head>
 
 <body>
@@ -107,7 +113,7 @@
                                     <div><strong>{{ $ticket->first_name }} {{ $ticket->last_name }}</strong></div>
                                     <div class="tiny muted">{{ $ticket->email }}</div>
                                     @if($ticket->order && $ticket->order->is_sports_association)
-                                        <div class="tags"><span class="tag tag--assoc">🏃‍♂️ Assoc: {{ $ticket->order->association_name ?? 'Non specificata' }}</span></div>
+                                        <div class="tags"><span class="tag tag--assoc">Associazione: {{ $ticket->order->association_name ?? 'Non specificata' }}</span></div>
                                     @endif
 
                                     @if($ticket->tag_1 || $ticket->tag_2)

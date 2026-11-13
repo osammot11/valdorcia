@@ -8,7 +8,8 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&display=swap" rel="stylesheet">
     <link rel="icon" type="image/svg+xml" href="/images/valdorcia-gravel/logo.svg">
-    <link rel="stylesheet" href="/css/checkout.css?v=1">
+    <link rel="stylesheet" href="/css/controls.css?v=1">
+    <link rel="stylesheet" href="/css/checkout.css?v=3">
 </head>
 <body class="center-items checkout-body">
 
@@ -184,11 +185,11 @@
               </div>
             
               <label>
-                  <input type="checkbox" value="1" checked required>Procedendo al pagamento dichiaro di accettare la <a href="/privacy-policy">privacy policy</a> e il <a href="/regolamento">regolamento</a> dell'evento
+                  <input type="checkbox" value="1" checked required><span>Procedendo al pagamento dichiaro di accettare la <a href="/privacy-policy">privacy policy</a> e il <a href="/regolamento">regolamento</a> dell'evento</span>
               </label>
 
               <label>
-                  <input type="checkbox" value="1" checked required>Acconsento al trattamento dei miei dati particolari relativi alla salute (es. celiachia), forniti volontariamente, al fine di gestire correttamente le esigenze alimentari durante l’evento, ai sensi dell’art. 9 del Regolamento UE 2016/679 (GDPR).
+                  <input type="checkbox" value="1" checked required><span>Acconsento al trattamento dei miei dati particolari relativi alla salute (es. celiachia), forniti volontariamente, al fine di gestire correttamente le esigenze alimentari durante l’evento, ai sensi dell’art. 9 del Regolamento UE 2016/679 (GDPR).</span>
               </label>
 
               <button class="btn fullwidth" id="payment-button" type="submit">Procedi al pagamento</button>

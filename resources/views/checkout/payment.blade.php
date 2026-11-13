@@ -8,7 +8,8 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&display=swap" rel="stylesheet">
     <link rel="icon" type="image/svg+xml" href="/images/valdorcia-gravel/logo.svg">
-    <link rel="stylesheet" href="/css/checkout.css?v=1">
+    <link rel="stylesheet" href="/css/controls.css?v=1">
+    <link rel="stylesheet" href="/css/checkout.css?v=3">
     <script src="https://js.stripe.com/v3/"></script>
 </head>
 <body class="center-items checkout-body">
