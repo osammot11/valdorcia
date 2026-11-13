@@ -38,7 +38,7 @@ class AdminController extends Controller
         }
 
         $activeTickets = $query->orderBy('created_at', 'desc')->get();
-        $currentPrice = \App\Models\Setting::where('key', 'ticket_price')->value('value') ?? 26.00;
+        $currentPrice = \App\Models\Setting::where('key', 'ticket_price')->value('value') ?? config('event.default_price');
         $totalRevenue = $activeTickets->sum('price_paid');
 
         return view('admin.dashboard', compact('activeTickets', 'currentPrice', 'totalRevenue'));
@@ -222,7 +222,7 @@ class AdminController extends Controller
         ]);
 
         $count = 0;
-        $currentPrice = \App\Models\Setting::where('key', 'ticket_price')->value('value') ?? 26.00;
+        $currentPrice = \App\Models\Setting::where('key', 'ticket_price')->value('value') ?? config('event.default_price');
 
         // 5. Leggiamo riga per riga (Ora con TUTTE le 18 colonne)
         while (($row = fgetcsv($handle, 1000, $delimiter)) !== false) {

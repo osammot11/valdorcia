@@ -22,6 +22,9 @@ return [
     'phone' => null,
     'organizer' => "Val d'Orcia Gravel", // DA CONFERMARE: ragione sociale / ASD
 
+    // Prezzo usato solo se l'admin non ne ha salvato uno nel database
+    'default_price' => 28.00,
+
     // La chiave è il valore salvato in database e validato dai controller.
     'routes' => [
         'Gravel 39K' => [

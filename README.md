@@ -9,7 +9,7 @@ Laravel, CSS scritto a mano (nessun framework CSS).
 - `config/event.php` — nome, data, località, email e percorsi dell'evento
 - `public/style.css` e `public/navbar/` — sito pubblico
 - `public/css/checkout.css` — iscrizione e pagamento
-- `public/admin/admin.css` — area admin, login, conferma ordine
+- `public/css/admin.css` — area admin, login, conferma ordine
 
 ## Avvio in locale
 

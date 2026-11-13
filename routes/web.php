@@ -26,9 +26,9 @@ Route::get('/ticket/{unique_code}/download', [CheckoutController::class, 'downlo
 Route::get('/iscrizione', function () {
     // Recuperiamo il prezzo dal database, con il paracadute a 28€ se non esiste
     try {
-        $currentPrice = Setting::where('key', 'ticket_price')->value('value') ?? 28.00;
+        $currentPrice = Setting::where('key', 'ticket_price')->value('value') ?? config('event.default_price');
     } catch (Throwable $e) {
-        $currentPrice = 28.00;
+        $currentPrice = config('event.default_price');
     }
 
     // Passiamo la variabile alla vista welcome

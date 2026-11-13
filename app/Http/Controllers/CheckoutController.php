@@ -45,8 +45,8 @@ class CheckoutController extends Controller
         ]);
 
         // 2. Calcolo del prezzo
-        // Leggiamo il prezzo dal database. Se non dovesse esistere, usiamo 28.00 come paracadute.
-        $basePrice = \App\Models\Setting::where('key', 'ticket_price')->value('value') ?? 28.00;
+        // Leggiamo il prezzo dal database. Se non dovesse esistere, usiamo il prezzo di riserva in config/event.php.
+        $basePrice = \App\Models\Setting::where('key', 'ticket_price')->value('value') ?? config('event.default_price');
         $discountAmount = 0;
         $appliedDiscountLabel = null;
 

@@ -3,23 +3,30 @@
 namespace Database\Seeders;
 
 use App\Models\User;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
 {
-    use WithoutModelEvents;
-
     /**
-     * Seed the application's database.
+     * Crea (o aggiorna) l'utente dell'area admin.
+     * Le credenziali stanno solo in .env: ADMIN_NAME, ADMIN_EMAIL, ADMIN_PASSWORD.
      */
     public function run(): void
     {
-        // User::factory(10)->create();
+        $email = env('ADMIN_EMAIL');
+        $password = env('ADMIN_PASSWORD');
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-        ]);
+        if (blank($email) || blank($password)) {
+            $this->command?->warn('ADMIN_EMAIL o ADMIN_PASSWORD mancanti in .env: nessun utente admin creato.');
+
+            return;
+        }
+
+        User::updateOrCreate(
+            ['email' => $email],
+            ['name' => env('ADMIN_NAME', 'Admin'), 'password' => $password],
+        );
+
+        $this->command?->info("Utente admin pronto: {$email}");
     }
 }
