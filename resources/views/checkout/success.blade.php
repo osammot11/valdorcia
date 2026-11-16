@@ -24,6 +24,10 @@
 
         <section class="confirm__body">
             <div class="inner">
+                @if (session('route_changed'))
+                    <p class="confirm__alert confirm__alert--ok" role="status">{{ session('route_changed') }}</p>
+                @endif
+
                 <dl class="confirm__order">
                     <div>
                         <dt>Codice ordine</dt>
@@ -51,7 +55,10 @@
                                 <p>{{ $route ? $route['name'] : $ticket->route_choice }} · {{ $ticket->day_card ? 'Tessera giornaliera' : ($ticket->membership ?? '') }}</p>
                                 <p class="ticket__code mono">{{ $ticket->unique_ticket_code }}</p>
                             </div>
-                            <a href="{{ route('ticket.download', $ticket->unique_ticket_code) }}" class="btn">Scarica PDF</a>
+                            <div class="ticket__actions">
+                                <a href="{{ route('ticket.download', $ticket->unique_ticket_code) }}" class="btn">Scarica PDF</a>
+                                <a href="{{ route('route-change.show', [$order->group_code, $ticket->unique_ticket_code]) }}" class="hyperlink">Cambia percorso</a>
+                            </div>
                         </article>
                     @endforeach
                 </div>

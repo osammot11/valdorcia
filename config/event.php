@@ -24,6 +24,7 @@ return [
     'saturday_label' => 'Sabato 16 ottobre',
     'sunday_label' => 'Domenica 17 ottobre',
     'online_closes_label' => '14 ottobre 2027', // nel 2026: tre giorni prima della domenica
+    'online_closes_iso' => '2027-10-14',        // ultimo giorno per iscriversi online e cambiare percorso
 
     'location' => "Castiglione d'Orcia",
     'start_place' => "Rocca d'Orcia",    // borgo medievale da cui partono Frugale, Saporito e Goloso

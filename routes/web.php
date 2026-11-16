@@ -17,6 +17,12 @@ Route::get('/checkout/success/{order_code}', [CheckoutController::class, 'succes
 // Rotta per il ritorno in caso di ANNULLAMENTO (GET)
 Route::get('/checkout/cancel/{order}', [CheckoutController::class, 'cancel'])->name('checkout.cancel');
 
+// Cambio di percorso da parte dell'iscritto (link dalla pagina di conferma)
+Route::get('/ordine/{order}/biglietto/{ticket}/percorso', [\App\Http\Controllers\RouteChangeController::class, 'show'])->name('route-change.show');
+Route::post('/ordine/{order}/biglietto/{ticket}/percorso', [\App\Http\Controllers\RouteChangeController::class, 'update'])
+    ->middleware('throttle:10,1')
+    ->name('route-change.update');
+
 // Rotta per il download on-demand del singolo biglietto PDF (GET)
 Route::get('/ticket/{unique_code}/download', [CheckoutController::class, 'downloadTicket'])->name('ticket.download');
 
