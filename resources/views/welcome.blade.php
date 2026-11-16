@@ -18,7 +18,7 @@
     <link rel="icon" type="image/png" href="/images/valdorcia-gravel/logo-valdorcia-gravel.png">
     <link rel="apple-touch-icon" href="/images/valdorcia-gravel/logo-valdorcia-gravel.png">
     <link rel="stylesheet" href="/css/controls.css?v=2">
-    <link rel="stylesheet" href="/css/checkout.css?v=6">
+    <link rel="stylesheet" href="/css/checkout.css?v=7">
 </head>
 <body class="center-items checkout-body">
 
@@ -44,13 +44,24 @@
         @else
         <form action="{{ route('checkout.store') }}" method="POST" id="registration-form" enctype="multipart/form-data">
             @if($errors->any())
+                @php
+                    // Gli errori dei singoli partecipanti sono mostrati sotto ogni campo
+                    $participantErrors = collect($errors->keys())->filter(fn ($k) => preg_match('/^tickets\.\d+\./', $k));
+                    $generalErrors = collect($errors->keys())->diff($participantErrors)->flatMap(fn ($k) => $errors->get($k));
+                @endphp
                 <div class="bg-primary-hover">
                     <strong>Attenzione!</strong>
                     <ul>
-                        @foreach($errors->all() as $error)
+                        @foreach($generalErrors as $error)
                             <li>{{ $error }}</li>
                         @endforeach
+                        @if ($participantErrors->isNotEmpty())
+                            <li>Controlla i campi segnati in rosso nei dati {{ $participantErrors->map(fn ($k) => explode('.', $k)[1])->unique()->count() > 1 ? 'dei partecipanti' : 'del partecipante' }}.</li>
+                        @endif
                     </ul>
+                    @if (old('tickets'))
+                        <p>I dati inseriti sono stati conservati, ma per sicurezza il browser non tiene i file: ricarica il certificato medico di ogni partecipante.</p>
+                    @endif
                 </div>
             @endif
             @csrf
@@ -95,141 +106,9 @@
             </div>
 
             <div id="tickets-container">
-                <div class="ticket-block top-margin-large">
-                    <h3>Partecipante #1</h3>
-
-                    <p class="block-title">Percorso</p>
-                    <div class="label-box">
-                        <label>Scelta del percorso</label>
-                        <select name="tickets[0][route_choice]" class="route-select" required>
-                            <option value="">Scegli il percorso</option>
-                            @foreach ($routes as $value => $route)
-                                @php $price = $displayTier->priceFor($value); $full = $remaining[$value] < 1; @endphp
-                                <option value="{{ $value }}" data-price="{{ $price }}" data-certificate="{{ $route['certificate'] }}" @disabled($full || $price === null) @selected(request('percorso') === $value && ! $full)>
-                                    {{ $route['name'] }} — {{ $route['km'] }} km, {{ $route['elevation'] }} m D+ · {{ $full ? 'al completo' : ($price !== null ? $euro($price) : 'non disponibile') }}
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
-
-                    <p class="block-title">Dati personali</p>
-                    <div class="grid-2 gap-20">
-                        <div class="label-box">
-                            <label>Nome</label>
-                            <input type="text" name="tickets[0][first_name]" placeholder="Nome" required autocomplete="given-name">
-                        </div>
-
-                        <div class="label-box">
-                            <label>Cognome</label>
-                            <input type="text" name="tickets[0][last_name]" placeholder="Cognome" required autocomplete="family-name">
-                        </div>
-
-                        <div class="label-box">
-                            <label>Data di nascita</label>
-                            <input type="date" name="tickets[0][dob]" required title="Data di nascita">
-                        </div>
-
-                        <div class="label-box">
-                            <label>Città di nascita</label>
-                            <input type="text" name="tickets[0][birth_place]" placeholder="Luogo di nascita" required>
-                        </div>
-
-                        <div class="label-box">
-                            <label>Nazionalità (sigla)</label>
-                            <input type="text" name="tickets[0][nationality]" placeholder="Es. IT" maxlength="2" oninput="this.value = this.value.toUpperCase()" required>
-                        </div>
-
-                        <div class="label-box">
-                            <label>Codice fiscale (se cittadino italiano)</label>
-                            <input type="text" name="tickets[0][codice_fiscale]" placeholder="Codice fiscale" maxlength="16" oninput="this.value = this.value.toUpperCase()">
-                        </div>
-
-                        <div class="label-box">
-                            <label>Email</label>
-                            <input type="email" name="tickets[0][email]" placeholder="Email" required autocomplete="email">
-                        </div>
-
-                        <div class="label-box">
-                            <label>Telefono</label>
-                            <input type="tel" name="tickets[0][phone]" placeholder="Telefono" required autocomplete="tel">
-                        </div>
-                    </div>
-
-                    <div class="grid-3 gap-20 top-margin-mid">
-                        <div class="label-box">
-                            <label>Indirizzo</label>
-                            <input type="text" name="tickets[0][residence_address]" placeholder="Indirizzo" required>
-                        </div>
-
-                        <div class="label-box">
-                            <label>Città</label>
-                            <input type="text" name="tickets[0][city]" placeholder="Città" required>
-                        </div>
-
-                        <div class="label-box">
-                            <label>CAP</label>
-                            <input type="text" name="tickets[0][zip_code]" placeholder="CAP" required>
-                        </div>
-
-                        <div class="label-box">
-                            <label>Paese</label>
-                            <select class="country-select" onchange="toggleCountry(this)">
-                                <option value="Italia" selected>Italia</option>
-                                <option value="Estero">Estero (Specifica...)</option>
-                            </select>
-
-                            <input type="hidden" name="tickets[0][country]" class="country-hidden" value="Italia">
-
-                            <input type="text" placeholder="Specifica nazione" class="country-text hidden" oninput="updateCountryHidden(this)">
-                        </div>
-
-                        <div class="label-box">
-                            <label>Regione</label>
-                            <select name="tickets[0][region]" class="region-select" onchange="updateProvinces(this)" required></select>
-
-                            <input type="text" name="tickets[0][region]" placeholder="Regione/Stato" class="region-text hidden" disabled required>
-                        </div>
-
-                        <div class="label-box">
-                            <label>Provincia</label>
-                            <select name="tickets[0][province]" class="province-select" required></select>
-
-                            <input type="text" name="tickets[0][province]" placeholder="Provincia/Contea" class="province-text hidden" disabled required>
-                        </div>
-                    </div>
-
-                    <p class="block-title">Tessera e certificato medico</p>
-                    <div class="grid-2 gap-20">
-                        <div class="label-box">
-                            <label>Tessera sportiva per il ciclismo</label>
-                            <select name="tickets[0][membership]" class="membership-select" required>
-                                <option value="">Scegli</option>
-                                @foreach (config('event.memberships') as $membership)
-                                    <option value="{{ $membership }}">{{ $membership }}</option>
-                                @endforeach
-                                <option value="giornaliera">Non sono tesserato: tessera giornaliera (+{{ $euro($dayCardPrice) }})</option>
-                            </select>
-                        </div>
-
-                        <div class="label-box membership-number-box">
-                            <label>Numero di tessera</label>
-                            <input type="text" name="tickets[0][membership_number]" class="membership-number" placeholder="Numero di tessera" required>
-                        </div>
-                    </div>
-
-                    <div class="label-box top-margin-mid">
-                        <label>Certificato medico</label>
-                        <input type="file" name="tickets[0][medical_certificate]" accept=".pdf,.jpg,.jpeg,.png,application/pdf,image/jpeg,image/png" required>
-                        <p class="small-note certificate-hint">PDF o foto, massimo 5 MB. Il tipo di certificato dipende dal percorso: scegli prima il percorso.</p>
-                    </div>
-
-                    <div class="top-margin-mid">
-                        <label>
-                            <input type="hidden" name="tickets[0][celiac]" value="0">
-                            <input type="checkbox" name="tickets[0][celiac]" value="1"> <span>Ai ristori mi servono alimenti senza glutine</span>
-                        </label>
-                    </div>
-                </div>
+                @foreach (old('tickets') ?: [0 => []] as $i => $t)
+                    @include('checkout._participant', ['i' => $i, 't' => $t, 'position' => $loop->iteration])
+                @endforeach
             </div>
 
             <button class="top-margin-large grey-btn" type="button" onclick="addParticipant()">+ Aggiungi un altro partecipante</button>
@@ -238,13 +117,13 @@
               <div class="label-box top-margin-xl">
                   <label>Metodo di pagamento</label>
                   <select name="payment_method">
-                      <option value="stripe">Carta</option>
-                      <option value="paypal">PayPal</option>
+                      <option value="stripe" @selected(old('payment_method') !== 'paypal')>Carta</option>
+                      <option value="paypal" @selected(old('payment_method') === 'paypal')>PayPal</option>
                   </select>
               </div>
 
               <label>
-                  <input type="checkbox" name="truthful_declaration" value="1" required><span>Dichiaro, ai sensi del D.P.R. 445/2000, che i documenti caricati sono veritieri e corrispondono agli originali in mio possesso.</span>
+                  <input type="checkbox" name="truthful_declaration" value="1" required @checked(old('truthful_declaration'))><span>Dichiaro, ai sensi del D.P.R. 445/2000, che i documenti caricati sono veritieri e corrispondono agli originali in mio possesso.</span>
               </label>
 
               <label>
@@ -290,8 +169,10 @@
         function populateRegions(block) {
             const regionSelect = block.querySelector('.region-select');
             regionSelect.innerHTML = '<option value="">Seleziona Regione</option>';
+            // Dopo un errore riprende la regione inviata, altrimenti Toscana / Siena
+            const selected = regionSelect.dataset.selected || 'Toscana';
             Object.keys(italyLocations).sort().forEach(region => {
-                const isSelected = region === 'Toscana' ? 'selected' : '';
+                const isSelected = region === selected ? 'selected' : '';
                 regionSelect.innerHTML += `<option value="${region}" ${isSelected}>${region}</option>`;
             });
             updateProvinces(regionSelect, true);
@@ -305,7 +186,8 @@
             provinceSelect.innerHTML = '<option value="">Seleziona Provincia</option>';
             if (italyLocations[region]) {
                 italyLocations[region].sort().forEach(prov => {
-                    const isSelected = (setLocalDefault && prov === 'Siena') ? 'selected' : '';
+                    const wanted = provinceSelect.dataset.selected || 'Siena';
+                    const isSelected = (setLocalDefault && prov === wanted) ? 'selected' : '';
                     provinceSelect.innerHTML += `<option value="${prov}" ${isSelected}>${prov}</option>`;
                 });
             }
@@ -405,7 +287,8 @@
             }
         });
 
-        let participantCount = 1;
+        // Indice per i nuovi blocchi: dopo un errore i blocchi esistenti possono avere indici sparsi
+        let participantCount = {{ collect(array_keys(old('tickets') ?: [0 => []]))->max() }};
 
         function addParticipant() {
             const container = document.getElementById('tickets-container');
@@ -427,6 +310,8 @@
                 }
             });
 
+            clone.querySelectorAll('.field-error').forEach(el => { if (el.classList.contains('certificate-error')) { el.hidden = true; } else { el.remove(); } });
+            clone.querySelectorAll('[data-selected]').forEach(el => { el.dataset.selected = ''; });
             clone.querySelector('.country-select').value = "Italia";
             clone.querySelector('.country-hidden').value = "Italia";
             toggleCountry(clone.querySelector('.country-select'));
@@ -495,11 +380,31 @@
             codeInput.addEventListener('input', () => { codeChecked = false; });
         }
 
+        // Controllo del certificato prima dell'invio, così un file sbagliato non fa ricaricare la pagina
+        const maxCertificateBytes = 5 * 1024 * 1024;
+        document.addEventListener('change', event => {
+            if (!event.target.matches('.certificate-input')) return;
+            const file = event.target.files[0];
+            const error = event.target.closest('.label-box').querySelector('.certificate-error');
+            let message = '';
+            if (file && !/\.(pdf|jpe?g|png)$/i.test(file.name)) {
+                message = 'Il certificato deve essere un PDF o una foto (JPG, PNG).';
+            } else if (file && file.size > maxCertificateBytes) {
+                message = 'Il file supera i 5 MB: comprimilo o fotografa di nuovo il certificato.';
+            }
+            event.target.setCustomValidity(message);
+            error.textContent = message;
+            error.hidden = message === '';
+        });
+
         document.addEventListener("DOMContentLoaded", function() {
-            const firstBlock = document.querySelector('.ticket-block');
-            if (!firstBlock) return; // iscrizioni chiuse
-            populateRegions(firstBlock);
-            updateBlock(firstBlock);
+            const blocks = document.querySelectorAll('.ticket-block');
+            if (!blocks.length) return; // iscrizioni chiuse
+            blocks.forEach(block => {
+                populateRegions(block);
+                updateBlock(block);
+            });
+            reindexParticipants();
             updateTotal();
         });
     </script>

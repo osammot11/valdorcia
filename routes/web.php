@@ -15,10 +15,7 @@ Route::get('/checkout/{order_code}/payment', [CheckoutController::class, 'paymen
 Route::get('/checkout/success/{order_code}', [CheckoutController::class, 'success'])->name('checkout.success');
 
 // Rotta per il ritorno in caso di ANNULLAMENTO (GET)
-Route::get('/checkout/cancel/{order}', function($order) {
-    // Per ora lasciamo un testo semplice, poi potremo fare una pagina dedicata
-    return "Pagamento annullato per l'ordine: " . $order; 
-})->name('checkout.cancel');
+Route::get('/checkout/cancel/{order}', [CheckoutController::class, 'cancel'])->name('checkout.cancel');
 
 // Rotta per il download on-demand del singolo biglietto PDF (GET)
 Route::get('/ticket/{unique_code}/download', [CheckoutController::class, 'downloadTicket'])->name('ticket.download');

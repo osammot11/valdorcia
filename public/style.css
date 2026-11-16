@@ -581,3 +581,5 @@ section { padding: clamp(64px, 9vw, 120px) var(--gutter); }
   html { scroll-behavior: auto; }
   *, *::before, *::after { transition: none !important; }
 }
+
+.confirm__alert { margin-bottom: 32px; padding: 14px 18px; border-left: 4px solid var(--clay); background: var(--paper-deep); font-weight: 600; }

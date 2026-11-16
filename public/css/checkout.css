@@ -204,3 +204,6 @@ label:has(> input[type="checkbox"]) > input[type="checkbox"] { margin-top: 1px; 
 }
 .ticket-block h3 + .block-title { margin-top: 18px; }
 .field-error { margin-top: 6px; font-size: 14px; font-weight: 600; color: var(--danger); }
+
+/* Campo con errore dopo l'invio */
+.label-box:has(> .field-error:not([hidden])) :is(input, select) { border-color: var(--danger); }

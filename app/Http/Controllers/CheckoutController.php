@@ -167,6 +167,23 @@ class CheckoutController extends Controller
         return redirect()->route('checkout.payment', ['order_code' => $order->group_code]);
     }
 
+    public function cancel(string $order)
+    {
+        $order = Order::with('tickets')->where('group_code', $order)->first();
+
+        if ($order && $order->status === 'paid') {
+            return redirect()->route('checkout.success', ['order_code' => $order->group_code]);
+        }
+
+        // Si può riprovare con la carta finché l'ordine tiene ancora i posti
+        $canRetry = $order
+            && $order->payment_method === 'stripe'
+            && $order->status === 'pending'
+            && $order->created_at->gt(now()->subMinutes(Registration::HOLD_MINUTES));
+
+        return view('checkout.cancel', compact('order', 'canRetry'));
+    }
+
     public function payment($order_code)
     {
         $order = Order::with('tickets')->where('group_code', $order_code)->firstOrFail();
