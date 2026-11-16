@@ -537,7 +537,38 @@ section { padding: clamp(64px, 9vw, 120px) var(--gutter); }
 
 /* --- Responsive ---------------------------------------------------------- */
 
+/* --- Pagina percorsi ----------------------------------------------------- */
+
+.route-pages { border-top: 2px solid var(--ink); }
+.route-page { padding: clamp(40px, 5vw, 64px) 0; border-bottom: 1px solid var(--line); scroll-margin-top: 96px; }
+.route-page__head { display: flex; align-items: end; gap: 28px; flex-wrap: wrap; }
+.route-page__head h2 { font-size: clamp(34px, 4vw, 56px); }
+.route-page__head .route__level { display: inline-block; margin-top: 12px; }
+.route-page__body { display: grid; grid-template-columns: 1.4fr 1fr; gap: clamp(28px, 5vw, 72px); margin-top: 32px; }
+.route-page__text { max-width: 620px; color: var(--ink-soft); font-size: 18px; }
+.route-page__text + .route-page__text { margin-top: 1em; }
+.route-page__actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px; }
+.route-page__facts { margin: 0; border-top: 1px solid var(--ink); }
+.route-page__facts > div { display: flex; justify-content: space-between; gap: 16px; padding: 12px 0; border-bottom: 1px solid var(--line); }
+.route-page__facts dt { font-size: 13px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--ink-soft); }
+.route-page__facts dd { margin: 0; font-weight: 700; text-align: right; }
+
+/* --- Come arrivare e foto ------------------------------------------------ */
+
+.places { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; }
+.place { display: flex; flex-direction: column; gap: 14px; padding: 28px; background: var(--surface); border: 1px solid var(--line); }
+.place h2 { font-size: clamp(28px, 2.6vw, 36px); }
+.place p { color: var(--ink-soft); }
+.place .btn { margin-top: auto; align-self: flex-start; }
+
+.steps-list { margin: 0; padding-left: 1.4em; }
+.steps-list li + li { margin-top: 10px; }
+.steps-list li::marker { color: var(--clay); font-weight: 800; }
+.top-gap { margin-top: 28px; }
+
 @media (max-width: 960px) {
+  .route-page__body { grid-template-columns: 1fr; }
+  .places { grid-template-columns: 1fr; }
   .intro, .faq__wrap, .program { grid-template-columns: 1fr; }
   .grid-3, .steps, .land__grid { grid-template-columns: 1fr; }
   .land__grid { row-gap: 0; }

@@ -8,9 +8,11 @@
         </div>
 
         <nav aria-label="Evento">
-            <a href="/#percorsi">Percorsi</a>
+            <a href="/percorsi">Percorsi</a>
             <a href="/programma">Programma</a>
             <a href="/iscrizione">Iscrizioni</a>
+            <a href="/come-arrivare">Come arrivare</a>
+            <a href="/gallery">Foto</a>
             <a href="/#faq">FAQ</a>
         </nav>
 

@@ -7,7 +7,7 @@
     </a>
 
     <div class="nav-links">
-        <a href="/#percorsi">Percorsi</a>
+        <a href="/percorsi">Percorsi</a>
         <a href="/programma">Programma</a>
         <a href="/regolamento">Regolamento</a>
         <a href="/#faq">FAQ</a>
@@ -28,7 +28,7 @@
         <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
     </a>
     <a href="/" onclick="closeMenu()">Home</a>
-    <a href="/#percorsi" onclick="closeMenu()">Percorsi</a>
+    <a href="/percorsi" onclick="closeMenu()">Percorsi</a>
     <a href="/programma" onclick="closeMenu()">Programma</a>
     <a href="/#faq" onclick="closeMenu()">FAQ</a>
     <a href="/chi-siamo" onclick="closeMenu()">Chi siamo</a>

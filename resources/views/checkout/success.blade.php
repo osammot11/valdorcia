@@ -59,7 +59,7 @@
                 <p class="confirm__note">{{ $count > 1 ? "Abbiamo mandato un'email a ogni partecipante" : "Ti abbiamo mandato un'email" }} con il link a questa pagina: puoi tornarci per scaricare {{ $count > 1 ? 'i biglietti' : 'il biglietto' }} quando vuoi. Al ritiro del pacco gara basta mostrarlo sul telefono, non serve stamparlo.</p>
 
                 <div class="confirm__actions">
-                    <a href="/#percorsi" class="btn btn-ghost">Rivedi i percorsi</a>
+                    <a href="/percorsi" class="btn btn-ghost">Rivedi i percorsi</a>
                     <a href="/" class="hyperlink">Torna alla home</a>
                 </div>
             </div>

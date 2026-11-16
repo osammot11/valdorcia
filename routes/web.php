@@ -78,6 +78,17 @@ Route::middleware('auth')->group(function () {
     Route::get('/admin/ticket/{id}/certificato', [AdminController::class, 'downloadCertificate'])->name('admin.download_certificate');
 });
 
+// Pagine che vivono dentro il programma
+Route::redirect('/orario', '/programma', 301);
+Route::redirect('/ricettivita', '/programma#dormire', 301);
+
+// Indirizzi del vecchio sito WordPress, se questo sito prende il dominio
+Route::redirect('/percorso', '/percorsi', 301);
+Route::redirect('/programma-2', '/programma', 301);
+Route::redirect('/iscrizione-2025', '/iscrizione', 301);
+Route::redirect('/foto-2026', '/gallery', 301);
+Route::redirect('/termini-e-condizioni', '/regolamento', 301);
+
 Route::get('/', [PageController::class, 'show'])->name('home');
 Route::get('/{slug}', [PageController::class, 'show'])
-    ->where('slug', 'programma|chi-siamo|faq|come-arrivare|contattaci|contatti|cookie-policy|gallery|orario|partnership|percorsi|privacy-policy|regolamento|ricettivita|styleguide|termini-condizioni|come-arrivare\.php|contattaci\.php|contatti\.php|cookie-policy\.php|gallery\.php|orario\.php|partnership\.php|percorsi\.php|privacy-policy\.php|regolamento\.php|ricettivita\.php|styleguide\.php|termini-condizioni\.php');
+    ->where('slug', 'programma|chi-siamo|faq|come-arrivare|contattaci|contatti|cookie-policy|gallery|partnership|percorsi|privacy-policy|regolamento|styleguide|termini-condizioni|come-arrivare\.php|contattaci\.php|contatti\.php|cookie-policy\.php|gallery\.php|partnership\.php|percorsi\.php|privacy-policy\.php|regolamento\.php|styleguide\.php|termini-condizioni\.php');

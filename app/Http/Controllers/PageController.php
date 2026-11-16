@@ -56,6 +56,21 @@ class PageController extends Controller
             'title' => "Chi siamo | Val d'Orcia Gravel",
             'description' => "ASD Team Orso on Bike, l'associazione di Montalcino che organizza Val d'Orcia Gravel.",
         ],
+        'percorsi' => [
+            'view' => 'pages.percorsi',
+            'title' => "Percorsi | Val d'Orcia Gravel",
+            'description' => "I quattro percorsi di Val d'Orcia Gravel: Frugale, Saporito, Goloso e Luculliano, da 45 a 220 km, con dislivello, partenze e tracce GPX.",
+        ],
+        'come-arrivare' => [
+            'view' => 'pages.come-arrivare',
+            'title' => "Come arrivare | Val d'Orcia Gravel",
+            'description' => "I luoghi di Val d'Orcia Gravel: segreteria a Castiglione d'Orcia, partenza da Rocca d'Orcia, tappa del Luculliano a Radicofani.",
+        ],
+        'gallery' => [
+            'view' => 'pages.gallery',
+            'title' => "Foto | Val d'Orcia Gravel",
+            'description' => "Le foto dei partecipanti di Val d'Orcia Gravel: come trovarle con un selfie sul portale Endupix.",
+        ],
         'termini-condizioni' => [
             'view' => 'pages.regolamento',
             'title' => "Regolamento | Val d'Orcia Gravel",
@@ -64,12 +79,7 @@ class PageController extends Controller
     ];
 
     private const HOME_ALIASES = [
-        'come-arrivare',
-        'gallery',
-        'orario',
         'faq',
-        'percorsi',
-        'ricettivita',
         'styleguide',
     ];
 

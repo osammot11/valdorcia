@@ -63,6 +63,7 @@ return [
             'certificate' => 'non agonistico',
             'start' => '9:00',
             'limit' => null,
+            'gpx' => ['Traccia 2026' => 'https://valdorciagravel.it/wp-content/uploads/2026/10/Frugale_2026.gpx'],
             'text' => "Il percorso breve, adatto a tutti: in una mattinata tocca molti dei luoghi simbolo della Val d'Orcia, tra filari di cipressi e strade bianche, con un ristoro speciale lungo la strada.",
         ],
         'saporito' => [
@@ -73,6 +74,7 @@ return [
             'certificate' => 'agonistico',
             'start' => '8:00',
             'limit' => null,
+            'gpx' => ['Traccia 2026' => 'https://valdorciagravel.it/wp-content/uploads/2026/10/saporito_2026.gpx'],
             'text' => "Il più equilibrato: impegnativo il giusto, attraversa i paesaggi più famosi della valle con due ristori dai sapori tipici.",
         ],
         'goloso' => [
@@ -83,6 +85,7 @@ return [
             'certificate' => 'agonistico',
             'start' => '7:00',
             'limit' => 300,
+            'gpx' => ['Traccia 2026' => 'https://valdorciagravel.it/wp-content/uploads/2026/10/Goloso_2026.gpx'],
             'text' => "Una giornata intera in sella per chi è allenato: distanza e dislivello si fanno sentire, ripagati da passaggi come il castello di Contignano e quattro ristori, tra cui quello nel borgo di Castelnuovo dell'Abate.",
         ],
         'luculliano' => [
@@ -96,6 +99,7 @@ return [
             'limit' => 100,
             'stages' => "Sabato circa 100 km da Rocca d'Orcia a Radicofani, domenica circa 120 km da Radicofani a Castiglione d'Orcia.",
             'includes' => 'cena del sabato a Radicofani, colazione della domenica e trasporto bagagli da e per Radicofani',
+            'gpx' => ['1ª tappa 2026' => 'https://valdorciagravel.it/wp-content/uploads/2026/10/Luculliano_tappa_1_20261.gpx', '2ª tappa 2026' => 'https://valdorciagravel.it/wp-content/uploads/2026/10/Luculliano_tappa_2_2026.gpx'],
             'text' => "Un viaggio in bikepacking su due giorni: il primo nel foliage del Monte Amiata, il secondo dentro la Val d'Orcia. Percorso non segnalato, con traccia GPX fornita a tutti; luci anteriori e posteriori obbligatorie.",
         ],
     ],
