@@ -34,6 +34,6 @@
     <a href="/chi-siamo" onclick="closeMenu()">Chi siamo</a>
     <a href="/iscrizione">Iscrizione</a>
     <a href="/regolamento">Regolamento</a>
-    <a href="/partnership">Partner</a>
+    <a href="/partnership">Sponsor</a>
     <a href="/contatti">Contatti</a>
 </div>

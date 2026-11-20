@@ -94,6 +94,7 @@ Route::redirect('/programma-2', '/programma', 301);
 Route::redirect('/iscrizione-2025', '/iscrizione', 301);
 Route::redirect('/foto-2026', '/gallery', 301);
 Route::redirect('/termini-e-condizioni', '/regolamento', 301);
+Route::redirect('/sponsor', '/partnership', 301);
 
 Route::get('/', [PageController::class, 'show'])->name('home');
 Route::get('/{slug}', [PageController::class, 'show'])

@@ -33,7 +33,7 @@ class PageController extends Controller
         ],
         'partnership' => [
             'view' => 'pages.partnership',
-            'title' => "Partner | Val d'Orcia Gravel",
+            'title' => "Sponsor e partner | Val d'Orcia Gravel",
             'description' => "Le realtà del territorio che sostengono Val d'Orcia Gravel.",
         ],
         'privacy-policy' => [
