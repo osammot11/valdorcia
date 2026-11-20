@@ -22,7 +22,12 @@
     <meta property="og:description" content="{{ $siteDescription }}">
     <meta property="og:url" content="{{ $canonical ?? url()->current() }}">
     <meta property="og:locale" content="it_IT">
-    <meta name="twitter:card" content="summary">
+    <meta property="og:image" content="{{ url('/images/og-image.png') }}">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="{{ config('event.name') }}, {{ config('event.date_label') }} a {{ config('event.location') }}">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content="{{ url('/images/og-image.png') }}">
     <meta name="twitter:title" content="{{ $siteTitle }}">
     <meta name="twitter:description" content="{{ $siteDescription }}">
 
