@@ -667,3 +667,8 @@ section { padding: clamp(64px, 9vw, 120px) var(--gutter); }
     .logo-grid--supporters .logo-tile { height: 110px; }
     .logo-grid--supporters .logo-tile img { max-height: 80px; }
 }
+
+/* Merchandising */
+.merch { align-items: start; }
+.merch__photo img { width: 100%; max-width: 420px; height: auto; display: block; border: 1px solid var(--line); }
+.merch__photo figcaption { margin-top: 8px; font-size: 13px; color: var(--ink-soft); }

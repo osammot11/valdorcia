@@ -13,6 +13,7 @@
             <a href="/iscrizione">Iscrizioni</a>
             <a href="/come-arrivare">Come arrivare</a>
             <a href="/gallery">Foto</a>
+            <a href="/merchandising">Merchandising</a>
             <a href="/#faq">FAQ</a>
         </nav>
 

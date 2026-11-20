@@ -31,6 +31,11 @@ class PageController extends Controller
             'title' => "Cookie Policy | Val d'Orcia Gravel",
             'description' => "Informativa sull'uso dei cookie del sito Val d'Orcia Gravel.",
         ],
+        'merchandising' => [
+            'view' => 'pages.merchandising',
+            'title' => "Merchandising | Val d'Orcia Gravel",
+            'description' => "La maglia ufficiale di Val d'Orcia Gravel by Natali: ordina online e ritira allo stand durante la manifestazione.",
+        ],
         'partnership' => [
             'view' => 'pages.partnership',
             'title' => "Sponsor e partner | Val d'Orcia Gravel",

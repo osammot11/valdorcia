@@ -98,4 +98,4 @@ Route::redirect('/sponsor', '/partnership', 301);
 
 Route::get('/', [PageController::class, 'show'])->name('home');
 Route::get('/{slug}', [PageController::class, 'show'])
-    ->where('slug', 'programma|chi-siamo|faq|come-arrivare|contattaci|contatti|cookie-policy|gallery|partnership|percorsi|privacy-policy|regolamento|styleguide|termini-condizioni|come-arrivare\.php|contattaci\.php|contatti\.php|cookie-policy\.php|gallery\.php|partnership\.php|percorsi\.php|privacy-policy\.php|regolamento\.php|styleguide\.php|termini-condizioni\.php');
+    ->where('slug', 'programma|chi-siamo|faq|come-arrivare|contattaci|contatti|cookie-policy|gallery|merchandising|partnership|percorsi|privacy-policy|regolamento|styleguide|termini-condizioni|come-arrivare\.php|contattaci\.php|contatti\.php|cookie-policy\.php|gallery\.php|partnership\.php|percorsi\.php|privacy-policy\.php|regolamento\.php|styleguide\.php|termini-condizioni\.php');
