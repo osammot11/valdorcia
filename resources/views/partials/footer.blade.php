@@ -20,6 +20,7 @@
         <nav aria-label="Informazioni">
             <a href="/regolamento">Regolamento</a>
             <a href="/chi-siamo">Chi siamo</a>
+            <a href="/blog">Blog</a>
             <a href="/partnership">Sponsor</a>
             <a href="/contatti">Contatti</a>
         </nav>

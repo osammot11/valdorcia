@@ -96,6 +96,11 @@ Route::redirect('/foto-2026', '/gallery', 301);
 Route::redirect('/termini-e-condizioni', '/regolamento', 301);
 Route::redirect('/sponsor', '/partnership', 301);
 
+// Blog: comunicati stampa importati dal vecchio sito (php artisan blog:import-old)
+Route::get('/blog', [\App\Http\Controllers\BlogController::class, 'index'])->name('blog.index');
+Route::get('/blog/{slug}', [\App\Http\Controllers\BlogController::class, 'show'])->where('slug', '[a-z0-9-]+')->name('blog.show');
+Route::get('/{legacySlug}', [\App\Http\Controllers\BlogController::class, 'legacy'])->where('legacySlug', 'comunicato-stampa-[a-z0-9-]+'); // stesso URI di /{slug}: serve un nome diverso
+
 Route::get('/', [PageController::class, 'show'])->name('home');
 Route::get('/{slug}', [PageController::class, 'show'])
     ->where('slug', 'programma|chi-siamo|faq|come-arrivare|contattaci|contatti|cookie-policy|gallery|merchandising|partnership|percorsi|privacy-policy|regolamento|styleguide|termini-condizioni|come-arrivare\.php|contattaci\.php|contatti\.php|cookie-policy\.php|gallery\.php|partnership\.php|percorsi\.php|privacy-policy\.php|regolamento\.php|styleguide\.php|termini-condizioni\.php');
