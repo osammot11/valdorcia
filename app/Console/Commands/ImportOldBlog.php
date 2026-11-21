@@ -67,7 +67,7 @@ class ImportOldBlog extends Command
             'legacy_slugs' => $legacy,
         ], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) . "\n");
 
-        $this->info(count($items) . ' comunicati importati (' . (count($posts) - count($items)) . ' doppioni saltati).');
+        $this->info(count($items) . ' comunicati importati (' . (count($posts) - count($items)) . ' doppioni saltati). Per caricarli nel database: php artisan db:seed --class=BlogPostSeeder');
 
         return self::SUCCESS;
     }

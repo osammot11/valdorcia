@@ -14,17 +14,17 @@
             <div class="inner post-list">
                 @foreach ($posts as $post)
                     <article class="post-card">
-                        <a href="/blog/{{ $post['slug'] }}" class="post-card__link">
+                        <a href="/blog/{{ $post->slug }}" class="post-card__link">
                             <div class="post-card__media">
-                                @if ($post['image'])
-                                    <img src="{{ $post['image'] }}" alt="" loading="lazy">
+                                @if ($post->image)
+                                    <img src="{{ $post->image }}" alt="" loading="lazy">
                                 @endif
                             </div>
                             <div class="post-card__body">
-                                <span class="kicker"><time datetime="{{ $post['date'] }}">{{ $post['date_label'] }}</time> · {{ $post['title'] }}</span>
-                                <h2>{{ $post['lead'] }}</h2>
-                                @if ($post['headline'])
-                                    <p>{{ $post['headline'] }}</p>
+                                <span class="kicker"><time datetime="{{ $post->published_on->toDateString() }}">{{ $post->published_on->translatedFormat('j F Y') }}</time> · {{ $post->displayTitle() }}</span>
+                                <h2>{{ $post->lead() }}</h2>
+                                @if ($post->headline())
+                                    <p>{{ $post->headline() }}</p>
                                 @endif
                                 <span class="post-card__more">Leggi il comunicato</span>
                             </div>

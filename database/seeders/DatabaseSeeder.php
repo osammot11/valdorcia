@@ -8,11 +8,13 @@ use Illuminate\Database\Seeder;
 class DatabaseSeeder extends Seeder
 {
     /**
-     * Crea (o aggiorna) l'utente dell'area admin.
+     * Carica i comunicati del blog e crea (o aggiorna) l'utente dell'area admin.
      * Le credenziali stanno solo in .env: ADMIN_NAME, ADMIN_EMAIL, ADMIN_PASSWORD.
      */
     public function run(): void
     {
+        $this->call(BlogPostSeeder::class);
+
         $email = env('ADMIN_EMAIL');
         $password = env('ADMIN_PASSWORD');
 

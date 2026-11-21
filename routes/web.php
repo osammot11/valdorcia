@@ -82,6 +82,14 @@ Route::middleware('auth')->group(function () {
     Route::post('/admin/ticket/{id}/update', [AdminController::class, 'updateTicketData'])->name('admin.update_ticket');
     Route::get('/admin/ticket/{id}/pdf', [AdminController::class, 'downloadPdf'])->name('admin.download_pdf');
     Route::get('/admin/ticket/{id}/certificato', [AdminController::class, 'downloadCertificate'])->name('admin.download_certificate');
+
+    // Blog: comunicati stampa
+    Route::get('/admin/blog', [\App\Http\Controllers\AdminBlogController::class, 'index'])->name('admin.blog.index');
+    Route::get('/admin/blog/nuovo', [\App\Http\Controllers\AdminBlogController::class, 'create'])->name('admin.blog.create');
+    Route::post('/admin/blog', [\App\Http\Controllers\AdminBlogController::class, 'store'])->name('admin.blog.store');
+    Route::get('/admin/blog/{post}/modifica', [\App\Http\Controllers\AdminBlogController::class, 'edit'])->name('admin.blog.edit');
+    Route::put('/admin/blog/{post}', [\App\Http\Controllers\AdminBlogController::class, 'update'])->name('admin.blog.update');
+    Route::delete('/admin/blog/{post}', [\App\Http\Controllers\AdminBlogController::class, 'destroy'])->name('admin.blog.destroy');
 });
 
 // Pagine che vivono dentro il programma
