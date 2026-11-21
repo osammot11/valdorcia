@@ -18,7 +18,7 @@
     <link rel="icon" type="image/png" href="/images/valdorcia-gravel/logo-valdorcia-gravel.png">
     <link rel="apple-touch-icon" href="/images/valdorcia-gravel/logo-valdorcia-gravel.png">
     <link rel="stylesheet" href="/css/controls.css?v=2">
-    <link rel="stylesheet" href="/css/checkout.css?v=7">
+    <link rel="stylesheet" href="/css/checkout.css?v=8">
 </head>
 <body class="center-items checkout-body">
 
@@ -33,14 +33,24 @@
         @if (! $displayTier)
             {{-- Nessuno scaglione aperto oggi --}}
             <div class="checkout-summary stack-mid center-text">
-                <h3 style="justify-content:center">Iscrizioni online chiuse</h3>
                 @if ($nextTier)
-                    <p>Le iscrizioni online riaprono il <strong>{{ $nextTier->starts_on->translatedFormat('j F Y') }}</strong>.</p>
+                    <h3 style="justify-content:center">Le iscrizioni online per la {{ config('event.name') }} {{ config('event.edition_year') }} riapriranno il {{ $nextTier->starts_on->translatedFormat('j F Y') }}!</h3>
+                    <p><strong>La {{ config('event.edition_number') }} edizione partirà da {{ config('event.location') }}!</strong></p>
+                    <p>La {{ config('event.name') }} fa parte del circuito <a class="hyperlink" href="https://gravelroadstuscany.it/" target="_blank" rel="noopener">Gravel Roads Tuscany</a> e del circuito MUT.</p>
                 @else
+                    <h3 style="justify-content:center">Iscrizioni online chiuse</h3>
                     <p>Le iscrizioni online per questa edizione sono chiuse. Sabato {{ \Illuminate\Support\Str::after(config('event.saturday_label'), 'Sabato ') }} ci si può ancora iscrivere in loco a {{ $euro(config('event.onsite_price')) }}, solo per Frugale, Saporito e Goloso.</p>
                 @endif
                 <p><a href="/" class="hyperlink">Torna al sito</a></p>
             </div>
+
+            @if ($tiers->isNotEmpty())
+                <div class="checkout-summary price-box">
+                    <p class="checkout-kicker">Quote {{ config('event.edition_year') }}</p>
+                    @include('checkout._tiers')
+                    <p class="small-note">Chi non è tesserato FCI o con un ente convenzionato aggiunge la tessera giornaliera da {{ $euro($dayCardPrice) }}, che include l'assicurazione. Il Luculliano comprende {{ $routes['luculliano']['includes'] }}.</p>
+                </div>
+            @endif
         @else
         <form action="{{ route('checkout.store') }}" method="POST" id="registration-form" enctype="multipart/form-data">
             @if($errors->any())
@@ -75,6 +85,10 @@
                     @endforeach
                 </ul>
                 <p class="small-note">Chi non è tesserato FCI o con un ente convenzionato aggiunge la tessera giornaliera da {{ $euro($dayCardPrice) }}, che include l'assicurazione. Il Luculliano comprende {{ $routes['luculliano']['includes'] }}.</p>
+                <details class="tier-details">
+                    <summary>Tutte le quote {{ config('event.edition_year') }}</summary>
+                    @include('checkout._tiers')
+                </details>
             </div>
 
             @if ($reservedTier)

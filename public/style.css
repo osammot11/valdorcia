@@ -160,13 +160,17 @@ section { padding: clamp(64px, 9vw, 120px) var(--gutter); }
 /* --- Hero ---------------------------------------------------------------- */
 
 .hero {
-  position: relative;
-  overflow: hidden;
-  padding: clamp(56px, 8vw, 104px) var(--gutter) 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: clamp(32px, 5vw, 72px);
+  align-items: center;
+  max-width: calc(var(--max) + 2 * var(--gutter));
+  margin: 0 auto;
+  padding: clamp(48px, 7vw, 96px) var(--gutter);
   background: var(--paper);
 }
 
-.hero__text { position: relative; z-index: 1; max-width: var(--max); margin: 0 auto; }
+.hero__text { min-width: 0; }
 
 .hero__meta {
   display: flex;
@@ -181,7 +185,7 @@ section { padding: clamp(64px, 9vw, 120px) var(--gutter); }
 
 .hero__title {
   margin-top: 20px;
-  font-size: clamp(64px, 13vw, 184px);
+  font-size: clamp(64px, 9vw, 150px);
   font-stretch: 62%;
   font-weight: 900;
   line-height: .84;
@@ -190,14 +194,24 @@ section { padding: clamp(64px, 9vw, 120px) var(--gutter); }
 .hero__title span { display: block; color: var(--clay); }
 
 .hero__copy { margin-top: 28px; }
-.hero__actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 36px; }
+.hero__note { margin-top: 16px; padding-left: 14px; border-left: 3px solid var(--clay); font-weight: 700; }
+.hero__actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 32px; }
 
-.hero__land {
-  width: calc(100% + 2 * var(--gutter));
-  max-width: none;
-  height: clamp(180px, 26vw, 380px);
-  margin: clamp(-40px, -3vw, -10px) calc(-1 * var(--gutter)) 0;
+.hero__photo { margin: 0; }
+.hero__photo img { display: block; width: 100%; height: auto; aspect-ratio: 1534 / 1025; object-fit: cover; }
+
+/* --- Edizione 2026: grazie e foto ---------------------------------------- */
+
+.thanks { border-top: 1px solid var(--line); }
+.thanks .lead { margin-top: 16px; }
+.photo-strip {
+  display: grid;
+  grid-template-columns: 1.5fr .75fr 1fr 1fr;
+  gap: 12px;
+  margin-top: 40px;
 }
+.photo-strip img { display: block; width: 100%; height: clamp(220px, 24vw, 340px); object-fit: cover; }
+.news { background: var(--surface); border-top: 1px solid var(--line); }
 
 /* --- Striscia dati ------------------------------------------------------- */
 
@@ -284,7 +298,6 @@ section { padding: clamp(64px, 9vw, 120px) var(--gutter); }
   background: repeating-linear-gradient(90deg, var(--clay) 0 14px, transparent 14px 20px);
 }
 
-.routes__note { margin-top: 28px; font-size: 15px; color: var(--ink-soft); }
 
 /* --- Territorio ---------------------------------------------------------- */
 
@@ -555,7 +568,7 @@ section { padding: clamp(64px, 9vw, 120px) var(--gutter); }
 
 /* --- Come arrivare e foto ------------------------------------------------ */
 
-.places { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; }
+.places { display: grid; grid-template-columns: repeat(2, 1fr); gap: 28px; }
 .place { display: flex; flex-direction: column; gap: 14px; padding: 28px; background: var(--surface); border: 1px solid var(--line); }
 .place h2 { font-size: clamp(28px, 2.6vw, 36px); }
 .place p { color: var(--ink-soft); }
@@ -567,6 +580,8 @@ section { padding: clamp(64px, 9vw, 120px) var(--gutter); }
 .top-gap { margin-top: 28px; }
 
 @media (max-width: 960px) {
+  .hero { grid-template-columns: 1fr; }
+  .photo-strip { grid-template-columns: 1fr 1fr; }
   .route-page__body { grid-template-columns: 1fr; }
   .places { grid-template-columns: 1fr; }
   .intro, .faq__wrap, .program { grid-template-columns: 1fr; }

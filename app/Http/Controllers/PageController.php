@@ -13,7 +13,7 @@ class PageController extends Controller
         '' => [
             'view' => 'pages.home',
             'title' => "Val d'Orcia Gravel | Strade bianche in Val d'Orcia",
-            'description' => "Val d'Orcia Gravel: manifestazione cicloturistica sulle strade bianche della Val d'Orcia, patrimonio UNESCO. Quattro percorsi da 45 a 220 km, il 16-17 ottobre 2027 a Castiglione d'Orcia.",
+            'description' => "Val d'Orcia Gravel: manifestazione cicloturistica sulle strade bianche della Val d'Orcia, patrimonio UNESCO. VI edizione il 16-17 ottobre 2027 a Montalcino, iscrizioni dal 10 dicembre 2026.",
             'bodyClass' => 'home-page',
         ],
         'contattaci' => [
@@ -49,12 +49,12 @@ class PageController extends Controller
         'regolamento' => [
             'view' => 'pages.regolamento',
             'title' => "Regolamento | Val d'Orcia Gravel",
-            'description' => "Regolamento di Val d'Orcia Gravel: requisiti, certificato medico, tessera, quote, equipaggiamento obbligatorio.",
+            'description' => "Regolamento di Val d'Orcia Gravel 2027, in via di definizione.",
         ],
         'programma' => [
             'view' => 'pages.programma',
             'title' => "Programma | Val d'Orcia Gravel",
-            'description' => "Programma di Val d'Orcia Gravel: ritiro pacchi gara, orari di partenza dei percorsi ed eventi collaterali.",
+            'description' => "Programma di Val d'Orcia Gravel 2027 a Montalcino e Radicofani, in via di definizione.",
         ],
         'chi-siamo' => [
             'view' => 'pages.chi-siamo',
@@ -64,12 +64,12 @@ class PageController extends Controller
         'percorsi' => [
             'view' => 'pages.percorsi',
             'title' => "Percorsi | Val d'Orcia Gravel",
-            'description' => "I quattro percorsi di Val d'Orcia Gravel: Frugale, Saporito, Goloso e Luculliano, da 45 a 220 km, con dislivello, partenze e tracce GPX.",
+            'description' => "I quattro percorsi di Val d'Orcia Gravel: Frugale, Saporito, Goloso e Luculliano, da 45 a 220 km. Tracce 2027 in via di definizione.",
         ],
         'come-arrivare' => [
             'view' => 'pages.come-arrivare',
             'title' => "Come arrivare | Val d'Orcia Gravel",
-            'description' => "I luoghi di Val d'Orcia Gravel: segreteria a Castiglione d'Orcia, partenza da Rocca d'Orcia, tappa del Luculliano a Radicofani.",
+            'description' => "I luoghi di Val d'Orcia Gravel 2027: partenza da Montalcino, tappa del Luculliano a Radicofani.",
         ],
         'gallery' => [
             'view' => 'pages.gallery',
@@ -79,7 +79,7 @@ class PageController extends Controller
         'termini-condizioni' => [
             'view' => 'pages.regolamento',
             'title' => "Regolamento | Val d'Orcia Gravel",
-            'description' => "Regolamento di Val d'Orcia Gravel: requisiti, certificato medico, tessera, quote, equipaggiamento obbligatorio.",
+            'description' => "Regolamento di Val d'Orcia Gravel 2027, in via di definizione.",
         ],
     ];
 
@@ -106,14 +106,6 @@ class PageController extends Controller
             'canonical' => url($slug === '' ? '/' : '/' . $slug),
             'bodyClass' => $page['bodyClass'] ?? '',
         ];
-
-        if ($page['view'] === 'pages.regolamento') {
-            try {
-                $data['tiers'] = \App\Models\PriceTier::orderBy('starts_on')->get();
-            } catch (Throwable $e) {
-                $data['tiers'] = collect();
-            }
-        }
 
         if ($page['view'] === 'pages.home') {
             try {

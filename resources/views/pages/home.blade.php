@@ -37,38 +37,58 @@
                 <span>{{ config('event.date_label') }}</span>
             </p>
             <h1 class="hero__title">Val d'Orcia<span>Gravel</span></h1>
-            <p class="lead hero__copy">Pedala sulle strade bianche più belle del mondo, patrimonio UNESCO. {{ count($routes) }} percorsi da {{ min($kmValues) }} a {{ $maxKm }} km, per ogni tipo di bici e ogni livello di esperienza.</p>
+            <p class="lead hero__copy">Pedala sulle strade bianche più belle del mondo, patrimonio UNESCO. La {{ config('event.edition_number') }} edizione parte da {{ config('event.location') }}, con {{ count($routes) }} percorsi tutti rinnovati.</p>
+            <p class="hero__note">Iscrizioni online dal 10 dicembre 2026 a prezzo agevolato: 25 € (70 € per il Luculliano).</p>
             <div class="hero__actions">
-                <a href="/iscrizione" class="btn">Iscriviti</a>
-                <a href="#percorsi" class="btn btn-ghost">Scegli il percorso</a>
+                <a href="/iscrizione" class="btn">Iscrizioni e quote</a>
+                <a href="#edizione-2026" class="btn btn-ghost">Com'è andata nel 2026</a>
             </div>
         </div>
 
-        <svg class="hero__land" viewBox="0 0 1440 380" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
-            <circle cx="1130" cy="120" r="54" fill="#c8642d" opacity=".9"/>
-            <path d="M0 210 C180 150 330 160 470 196 S760 250 930 200 S1250 120 1440 170 V380 H0Z" fill="#e2c48e"/>
-            <path d="M0 250 C160 214 300 220 450 250 S720 300 900 262 S1230 200 1440 236 V380 H0Z" fill="#d6a95c"/>
-            <path d="M0 300 C200 262 380 270 560 298 S900 330 1080 296 S1330 262 1440 280 V380 H0Z" fill="#8c8a4f"/>
-            <path d="M0 340 C220 318 420 322 620 340 S1000 362 1200 340 S1380 326 1440 332 V380 H0Z" fill="#3d4630"/>
-            <path d="M260 380 C330 340 420 318 560 300 S820 262 930 236 S1060 206 1140 196" fill="none" stroke="#f3ecdf" stroke-width="7" stroke-linecap="round" stroke-dasharray="20 14"/>
-            <g fill="#2a3122">
-                @foreach ([[960, 218], [990, 214], [1020, 209], [1050, 204], [1080, 199], [1110, 194]] as $i => [$x, $y])
-                    @php $h = 46 + ($i % 2) * 8; @endphp
-                    <path d="M{{ $x }} {{ $y }} C{{ $x - 8 }} {{ $y - $h * .45 }} {{ $x - 5 }} {{ $y - $h * .8 }} {{ $x }} {{ $y - $h }} C{{ $x + 5 }} {{ $y - $h * .8 }} {{ $x + 8 }} {{ $y - $h * .45 }} {{ $x }} {{ $y }}Z"/>
-                @endforeach
-                <path d="M300 268 C292 250 294 228 300 210 C306 228 308 250 300 268Z"/>
-            </g>
-        </svg>
+        <figure class="hero__photo">
+            <img src="/images/home/arrivo.jpg" srcset="/images/home/arrivo-800.jpg 800w, /images/home/arrivo.jpg 1534w" sizes="(max-width: 960px) 100vw, 50vw" width="1534" height="1025" alt="Un partecipante festeggia sotto lo striscione d'arrivo della Val d'Orcia Gravel 2026" fetchpriority="high">
+        </figure>
     </div>
 
     <div class="facts" aria-label="L'evento in breve">
         <div><strong>{{ count($routes) }} percorsi</strong><span>{{ implode(' · ', $kmValues) }} km</span></div>
         <div><strong>Ogni bici</strong><span>Gravel, strada, mtb, e-bike</span></div>
-        <div><strong>{{ config('event.location') }}</strong><span>Partenze da {{ config('event.start_place') }}</span></div>
+        <div><strong>{{ config('event.location') }}</strong><span>Nuova sede</span></div>
         <div><strong>{{ config('event.date_label') }}</strong><span>{{ config('event.edition_number') }} edizione</span></div>
     </div>
 
     <main>
+        <section id="edizione-2026" class="thanks">
+            <div class="inner">
+                <span class="kicker">Edizione 2026</span>
+                <h2>Grazie a tutti i partecipanti.</h2>
+                <p class="lead">In 740 avete pedalato tra le strade bianche più belle del mondo!</p>
+
+                <div class="photo-strip">
+                    <img src="/images/home/crete-800.jpg" srcset="/images/home/crete-800.jpg 800w, /images/home/crete.jpg 1600w" sizes="(max-width: 768px) 100vw, 40vw" width="1600" height="1066" alt="Due ciclisti in salita su una strada bianca tra le crete" loading="lazy">
+                    <img src="/images/home/notturna.jpg" width="764" height="1024" alt="Ciclisti di notte tra le vie lastricate di un borgo, in bianco e nero" loading="lazy">
+                    <img src="/images/home/sosta-800.jpg" srcset="/images/home/sosta-800.jpg 800w, /images/home/sosta.jpg 1600w" sizes="(max-width: 768px) 100vw, 30vw" width="1600" height="1066" alt="Una partecipante in sosta accanto alla sua gravel, appoggiata a un muro in pietra" loading="lazy">
+                    <img src="/images/home/timbro-800.jpg" srcset="/images/home/timbro-800.jpg 800w, /images/home/timbro.jpg 1600w" sizes="(max-width: 768px) 100vw, 30vw" width="1600" height="1066" alt="Due bambine timbrano la road map di un ciclista al punto timbro" loading="lazy">
+                </div>
+
+                <a class="btn btn-ghost top-gap" href="https://www.youtube.com/watch?v=fvuZWxppnUs" target="_blank" rel="noopener">Guarda gli highlights 2026 su YouTube</a>
+            </div>
+        </section>
+
+        <section class="news">
+            <div class="inner intro">
+                <div>
+                    <span class="kicker">Edizione {{ config('event.edition_year') }}</span>
+                    <h2>Si riparte da {{ config('event.location') }}.</h2>
+                </div>
+                <div class="intro__body">
+                    <p>La nuova sede dell'edizione {{ config('event.edition_year') }} sarà {{ config('event.location') }}, il {{ config('event.date_label') }}. Tutti i percorsi saranno rinnovati e, dopo il grande successo, torna il Luculliano: un viaggio di due giorni in pieno spirito gravel e bikepacking, ampliato a {{ $routes['luculliano']['limit'] }} iscritti.</p>
+                    <p>Le iscrizioni online aprono il 10 dicembre 2026 a prezzo agevolato: 25 € per Frugale, Saporito e Goloso, 70 € per il Luculliano. Tutte le quote sono nella pagina <a class="hyperlink" href="/iscrizione">iscrizioni</a>.</p>
+                    <p>La {{ config('event.name') }} fa parte del circuito <a class="hyperlink" href="https://gravelroadstuscany.it/" target="_blank" rel="noopener">Gravel Roads Tuscany</a> e del circuito MUT.</p>
+                </div>
+            </div>
+        </section>
+
         <section>
             <div class="inner intro">
                 <div>
@@ -76,9 +96,9 @@
                     <h2>Cicloturismo, non cronometro.</h2>
                 </div>
                 <div class="intro__body">
-                    <p>{{ config('event.name') }} è una manifestazione cicloturistica internazionale nata nel 2022 e organizzata da {{ config('event.organizer') }}, l'associazione di Castelnuovo dell'Abate che dal 1990 porta le bici fuori strada in Val d'Orcia. Nel 2025 i partecipanti sono stati 693.</p>
+                    <p>{{ config('event.name') }} è una manifestazione cicloturistica internazionale nata nel 2022 e organizzata da {{ config('event.organizer') }}, l'associazione di Castelnuovo dell'Abate che dal 1990 porta le bici fuori strada in Val d'Orcia. Nel 2026 i partecipanti sono stati 740.</p>
                     <p>Non ci sono tratti cronometrati né chip: si pedala per il paesaggio, i ristori con i prodotti del territorio e la compagnia. Le strade restano aperte al traffico, quindi vale il codice della strada.</p>
-                    <p>La {{ config('event.edition_number') }} edizione si svolge su due giorni a {{ config('event.location') }}: il sabato il ritiro dei pacchi gara e la partenza del Luculliano, la domenica tutti gli altri percorsi.</p>
+                    <p>La {{ config('event.edition_number') }} edizione si svolge il {{ config('event.date_label') }} a {{ config('event.location') }}: il <a class="hyperlink" href="/programma">programma</a> è in via di definizione.</p>
                     @if ($totalIscritti > 0)
                         <p class="counter"><strong>{{ $totalIscritti }}</strong> iscritti finora</p>
                     @endif
@@ -93,7 +113,7 @@
                         <span class="kicker">Percorsi</span>
                         <h2>Quattro percorsi, una valle.</h2>
                     </div>
-                    <p>Tracciati disegnati per le gravel ma percorribili anche con mtb ed e-bike. Frugale, Saporito e Goloso partono la domenica da {{ config('event.start_place') }}; il Luculliano è un viaggio di due giorni.</p>
+                    <p>Tracciati disegnati per le gravel ma percorribili anche con mtb ed e-bike. Per l'edizione {{ config('event.edition_year') }} i percorsi saranno tutti rinnovati: tracce e descrizioni sono in via di definizione.</p>
                 </div>
 
                 <div class="route-list">
@@ -102,8 +122,9 @@
                             <p class="route__km">{{ $route['km'] }}<small>km</small></p>
                             <div class="route__info">
                                 <h3>{{ $route['name'] }} <span class="route__level">{{ $route['level'] }}</span></h3>
-                                <p class="route__stats">{{ number_format($route['elevation'], 0, ',', '.') }} m di dislivello · partenza {{ $route['start'] }}@if ($route['limit']) · max {{ $route['limit'] }} partecipanti @endif</p>
-                                <p>{{ $route['text'] }}</p>
+                                @if ($route['limit'])
+                                    <p class="route__stats">Max {{ $route['limit'] }} partecipanti</p>
+                                @endif
                                 <div class="route__bar" style="--len: {{ round($route['km'] / $maxKm, 3) }}" aria-hidden="true"></div>
                             </div>
                             <a href="/iscrizione?percorso={{ urlencode($value) }}" class="btn btn-ghost">Iscriviti al {{ $route['short_name'] ?? $route['name'] }}</a>
@@ -111,7 +132,6 @@
                     @endforeach
                 </div>
 
-                <p class="routes__note">Frugale, Saporito e Goloso sono segnalati con cartelli gialli e frecce marroni; il Luculliano non è segnalato e si segue la traccia GPX. Le tracce possono cambiare per esigenze organizzative.</p>
             </div>
         </section>
 
@@ -124,7 +144,7 @@
                     <div class="land__item">
                         <span class="num">01</span>
                         <h3>Punti ristoro</h3>
-                        <p>Prodotti della tradizione senese e toscana lungo il percorso, più un rinfresco all'arrivo. Saporito ha due ristori, Goloso quattro.</p>
+                        <p>Prodotti della tradizione senese e toscana lungo il percorso, più un rinfresco all'arrivo.</p>
                     </div>
                     <div class="land__item">
                         <span class="num">02</span>
@@ -171,7 +191,7 @@
                     </li>
                     <li>
                         <h3>Ritira il pacco gara</h3>
-                        <p>Alla Pro Loco di {{ config('event.location') }}, il sabato o la domenica mattina prima della partenza: gli orari sono nel <a class="hyperlink" href="/programma">programma</a>.</p>
+                        <p>A {{ config('event.location') }}, prima della partenza: luogo e orari saranno nel <a class="hyperlink" href="/programma">programma</a>, in via di definizione.</p>
                     </li>
                 </ol>
             </div>

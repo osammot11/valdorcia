@@ -6,9 +6,10 @@
 |--------------------------------------------------------------------------
 |
 | Unico punto in cui cambiare nomi, date, luoghi, contatti e percorsi.
-| Fonte: sito ufficiale valdorciagravel.it (edizione 2026). Le date 2027
-| sono spostate di un anno sulla stessa formula: DA CONFERMARE con
-| l'organizzazione. I prezzi stanno nel database (Scaglioni nell'admin).
+| Fonte: sito ufficiale valdorciagravel.it e mail di Federico Ricci del
+| 3/11/2026 per l'edizione 2027 (nuova sede Montalcino; programma,
+| percorsi e regolamento in via di definizione). I prezzi stanno nel
+| database (Scaglioni nell'admin).
 |
 */
 
@@ -26,8 +27,8 @@ return [
     'online_closes_label' => '14 ottobre 2027', // nel 2026: tre giorni prima della domenica
     'online_closes_iso' => '2027-10-14',        // ultimo giorno per iscriversi online e cambiare percorso
 
-    'location' => "Castiglione d'Orcia",
-    'start_place' => "Rocca d'Orcia",    // borgo medievale da cui partono Frugale, Saporito e Goloso
+    'location' => 'Montalcino',
+    'start_place' => 'Montalcino',       // "La VI edizione partirà da Montalcino": luogo preciso in via di definizione
     'region' => 'Siena, Toscana',
 
     'email' => 'bike@bikemontalcino.it',
@@ -52,7 +53,7 @@ return [
     'memberships' => ['FCI', 'ACSI', 'US ACLI', 'CSI', 'CSAIN', 'AICS', 'LIBERTAS', 'CSEN', 'UISP', 'OPES (con Bike Card)', 'ASI (con Bike Card)'],
 
     // Iscrizione il sabato in loco (solo Frugale, Saporito, Goloso)
-    'onsite_price' => 50.00,
+    'onsite_price' => 55.00,
 
     // La chiave è il valore salvato in database e validato dai controller.
     'routes' => [
@@ -97,8 +98,8 @@ return [
             'level' => 'Due giorni',
             'certificate' => 'agonistico',
             'start' => 'sabato 12:00',
-            'limit' => 100,
-            'stages' => "Sabato circa 100 km da Rocca d'Orcia a Radicofani, domenica circa 120 km da Radicofani a Castiglione d'Orcia.",
+            'limit' => 150,
+            'stages' => "Due giorni con tappa a Radicofani.",
             'includes' => 'cena del sabato a Radicofani, colazione della domenica e trasporto bagagli da e per Radicofani',
             'gpx' => ['1ª tappa 2026' => 'https://valdorciagravel.it/wp-content/uploads/2026/10/Luculliano_tappa_1_20261.gpx', '2ª tappa 2026' => 'https://valdorciagravel.it/wp-content/uploads/2026/10/Luculliano_tappa_2_2026.gpx'],
             'text' => "Un viaggio in bikepacking su due giorni: il primo nel foliage del Monte Amiata, il secondo dentro la Val d'Orcia. Percorso non segnalato, con traccia GPX fornita a tutti; luci anteriori e posteriori obbligatorie.",

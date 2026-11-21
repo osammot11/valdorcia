@@ -33,6 +33,7 @@ Route::get('/iscrizione', function () {
         'reservedTier' => Registration::reservedTier(),
         'nextTier' => Registration::nextPublicTier(),
         'remaining' => Registration::remainingByRoute(),
+        'tiers' => \App\Models\PriceTier::whereNull('access_code')->orderBy('starts_on')->get(),
     ]);
 })->name('iscrizione');
 

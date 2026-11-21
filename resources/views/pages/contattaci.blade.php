@@ -21,7 +21,7 @@
                 </div>
                 <div class="card">
                     <h2>Dormire e mangiare</h2>
-                    <p class="top-margin-large">Pro Loco di {{ config('event.location') }}: <a class="hyperlink" href="mailto:prolococastiglionedorcia@gmail.com">prolococastiglionedorcia@gmail.com</a></p>
+                    <p class="top-margin-large">Pro Loco di Castiglione d'Orcia: <a class="hyperlink" href="mailto:prolococastiglionedorcia@gmail.com">prolococastiglionedorcia@gmail.com</a></p>
                     <p class="top-margin-mid">Pro Loco di Radicofani (Luculliano): <a class="hyperlink" href="mailto:prolocoradicofani@gmail.com">prolocoradicofani@gmail.com</a></p>
                 </div>
                 <div class="card">

@@ -207,3 +207,13 @@ label:has(> input[type="checkbox"]) > input[type="checkbox"] { margin-top: 1px; 
 
 /* Campo con errore dopo l'invio */
 .label-box:has(> .field-error:not([hidden])) :is(input, select) { border-color: var(--danger); }
+
+/* Tabella di tutti gli scaglioni */
+.tier-list li { align-items: baseline; }
+.tier-list strong { text-align: right; }
+.tier-details summary { cursor: pointer; font-weight: 700; }
+.tier-details .tier-list { margin-top: 8px; }
+@media (max-width: 560px) {
+  .tier-list li { flex-direction: column; gap: 2px; }
+  .tier-list strong { text-align: left; }
+}
