@@ -27,6 +27,35 @@ class BlogTest extends TestCase
         $this->get('/sponsor')->assertRedirect('/partnership');
     }
 
+    public function test_a_post_uses_its_first_sentence_as_title_and_points_to_the_new_edition(): void
+    {
+        $this->seed(\Database\Seeders\BlogPostSeeder::class);
+        $post = \App\Models\Post::where('slug', 'comunicato-stampa-3-2026')->firstOrFail();
+        $sentence = $post->headlineSentence();
+        $this->assertNotNull($sentence);
+
+        $html = $this->get('/blog/' . $post->slug)->assertOk()
+            ->assertSee('Comunicato stampa 3 – 2026')
+            ->assertSee("Questo comunicato riguarda un'edizione passata", false)
+            ->assertSee('alt="Comunicato stampa 3 – 2026"', false)
+            ->getContent();
+
+        $this->assertStringContainsString('<h1 class="post-title">' . e($sentence) . '</h1>', $html);
+        $main = \Illuminate\Support\Str::between($html, '<main>', '</main>');
+        $this->assertSame(1, substr_count($main, e($sentence)), 'La prima frase non va ripetuta nel testo');
+
+        // Frase troppo lunga: resta il titolo ufficiale e il primo paragrafo va in apertura, una volta sola
+        $long = \App\Models\Post::where('slug', 'comunicato-stampa-2-2026')->firstOrFail();
+        $this->assertNull($long->headlineSentence());
+        $longMain = \Illuminate\Support\Str::between($this->get('/blog/' . $long->slug)->assertOk()->getContent(), '<main>', '</main>');
+        $this->assertStringContainsString('<h1>Comunicato stampa 2 – 2026</h1>', $longMain);
+        $this->assertSame(1, substr_count($longMain, e($long->firstText())));
+        $this->assertStringContainsString('class="lead post-intro"', $longMain);
+
+        // Archivio diviso per anno
+        $this->get('/blog')->assertOk()->assertSee('id="anno-2026"', false)->assertSee('id="anno-2022"', false);
+    }
+
     public function test_the_seeder_does_not_overwrite_admin_changes(): void
     {
         $this->seed(BlogPostSeeder::class);

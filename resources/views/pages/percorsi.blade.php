@@ -14,6 +14,8 @@
             </div>
         </section>
 
+        @include('partials.page-photo', ['photo' => 'crete', 'alt' => 'Due ciclisti in salita su una strada bianca tra le crete, edizione 2026'])
+
         <section>
             <div class="inner route-pages">
                 @foreach ($routes as $value => $route)

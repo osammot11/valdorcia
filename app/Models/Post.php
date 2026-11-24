@@ -54,6 +54,29 @@ class Post extends Model
         return preg_match('/^(.{30,160}?[.!?])(\s|$)/u', $first, $m) ? $m[1] : Str::limit($first, 140);
     }
 
+    /** La prima frase intera del testo (senza troncarla), da usare come titolo della pagina; null se è troppo lunga */
+    public function headlineSentence(): ?string
+    {
+        return preg_match('/^(.{30,160}?[.!?])(\s|$)/u', $this->firstText(), $m) ? $m[1] : null;
+    }
+
+    /** Comunicato di un'edizione già passata (pubblicato entro il giorno dell'ultima edizione) */
+    public function isFromPastEdition(): bool
+    {
+        $lastEdition = \Illuminate\Support\Carbon::parse(config('event.date_iso'))->subYear();
+
+        return $this->published_on->lte($lastEdition);
+    }
+
+    /** Larghezza e altezza della foto, per riservarle lo spazio mentre carica */
+    public function imageSize(): ?array
+    {
+        $path = $this->image ? public_path(ltrim($this->image, '/')) : null;
+        $size = $path && is_file($path) ? @getimagesize($path) : false;
+
+        return $size ? ['width' => $size[0], 'height' => $size[1]] : null;
+    }
+
     public function excerpt(): string
     {
         return Str::limit($this->firstText(), 180);

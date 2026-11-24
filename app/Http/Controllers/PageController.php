@@ -108,7 +108,7 @@ class PageController extends Controller
         ];
 
         // Con le iscrizioni chiuse i pulsanti dei percorsi non promettono un modulo che non c'è
-        if (in_array($page['view'], ['pages.home', 'pages.percorsi'], true)) {
+        if (in_array($page['view'], ['pages.home', 'pages.percorsi', 'pages.programma'], true)) {
             try {
                 $data['registrationOpen'] = \App\Services\Registration::isOpen();
             } catch (Throwable $e) {

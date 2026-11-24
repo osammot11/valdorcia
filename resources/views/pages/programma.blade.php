@@ -12,6 +12,8 @@
             </div>
         </section>
 
+        @include('partials.page-photo', ['photo' => 'timbro', 'alt' => 'Due bambine timbrano la road map di un ciclista al punto timbro, edizione 2026'])
+
         <section>
             <div class="inner grid-2">
                 <div>
@@ -21,6 +23,9 @@
                 <div>
                     <p>Il programma dell'edizione {{ config('event.edition_year') }} è in via di definizione: ritiro dei pacchi gara, partenze ed eventi collaterali saranno pubblicati qui appena confermati dall'organizzazione.</p>
                     <p>Intanto puoi segnare le date: {{ \Illuminate\Support\Str::lower(config('event.saturday_label')) }} e {{ \Illuminate\Support\Str::lower(config('event.sunday_label')) }} 2027, con partenza da {{ config('event.location') }}. Le iscrizioni online aprono il 10 dicembre 2026: quote e scadenze sono nella pagina <a class="hyperlink" href="/iscrizione">iscrizioni</a>.</p>
+                    @unless ($registrationOpen)
+                        <p class="top-gap"><a class="btn" href="{{ route('iscrizione.ics') }}" download>Promemoria per l'apertura delle iscrizioni</a></p>
+                    @endunless
                 </div>
             </div>
         </section>

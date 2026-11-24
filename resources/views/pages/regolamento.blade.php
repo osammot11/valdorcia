@@ -12,6 +12,8 @@
             </div>
         </section>
 
+        @include('partials.page-photo', ['photo' => 'sosta', 'alt' => 'Una partecipante in sosta accanto alla sua gravel, appoggiata a un muro in pietra, edizione 2026'])
+
         <section>
             <div class="inner grid-2">
                 <div>
