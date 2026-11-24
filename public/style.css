@@ -105,9 +105,10 @@ a { color: inherit; }
   text-decoration: none;
   text-align: center;
   cursor: pointer;
-  transition: background-color .2s ease, border-color .2s ease, color .2s ease;
+  transition: background-color .2s ease, border-color .2s ease, color .2s ease, transform .16s cubic-bezier(0.23, 1, 0.32, 1);
 }
 .btn:hover { background: var(--clay-dark); border-color: var(--clay-dark); }
+.btn:active, .cookie-choice:active, .nav-cta:active { transform: scale(.97); }
 
 .btn-ghost { background: transparent; color: var(--ink); border-color: var(--ink); }
 .btn-ghost:hover { background: var(--ink); border-color: var(--ink); color: var(--paper); }
@@ -498,7 +499,7 @@ section { padding: clamp(64px, 9vw, 120px) var(--gutter); }
   letter-spacing: .06em;
   text-transform: uppercase;
   cursor: pointer;
-  transition: background-color .2s ease, color .2s ease;
+  transition: background-color .2s ease, color .2s ease, transform .16s cubic-bezier(0.23, 1, 0.32, 1);
 }
 .cookie-choice:hover { background: var(--ink); color: var(--paper); }
 .cookie-link {

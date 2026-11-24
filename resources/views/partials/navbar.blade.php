@@ -1,4 +1,4 @@
-<link rel="stylesheet" href="/navbar/navbar.css?v=9">
+<link rel="stylesheet" href="/navbar/navbar.css?v=10">
 <script src="/navbar/navbar.js?v=4" defer></script>
 
 <nav class="navbar" aria-label="Principale">

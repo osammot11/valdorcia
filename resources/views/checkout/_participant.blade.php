@@ -147,10 +147,13 @@
             <label for="{{ $id('membership') }}">Tessera sportiva per il ciclismo</label>
             <select id="{{ $id('membership') }}" name="tickets[{{ $i }}][membership]"{{ $describe('membership') }} class="membership-select" required>
                 <option value="">Scegli</option>
-                @foreach (config('event.memberships') as $option)
-                    <option value="{{ $option }}" @selected($membership === $option)>{{ $option }}</option>
-                @endforeach
+                {{-- La risposta più comune per prima --}}
                 <option value="giornaliera" @selected($membership === 'giornaliera')>Non sono tesserato: tessera giornaliera (+{{ $euro($dayCardPrice) }})</option>
+                <optgroup label="Sono tesserato con">
+                    @foreach (config('event.memberships') as $option)
+                        <option value="{{ $option }}" @selected($membership === $option)>{{ $option }}</option>
+                    @endforeach
+                </optgroup>
             </select>
             {{ $fe('membership') }}
         </div>

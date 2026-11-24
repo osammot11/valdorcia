@@ -96,7 +96,7 @@
                     <h2>Cicloturismo, non cronometro.</h2>
                 </div>
                 <div class="intro__body">
-                    <p>{{ config('event.name') }} è una manifestazione cicloturistica internazionale nata nel 2022 e organizzata da {{ config('event.organizer') }}, l'associazione di Castelnuovo dell'Abate che dal 1990 porta le bici fuori strada in Val d'Orcia. Nel 2026 i partecipanti sono stati 740.</p>
+                    <p>{{ config('event.name') }} è una manifestazione cicloturistica internazionale nata nel 2022 e organizzata da {{ config('event.organizer') }}, l'associazione di Castelnuovo dell'Abate che dal 1990 porta le bici fuori strada in Val d'Orcia.</p>
                     <p>Non ci sono tratti cronometrati né chip: si pedala per il paesaggio, i ristori con i prodotti del territorio e la compagnia. Le strade restano aperte al traffico, quindi vale il codice della strada.</p>
                     <p>La {{ config('event.edition_number') }} edizione si svolge il {{ config('event.date_label') }} a {{ config('event.location') }}: il <a class="hyperlink" href="/programma">programma</a> è in via di definizione.</p>
                     @if ($totalIscritti > 0)
@@ -138,7 +138,7 @@
         <section id="territorio" class="land">
             <div class="inner">
                 <span class="kicker">Cosa comprende l'iscrizione</span>
-                <h2>Pensate tu a pedalare.</h2>
+                <h2>Tu pensa a pedalare.</h2>
 
                 <div class="land__grid">
                     <div class="land__item">
@@ -205,39 +205,39 @@
                 </div>
                 <div class="faq-accordion">
                     <div class="faq-item">
-                        <button class="faq-question" aria-expanded="false"><span>Serve il certificato medico?</span><span class="faq-icon">+</span></button>
+                        <button class="faq-question" aria-expanded="false"><span>Serve il certificato medico?</span><span class="faq-icon" aria-hidden="true">+</span></button>
                         <div class="faq-answer"><p>Sì, per tutti, anche per chi ha la tessera. Per Saporito, Goloso e Luculliano serve il certificato di idoneità agonistica per il ciclismo; per il Frugale basta quello non agonistico. Lo carichi direttamente nel modulo di iscrizione.</p></div>
                     </div>
                     <div class="faq-item">
-                        <button class="faq-question" aria-expanded="false"><span>Serve una tessera sportiva?</span><span class="faq-icon">+</span></button>
+                        <button class="faq-question" aria-expanded="false"><span>Serve una tessera sportiva?</span><span class="faq-icon" aria-hidden="true">+</span></button>
                         <div class="faq-answer"><p>No. Se non sei tesserato FCI o con un ente convenzionato, nel modulo aggiungi la tessera giornaliera da 10 €, che include la copertura assicurativa per la manifestazione.</p></div>
                     </div>
                     <div class="faq-item">
-                        <button class="faq-question" aria-expanded="false"><span>Ci sono tratti cronometrati o il chip?</span><span class="faq-icon">+</span></button>
+                        <button class="faq-question" aria-expanded="false"><span>Ci sono tratti cronometrati o il chip?</span><span class="faq-icon" aria-hidden="true">+</span></button>
                         <div class="faq-answer"><p>No: tutti i percorsi sono cicloturistici, senza cronometraggio. Il tracciamento con l'app Whip Live di ENDU serve solo per la sicurezza ed è obbligatorio.</p></div>
                     </div>
                     <div class="faq-item">
-                        <button class="faq-question" aria-expanded="false"><span>Con che bici posso partecipare?</span><span class="faq-icon">+</span></button>
+                        <button class="faq-question" aria-expanded="false"><span>Con che bici posso partecipare?</span><span class="faq-icon" aria-hidden="true">+</span></button>
                         <div class="faq-answer"><p>Con qualsiasi bici: gravel, strada, mountain bike ed e-bike.</p></div>
                     </div>
                     <div class="faq-item">
-                        <button class="faq-question" aria-expanded="false"><span>I percorsi sono segnalati?</span><span class="faq-icon">+</span></button>
+                        <button class="faq-question" aria-expanded="false"><span>I percorsi sono segnalati?</span><span class="faq-icon" aria-hidden="true">+</span></button>
                         <div class="faq-answer"><p>Frugale, Saporito e Goloso sì, con cartelli gialli e frecce marroni e personale ai bivi. Il Luculliano non è segnalato: si segue la traccia GPX fornita a tutti gli iscritti.</p></div>
                     </div>
                     <div class="faq-item">
-                        <button class="faq-question" aria-expanded="false"><span>Le strade sono chiuse al traffico?</span><span class="faq-icon">+</span></button>
+                        <button class="faq-question" aria-expanded="false"><span>Le strade sono chiuse al traffico?</span><span class="faq-icon" aria-hidden="true">+</span></button>
                         <div class="faq-answer"><p>No. Essendo una manifestazione cicloturistica le strade restano aperte: si rispetta il codice della strada e si tiene sempre la destra.</p></div>
                     </div>
                     <div class="faq-item">
-                        <button class="faq-question" aria-expanded="false"><span>Cosa devo portare?</span><span class="faq-icon">+</span></button>
+                        <button class="faq-question" aria-expanded="false"><span>Cosa devo portare?</span><span class="faq-icon" aria-hidden="true">+</span></button>
                         <div class="faq-answer"><p>Casco rigido omologato (obbligatorio e sempre allacciato), attrezzi per smontare il copertone, camera d'aria di scorta, pompa o bomboletta e borraccia. Per il Luculliano anche luci anteriori e posteriori.</p></div>
                     </div>
                     <div class="faq-item">
-                        <button class="faq-question" aria-expanded="false"><span>Posso avere un rimborso?</span><span class="faq-icon">+</span></button>
+                        <button class="faq-question" aria-expanded="false"><span>Posso avere un rimborso?</span><span class="faq-icon" aria-hidden="true">+</span></button>
                         <div class="faq-answer"><p>La quota non è rimborsabile né cedibile. In caso di infortunio, con un certificato medico inviato entro il 1° ottobre, puoi spostare l'iscrizione all'edizione successiva.</p></div>
                     </div>
                     <div class="faq-item">
-                        <button class="faq-question" aria-expanded="false"><span>Posso iscrivere un gruppo o un'associazione?</span><span class="faq-icon">+</span></button>
+                        <button class="faq-question" aria-expanded="false"><span>Posso iscrivere un gruppo o un'associazione?</span><span class="faq-icon" aria-hidden="true">+</span></button>
                         <div class="faq-answer"><p>Sì. Nello stesso ordine puoi aggiungere più partecipanti e indicare il nome dell'associazione. Ognuno riceve il proprio biglietto nominativo.</p></div>
                     </div>
                 </div>

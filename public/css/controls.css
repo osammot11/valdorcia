@@ -93,11 +93,12 @@ input[type="checkbox"]::before {
   margin-top: -3px;
   border-left: 2.5px solid #fff;
   border-bottom: 2.5px solid #fff;
-  transform: rotate(-45deg) scale(0);
-  transition: transform .12s ease;
+  opacity: 0;
+  transform: rotate(-45deg) scale(.6);
+  transition: transform .14s cubic-bezier(0.23, 1, 0.32, 1), opacity .1s ease;
 }
 input[type="checkbox"]:checked { background: var(--clay); border-color: var(--clay); }
-input[type="checkbox"]:checked::before { transform: rotate(-45deg) scale(1); }
+input[type="checkbox"]:checked::before { opacity: 1; transform: rotate(-45deg) scale(1); }
 input[type="checkbox"]:focus-visible { outline: 3px solid var(--clay-soft); outline-offset: 2px; }
 
 /* --- File: il bottone segue lo stile del sito ---------------------------- */

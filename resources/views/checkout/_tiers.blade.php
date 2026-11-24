@@ -14,7 +14,7 @@
                 ->map(fn ($keys, $price) => $keys->map(fn ($k) => $routeNames[$k])->implode(', ') . ' ' . $fmt($price));
         @endphp
         <li>
-            <span>Dal {{ $tier->starts_on->format('d/m/Y') }} al {{ $tier->ends_on->format('d/m/Y') }}</span>
+            <span>Dal {{ $tier->starts_on->translatedFormat('j F Y') }} al {{ $tier->ends_on->translatedFormat('j F Y') }}</span>
             <strong>{{ $groups->implode(' · ') }}</strong>
         </li>
     @endforeach

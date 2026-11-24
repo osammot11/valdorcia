@@ -104,14 +104,14 @@ form > label, .stack-mid > label, .ticket-block > div > label {
 .box-associazione > label { font-weight: 600; color: var(--ink); }
 .ticket-block { border-top: 4px solid var(--clay); }
 
-.bg-primary-hover {
+.form-alert {
   margin-bottom: 24px;
   padding: 16px 20px;
   background: #fbe9e5;
   border-left: 4px solid var(--danger);
   color: var(--danger);
 }
-.bg-primary-hover ul { margin: 8px 0 0; padding-left: 20px; }
+.form-alert ul { margin: 8px 0 0; padding-left: 20px; }
 
 /* --- Bottoni ------------------------------------------------------------- */
 
@@ -121,8 +121,9 @@ form > label, .stack-mid > label, .ticket-block > div > label {
   letter-spacing: .06em;
   text-transform: uppercase;
   cursor: pointer;
-  transition: background-color .2s ease, border-color .2s ease, color .2s ease;
+  transition: background-color .2s ease, border-color .2s ease, color .2s ease, transform .16s cubic-bezier(0.23, 1, 0.32, 1);
 }
+.btn:active, .grey-btn:active, .remove-btn:active { transform: scale(.97); }
 
 .btn {
   display: inline-block;

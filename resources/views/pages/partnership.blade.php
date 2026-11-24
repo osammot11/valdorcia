@@ -16,7 +16,7 @@
 
         <section>
             <div class="inner">
-                <span class="kicker">Edizione {{ $sponsors['edition'] }}</span>
+                <span class="kicker">Sostenitori dell'edizione {{ $sponsors['edition'] }}</span>
                 <h2>Con il sostegno di</h2>
                 <ul class="logo-grid logo-grid--supporters">
                     @foreach ($sponsors['supporters'] as $item)
@@ -30,7 +30,7 @@
 
         <section>
             <div class="inner">
-                <span class="kicker">Edizione {{ $sponsors['edition'] }}</span>
+                <span class="kicker">Partner dell'edizione {{ $sponsors['edition'] }}</span>
                 <h2>I nostri partner</h2>
                 <ul class="logo-grid">
                     @foreach ($sponsors['partners'] as $item)

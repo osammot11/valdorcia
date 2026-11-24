@@ -18,6 +18,7 @@ class PageController extends Controller
         ],
         'contattaci' => [
             'view' => 'pages.contattaci',
+            'canonical' => 'contatti', // stessa pagina di /contatti
             'title' => "Contatti | Val d'Orcia Gravel",
             'description' => "Scrivi allo staff di Val d'Orcia Gravel per iscrizioni, percorsi e logistica.",
         ],
@@ -103,7 +104,7 @@ class PageController extends Controller
         $data = [
             'title' => $page['title'],
             'description' => $page['description'],
-            'canonical' => url($slug === '' ? '/' : '/' . $slug),
+            'canonical' => url($slug === '' ? '/' : '/' . ($page['canonical'] ?? $slug)),
             'bodyClass' => $page['bodyClass'] ?? '',
         ];
 

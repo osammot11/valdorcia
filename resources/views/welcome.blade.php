@@ -39,8 +39,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&display=swap" rel="stylesheet">
     <link rel="icon" type="image/png" href="/images/valdorcia-gravel/logo-valdorcia-gravel.png">
     <link rel="apple-touch-icon" href="/images/valdorcia-gravel/logo-valdorcia-gravel.png">
-    <link rel="stylesheet" href="/css/controls.css?v=2">
-    <link rel="stylesheet" href="/css/checkout.css?v=10">
+    <link rel="stylesheet" href="/css/controls.css?v=3">
+    <link rel="stylesheet" href="/css/checkout.css?v=11">
 </head>
 <body class="center-items checkout-body">
 
@@ -97,7 +97,7 @@
                     $participantErrors = collect($errors->keys())->filter(fn ($k) => preg_match('/^tickets\.\d+\./', $k));
                     $generalErrors = collect($errors->keys())->diff($participantErrors)->flatMap(fn ($k) => $errors->get($k));
                 @endphp
-                <div class="bg-primary-hover">
+                <div class="form-alert" role="alert">
                     <strong>Attenzione!</strong>
                     <ul>
                         @foreach($generalErrors as $error)
