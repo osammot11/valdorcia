@@ -107,6 +107,15 @@ class PageController extends Controller
             'bodyClass' => $page['bodyClass'] ?? '',
         ];
 
+        // Con le iscrizioni chiuse i pulsanti dei percorsi non promettono un modulo che non c'è
+        if (in_array($page['view'], ['pages.home', 'pages.percorsi'], true)) {
+            try {
+                $data['registrationOpen'] = \App\Services\Registration::isOpen();
+            } catch (Throwable $e) {
+                $data['registrationOpen'] = true;
+            }
+        }
+
         if ($page['view'] === 'pages.home') {
             try {
                 $data['totalIscritti'] = Ticket::whereNotNull('unique_ticket_code')->count();

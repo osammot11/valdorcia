@@ -26,9 +26,15 @@ Route::post('/ordine/{order}/biglietto/{ticket}/percorso', [\App\Http\Controller
 // Rotta per il download on-demand del singolo biglietto PDF (GET)
 Route::get('/ticket/{unique_code}/download', [CheckoutController::class, 'downloadTicket'])->name('ticket.download');
 
-Route::get('/iscrizione', function () {
+Route::get('/iscrizione', function (\Illuminate\Http\Request $request) {
+    // Percorso scelto dai pulsanti di home e Percorsi (?percorso=goloso), se valido
+    $selectedRoute = array_key_exists((string) $request->query('percorso'), config('event.routes'))
+        ? (string) $request->query('percorso')
+        : null;
+
     // Scaglione di prezzo valido oggi e posti rimasti (vedi App\Services\Registration)
     return view('welcome', [
+        'selectedRoute' => $selectedRoute,
         'publicTier' => Registration::publicTier(),
         'reservedTier' => Registration::reservedTier(),
         'nextTier' => Registration::nextPublicTier(),
@@ -44,6 +50,43 @@ Route::post('/iscrizione/codice', function (\Illuminate\Http\Request $request) {
 
     return response()->json(['valid' => $valid, 'required' => $reserved && ! Registration::publicTier()]);
 })->middleware('throttle:10,1')->name('iscrizione.codice');
+
+// Promemoria da salvare nel calendario per il giorno in cui riaprono le iscrizioni
+Route::get('/iscrizione/apertura.ics', function () {
+    // Solo a iscrizioni chiuse: con uno scaglione aperto il prossimo è un cambio di prezzo, non un'apertura
+    $tier = Registration::isOpen() ? null : Registration::nextPublicTier();
+    abort_unless($tier, 404);
+
+    $name = config('event.name') . ' ' . config('event.edition_year');
+    $escape = fn (string $text) => addcslashes($text, ',;\\');
+    $lines = [
+        'BEGIN:VCALENDAR',
+        'VERSION:2.0',
+        'PRODID:-//' . config('event.name') . '//Iscrizioni//IT',
+        'CALSCALE:GREGORIAN',
+        'METHOD:PUBLISH',
+        'BEGIN:VEVENT',
+        'UID:apertura-iscrizioni-' . $tier->starts_on->format('Ymd') . '@' . parse_url(url('/'), PHP_URL_HOST),
+        'DTSTAMP:' . now('UTC')->format('Ymd\THis\Z'),
+        'DTSTART;VALUE=DATE:' . $tier->starts_on->format('Ymd'),
+        'DTEND;VALUE=DATE:' . $tier->starts_on->copy()->addDay()->format('Ymd'),
+        'SUMMARY:' . $escape('Aprono le iscrizioni: ' . $name),
+        'DESCRIPTION:' . $escape('Iscrizioni online a ' . route('iscrizione')),
+        'URL:' . route('iscrizione'),
+        'BEGIN:VALARM',
+        'ACTION:DISPLAY',
+        'DESCRIPTION:' . $escape('Aprono le iscrizioni: ' . $name),
+        'TRIGGER:PT9H',
+        'END:VALARM',
+        'END:VEVENT',
+        'END:VCALENDAR',
+    ];
+
+    return response(implode("\r\n", $lines) . "\r\n", 200, [
+        'Content-Type' => 'text/calendar; charset=utf-8',
+        'Content-Disposition' => 'attachment; filename="apertura-iscrizioni.ics"',
+    ]);
+})->name('iscrizione.ics');
 
 Route::redirect('/ticketing', '/iscrizione', 301);
 Route::redirect('/ticketing/index.php', '/iscrizione', 301);

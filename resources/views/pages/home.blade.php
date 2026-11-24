@@ -127,7 +127,7 @@
                                 @endif
                                 <div class="route__bar" style="--len: {{ round($route['km'] / $maxKm, 3) }}" aria-hidden="true"></div>
                             </div>
-                            <a href="/iscrizione?percorso={{ urlencode($value) }}" class="btn btn-ghost">Iscriviti al {{ $route['short_name'] ?? $route['name'] }}</a>
+                            <a href="/iscrizione?percorso={{ urlencode($value) }}" class="btn btn-ghost">{{ $registrationOpen ? 'Iscriviti al' : 'Quote del' }} {{ $route['short_name'] ?? $route['name'] }}</a>
                         </article>
                     @endforeach
                 </div>
@@ -247,7 +247,7 @@
         <section class="final-cta">
             <span class="kicker">{{ config('event.location') }} · {{ config('event.date_label') }}</span>
             <h2>Ci vediamo<br>sullo sterrato.</h2>
-            <a href="/iscrizione" class="btn btn-light">Iscriviti ora</a>
+            <a href="/iscrizione" class="btn btn-light">{{ $registrationOpen ? 'Iscriviti ora' : 'Quote e apertura iscrizioni' }}</a>
 
             <svg viewBox="0 0 1440 140" preserveAspectRatio="none" aria-hidden="true">
                 <path d="M0 70 C200 30 380 40 560 72 S900 110 1080 70 S1330 40 1440 56 V140 H0Z" fill="#d6a95c" opacity=".55"/>

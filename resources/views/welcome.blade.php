@@ -5,6 +5,12 @@
     // Prezzi mostrati nel modulo: scaglione pubblico, oppure quello riservato se è l'unico aperto
     $displayTier = $publicTier ?? $reservedTier;
     $codeRequired = ! $publicTier && $reservedTier;
+    $shareTitle = 'Iscrizione ' . config('event.name') . ' ' . config('event.edition_year');
+    $shareDescription = $displayTier
+        ? 'Iscriviti alla ' . config('event.name') . ' ' . config('event.edition_year') . ', ' . config('event.date_label') . ' a ' . config('event.location') . '.'
+        : ($nextTier
+            ? 'Le iscrizioni online alla ' . config('event.name') . ' ' . config('event.edition_year') . ' aprono il ' . $nextTier->starts_on->translatedFormat('j F Y') . '. Tutte le quote dei percorsi.'
+            : 'Iscrizioni online chiuse. ' . config('event.name') . ', ' . config('event.date_label') . ' a ' . config('event.location') . '.');
 @endphp
 <!DOCTYPE html>
 <html lang="it">
@@ -12,13 +18,29 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Iscrizione | {{ config('event.name') }} {{ config('event.edition_year') }}</title>
+    <meta name="description" content="{{ $shareDescription }}">
+    <link rel="canonical" href="{{ route('iscrizione') }}">
+    <meta name="theme-color" content="#f3ecdf">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="{{ $shareTitle }}">
+    <meta property="og:description" content="{{ $shareDescription }}">
+    <meta property="og:url" content="{{ route('iscrizione') }}">
+    <meta property="og:locale" content="it_IT">
+    <meta property="og:image" content="{{ url('/images/og-image.png') }}">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="{{ config('event.name') }}, {{ config('event.date_label') }} a {{ config('event.location') }}">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content="{{ url('/images/og-image.png') }}">
+    <meta name="twitter:title" content="{{ $shareTitle }}">
+    <meta name="twitter:description" content="{{ $shareDescription }}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&display=swap" rel="stylesheet">
     <link rel="icon" type="image/png" href="/images/valdorcia-gravel/logo-valdorcia-gravel.png">
     <link rel="apple-touch-icon" href="/images/valdorcia-gravel/logo-valdorcia-gravel.png">
     <link rel="stylesheet" href="/css/controls.css?v=2">
-    <link rel="stylesheet" href="/css/checkout.css?v=8">
+    <link rel="stylesheet" href="/css/checkout.css?v=9">
 </head>
 <body class="center-items checkout-body">
 
@@ -27,21 +49,37 @@
         <div class="center-text stack-mid">
             <p class="checkout-kicker">{{ config('event.location') }} · {{ config('event.date_label') }}</p>
             <h1>Iscrizione {{ config('event.name') }} {{ config('event.edition_year') }}</h1>
-            <p class="checkout-intro">Scegli il percorso e inserisci i dati di ogni partecipante. Per ognuno servono tessera sportiva (o la tessera giornaliera) e certificato medico.</p>
+            @if ($displayTier)
+                <p class="checkout-intro">Scegli il percorso e inserisci i dati di ogni partecipante. Per ognuno servono tessera sportiva (o la tessera giornaliera) e certificato medico.</p>
+            @endif
         </div>
 
         @if (! $displayTier)
             {{-- Nessuno scaglione aperto oggi --}}
-            <div class="checkout-summary stack-mid center-text">
+            <div class="checkout-summary closed-box stack-mid">
                 @if ($nextTier)
-                    <h3 style="justify-content:center">Le iscrizioni online per la {{ config('event.name') }} {{ config('event.edition_year') }} riapriranno il {{ $nextTier->starts_on->translatedFormat('j F Y') }}!</h3>
-                    <p><strong>La {{ config('event.edition_number') }} edizione partirà da {{ config('event.location') }}!</strong></p>
-                    <p>La {{ config('event.name') }} fa parte del circuito <a class="hyperlink" href="https://gravelroadstuscany.it/" target="_blank" rel="noopener">Gravel Roads Tuscany</a> e del circuito MUT.</p>
+                    @php
+                        $opening = $nextTier->starts_on->translatedFormat('j F');
+                        $chosen = $selectedRoute ? $routes[$selectedRoute] : null;
+                        $chosenPrice = $selectedRoute ? $nextTier->priceFor($selectedRoute) : null;
+                    @endphp
+                    <h2 class="closed-title">Le iscrizioni online per la {{ config('event.name') }} {{ config('event.edition_year') }} riapriranno il {{ $nextTier->starts_on->translatedFormat('j F Y') }}!</h2>
+
+                    @if ($chosen)
+                        <p class="closed-route"><span>{{ $chosen['name'] }} · {{ $chosen['km'] }} km</span>@if ($chosenPrice !== null)<strong>{{ $euro($chosenPrice) }} dal {{ $opening }}</strong>@endif</p>
+                    @endif
+
+                    <p><strong>La {{ config('event.edition_number') }} edizione partirà da {{ config('event.location') }}!</strong> La {{ config('event.name') }} fa parte del circuito <a class="hyperlink" href="https://gravelroadstuscany.it/" target="_blank" rel="noopener">Gravel Roads Tuscany</a> e del circuito MUT.</p>
+
+                    <div class="closed-actions">
+                        <a class="btn" href="{{ route('iscrizione.ics') }}" download>Aggiungi al calendario</a>
+                        <a class="btn btn-ghost" href="/percorsi{{ $selectedRoute ? '#' . $selectedRoute : '' }}">Guarda i percorsi</a>
+                    </div>
                 @else
-                    <h3 style="justify-content:center">Iscrizioni online chiuse</h3>
+                    <h2 class="closed-title">Iscrizioni online chiuse</h2>
                     <p>Le iscrizioni online per questa edizione sono chiuse. Sabato {{ \Illuminate\Support\Str::after(config('event.saturday_label'), 'Sabato ') }} ci si può ancora iscrivere in loco a {{ $euro(config('event.onsite_price')) }}, solo per Frugale, Saporito e Goloso.</p>
                 @endif
-                <p><a href="/" class="hyperlink">Torna al sito</a></p>
+                <p class="closed-back"><a href="/" class="hyperlink">Torna al sito</a></p>
             </div>
 
             @if ($tiers->isNotEmpty())

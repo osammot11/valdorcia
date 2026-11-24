@@ -31,7 +31,7 @@
                                 <p class="route-page__text">Percorso in via di definizione.@isset($route['stages']) Nella quota sono compresi {{ $route['includes'] }}.@endisset</p>
 
                                 <div class="route-page__actions">
-                                    <a href="/iscrizione?percorso={{ urlencode($value) }}" class="btn">Iscriviti al {{ $route['short_name'] ?? $route['name'] }}</a>
+                                    <a href="/iscrizione?percorso={{ urlencode($value) }}" class="btn">{{ $registrationOpen ? 'Iscriviti al' : 'Quote del' }} {{ $route['short_name'] ?? $route['name'] }}</a>
                                 </div>
                             </div>
 
