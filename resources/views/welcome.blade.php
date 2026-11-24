@@ -40,7 +40,7 @@
     <link rel="icon" type="image/png" href="/images/valdorcia-gravel/logo-valdorcia-gravel.png">
     <link rel="apple-touch-icon" href="/images/valdorcia-gravel/logo-valdorcia-gravel.png">
     <link rel="stylesheet" href="/css/controls.css?v=2">
-    <link rel="stylesheet" href="/css/checkout.css?v=9">
+    <link rel="stylesheet" href="/css/checkout.css?v=10">
 </head>
 <body class="center-items checkout-body">
 
@@ -399,7 +399,7 @@
             const blocks = document.querySelectorAll('.ticket-block');
 
             blocks.forEach((block, index) => {
-                const h3 = block.querySelector('h3');
+                const h3 = block.querySelector('.participant-title');
 
                 if (index === 0) {
                     h3.innerHTML = "Partecipante #1";

@@ -35,15 +35,17 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="/style.css?v=116">
+    <link rel="stylesheet" href="/style.css?v=118">
     @stack('head')
 </head>
 
 <body class="{{ $bodyClass ?? '' }}">
+    <a class="skip-link" href="#contenuto">Salta al contenuto</a>
     <header class="site-header">
         @include('partials.navbar')
     </header>
 
+    <div id="contenuto" tabindex="-1"></div>
     @yield('content')
 
     @include('partials.footer')

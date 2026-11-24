@@ -30,13 +30,14 @@
 @endpush
 
 @section('content')
+    <main>
     <div class="hero">
         <div class="hero__text">
             <p class="hero__meta">
                 <span>{{ config('event.location') }}</span>
                 <span>{{ config('event.date_label') }}</span>
             </p>
-            <h1 class="hero__title">Val d'Orcia<span>Gravel</span></h1>
+            <h1 class="hero__title">Val d'Orcia <span>Gravel</span></h1>
             <p class="lead hero__copy">Pedala sulle strade bianche più belle del mondo, patrimonio UNESCO. La {{ config('event.edition_number') }} edizione parte da {{ config('event.location') }}, con {{ count($routes) }} percorsi tutti rinnovati.</p>
             <p class="hero__note">Iscrizioni online dal 10 dicembre 2026 a prezzo agevolato: 25 € (70 € per il Luculliano).</p>
             <div class="hero__actions">
@@ -57,7 +58,6 @@
         <div><strong>{{ config('event.date_label') }}</strong><span>{{ config('event.edition_number') }} edizione</span></div>
     </div>
 
-    <main>
         <section id="edizione-2026" class="thanks">
             <div class="inner">
                 <span class="kicker">Edizione 2026</span>
@@ -246,7 +246,7 @@
 
         <section class="final-cta">
             <span class="kicker">{{ config('event.location') }} · {{ config('event.date_label') }}</span>
-            <h2>Ci vediamo<br>sullo sterrato.</h2>
+            <h2>Ci vediamo <br>sullo sterrato.</h2>
             <a href="/iscrizione" class="btn btn-light">{{ $registrationOpen ? 'Iscriviti ora' : 'Quote e apertura iscrizioni' }}</a>
 
             <svg viewBox="0 0 1440 140" preserveAspectRatio="none" aria-hidden="true">

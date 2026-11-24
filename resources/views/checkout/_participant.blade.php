@@ -24,7 +24,7 @@
     $membership = $v('membership');
 @endphp
 <div class="ticket-block top-margin-large">
-    <h3>Partecipante #{{ $position }}</h3>
+    <h2 class="participant-title">Partecipante #{{ $position }}</h2>
 
     <p class="block-title">Percorso</p>
     <div class="label-box">

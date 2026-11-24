@@ -25,7 +25,7 @@
             <a href="/contatti">Contatti</a>
         </nav>
 
-        <nav aria-label="Note legali">
+        <nav aria-label="Contatti e note legali">
             <a href="mailto:{{ config('event.email') }}">{{ config('event.email') }}</a>
             <a href="tel:{{ str_replace(' ', '', config('event.phone')) }}">{{ config('event.phone') }}</a>
             @foreach (config('event.social') as $name => $url)

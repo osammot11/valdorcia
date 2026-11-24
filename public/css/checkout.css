@@ -27,7 +27,7 @@ body {
   line-height: 1.55;
 }
 
-h1, h3 {
+h1, h3, .participant-title {
   margin: 0;
   font-stretch: 72%;
   font-weight: 800;
@@ -35,7 +35,7 @@ h1, h3 {
   text-transform: uppercase;
 }
 h1 { font-size: clamp(38px, 6vw, 60px); }
-h3 { display: flex; justify-content: space-between; align-items: center; gap: 12px; font-size: 26px; }
+h3, .participant-title { display: flex; justify-content: space-between; align-items: center; gap: 12px; font-size: 26px; }
 p { margin: 0; }
 
 a { color: var(--clay); }
@@ -202,7 +202,7 @@ label:has(> input[type="checkbox"]) > input[type="checkbox"] { margin-top: 1px; 
   text-transform: uppercase;
   color: var(--clay);
 }
-.ticket-block h3 + .block-title { margin-top: 18px; }
+.ticket-block .participant-title + .block-title { margin-top: 18px; }
 .field-error { margin-top: 6px; font-size: 14px; font-weight: 600; color: var(--danger); }
 
 /* Campo con errore dopo l'invio */
@@ -224,6 +224,7 @@ label:has(> input[type="checkbox"]) > input[type="checkbox"] { margin-top: 1px; 
 .closed-route strong { color: var(--clay); }
 .closed-actions { display: flex; flex-wrap: wrap; gap: 12px; padding-top: 8px; }
 .closed-back { font-size: 15px; }
+.closed-back a { display: inline-flex; align-items: center; min-height: 44px; }
 .btn-ghost { background: transparent; color: var(--ink); box-shadow: inset 0 0 0 2px var(--ink); }
 .btn-ghost:hover { background: var(--ink); color: var(--paper); }
 @media (max-width: 560px) {
