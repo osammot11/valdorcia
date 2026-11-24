@@ -41,6 +41,25 @@ class SendTicketEmailTest extends TestCase
             && str_contains($r['htmlContent'], '/checkout/success/WFU_MAIL'));
     }
 
+    public function test_unconfirmed_logistics_are_not_printed_on_ticket_or_email(): void
+    {
+        config(['event.logistics_confirmed' => false]);
+        Http::fake(['api.brevo.com/*' => Http::response(['messageId' => '1'], 201)]);
+        $ticket = $this->ticket();
+
+        $pdf = view('pdf.ticket', ['ticket' => $ticket->load('order')])->render();
+        $this->assertStringNotContainsString('Pro Loco', $pdf);
+        $this->assertStringContainsString('Luogo e orari nel programma', $pdf);
+        $this->assertStringNotContainsString('dislivello', $pdf);
+
+        (new SendTicketEmail($ticket, 'frugale'))->handle(); // email di cambio percorso, che indica la partenza
+        Http::assertSent(fn (Request $r) => str_contains($r['htmlContent'], 'luogo e orari saranno nel programma')
+            && ! str_contains($r['htmlContent'], ' ore 8:00'));
+
+        config(['event.logistics_confirmed' => true]);
+        $this->assertStringContainsString('Pro Loco', view('pdf.ticket', ['ticket' => $ticket])->render());
+    }
+
     public function test_a_brevo_error_makes_the_job_fail_and_is_logged(): void
     {
         Http::fake(['api.brevo.com/*' => Http::response(['code' => 'unauthorized'], 401)]);

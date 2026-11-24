@@ -27,6 +27,11 @@ return [
     'online_closes_label' => '14 ottobre 2027', // nel 2026: tre giorni prima della domenica
     'online_closes_iso' => '2027-10-14',        // ultimo giorno per iscriversi online e cambiare percorso
 
+    // false finché l'organizzazione non conferma luogo di partenza, ritiro pacchi e orari 2027:
+    // biglietto PDF, email di conferma e modulo rimandano al programma invece di indicarli.
+    // Quando arrivano: aggiornare start_place, gli orari 'start' dei percorsi e mettere true.
+    'logistics_confirmed' => false,
+
     'location' => 'Montalcino',
     'start_place' => 'Montalcino',       // "La VI edizione partirà da Montalcino": luogo preciso in via di definizione
     'region' => 'Siena, Toscana',

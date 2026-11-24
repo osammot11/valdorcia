@@ -6,6 +6,7 @@
     $routeName = $route['name'] ?? $ticket->route_choice;
     $startDay = $isLuculliano ? config('event.saturday_label') : config('event.sunday_label');
     $startTime = $route ? ($isLuculliano ? '12:00' : $route['start']) : null;
+    $confirmed = config('event.logistics_confirmed');
     $membershipLabel = $ticket->day_card ? 'Giornaliera, inclusa' : trim(($ticket->membership ?? '—') . ' ' . ($ticket->membership_number ?? ''));
     $logo = public_path('images/valdorcia-gravel/logo-valdorcia-gravel.png');
     $euro = fn ($v) => number_format((float) $v, 2, ',', '.') . ' €';
@@ -107,7 +108,7 @@
                         <td style="vertical-align: bottom;">
                             <div class="route-name">{{ $routeName }}</div>
                             @if ($route)
-                                <div class="route-meta">{{ number_format($route['elevation'], 0, ',', '.') }} m di dislivello · {{ $route['level'] }}{{ $isLuculliano ? ' · non segnalato' : '' }}</div>
+                                <div class="route-meta">@if ($confirmed){{ number_format($route['elevation'], 0, ',', '.') }} m di dislivello · @endif{{ $route['level'] }}{{ $confirmed && $isLuculliano ? ' · non segnalato' : '' }}</div>
                                 <div class="bar"><div style="width: {{ round($route['km'] / 220 * 100) }}%;"></div></div>
                             @endif
                         </td>
@@ -117,18 +118,33 @@
 
             <table class="facts">
                 <tr>
-                    <td>
-                        <div class="label">Partenza</div>
-                        <div class="value">{{ $startDay }}@if ($startTime), ore {{ $startTime }}@endif</div>
-                    </td>
-                    <td>
-                        <div class="label">Luogo di partenza</div>
-                        <div class="value">{{ config('event.start_place') }}</div>
-                    </td>
-                    <td class="last">
-                        <div class="label">Ritiro pacco gara</div>
-                        <div class="value">Pro Loco, {{ config('event.location') }}</div>
-                    </td>
+                    @if ($confirmed)
+                        <td>
+                            <div class="label">Partenza</div>
+                            <div class="value">{{ $startDay }}@if ($startTime), ore {{ $startTime }}@endif</div>
+                        </td>
+                        <td>
+                            <div class="label">Luogo di partenza</div>
+                            <div class="value">{{ config('event.start_place') }}</div>
+                        </td>
+                        <td class="last">
+                            <div class="label">Ritiro pacco gara</div>
+                            <div class="value">Pro Loco, {{ config('event.location') }}</div>
+                        </td>
+                    @else
+                        <td>
+                            <div class="label">Quando</div>
+                            <div class="value">{{ config('event.date_label') }}</div>
+                        </td>
+                        <td>
+                            <div class="label">Dove</div>
+                            <div class="value">{{ config('event.location') }}</div>
+                        </td>
+                        <td class="last">
+                            <div class="label">Partenza e ritiro pacco</div>
+                            <div class="value">Luogo e orari nel programma su {{ preg_replace('#^https?://#', '', url('/programma')) }}</div>
+                        </td>
+                    @endif
                 </tr>
                 <tr class="end">
                     <td>

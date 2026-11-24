@@ -39,9 +39,11 @@ class SendTicketEmail implements ShouldQueue
         $lights = $this->ticket->route_choice === 'luculliano' ? ' e luci anteriori e posteriori' : '';
 
         $isLuculliano = $this->ticket->route_choice === 'luculliano';
-        $start = $route
+        $start = ! config('event.logistics_confirmed')
+            ? 'luogo e orari saranno nel programma, ' . e(url('/programma'))
+            : ($route
             ? e(($isLuculliano ? config('event.saturday_label') . ' ore 12:00' : config('event.sunday_label') . ' ore ' . $route['start']) . ', ' . config('event.start_place'))
-            : '';
+            : '');
         $button = "<p><a href='{$thankYouLink}' style='padding: 10px 20px; background-color: #a9501f; color: white; text-decoration: none; border-radius: 0; display: inline-block; margin-top: 10px;'>Scarica il biglietto</a></p>";
         $fallback = "<p>Se il pulsante non funziona, copia e incolla nel browser questo link:</p><p>{$thankYouLink}</p>";
 

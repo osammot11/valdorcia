@@ -50,7 +50,7 @@
                                     <span class="route-option__km">{{ $route['km'] }}<small>km</small></span>
                                     <span class="route-option__info">
                                         <strong>{{ $route['name'] }}</strong>
-                                        <small>{{ number_format($route['elevation'], 0, ',', '.') }} m di dislivello · partenza {{ $route['start'] }} · certificato {{ $route['certificate'] }}</small>
+                                        <small>{{ $route['level'] }} · certificato {{ $route['certificate'] }}</small>
                                         @if (! $option['available'])
                                             <em>{{ $reasons[$option['reason']] }}</em>
                                         @endif

@@ -34,7 +34,7 @@
             @foreach ($routes as $value => $route)
                 @php $price = $displayTier->priceFor($value); $full = $remaining[$value] < 1; @endphp
                 <option value="{{ $value }}" data-price="{{ $price }}" data-certificate="{{ $route['certificate'] }}" @disabled($full || $price === null) @selected($selectedRoute === $value && ! $full)>
-                    {{ $route['name'] }} — {{ $route['km'] }} km, {{ $route['elevation'] }} m D+ · {{ $full ? 'al completo' : ($price !== null ? $euro($price) : 'non disponibile') }}
+                    {{ $route['name'] }} — {{ $route['km'] }} km · {{ $full ? 'al completo' : ($price !== null ? $euro($price) : 'non disponibile') }}
                 </option>
             @endforeach
         </select>
