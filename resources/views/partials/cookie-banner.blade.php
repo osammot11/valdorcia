@@ -1,34 +1,31 @@
 @if (!request()->cookie('site_cookie_consent'))
-    <div id="cookieBanner" class="cookie-banner" aria-live="polite" aria-label="Banner consenso cookie">
+    {{-- Rifiuta e Accetta hanno lo stesso peso, come chiedono le linee guida del Garante --}}
+    <section id="cookieBanner" class="cookie-banner" aria-labelledby="cookieBannerTitle">
         <div class="cookie-banner__content">
             <div class="cookie-banner__text">
-                <h5>Questo sito usa i cookie</h5>
-                <p class="top-margin-mid">
-                    Utilizziamo cookie tecnici necessari al funzionamento del sito e, solo con il tuo consenso,
-                    eventuali cookie statistici o di marketing. Puoi accettare, rifiutare oppure personalizzare le preferenze.
-                    Leggi la nostra
-                    <a href="/cookie-policy" class="hyperlink">Cookie Policy</a>,
-                    <a href="/privacy-policy" class="hyperlink">Privacy Policy</a>
-                    e i
-                    <a href="/termini-condizioni" class="hyperlink">Termini e Condizioni</a>.
+                <p class="cookie-title" id="cookieBannerTitle">Questo sito usa i cookie</p>
+                <p class="cookie-banner__copy">
+                    Usiamo i cookie tecnici necessari al sito; gli altri solo con il tuo consenso. Dettagli nella
+                    <a href="/cookie-policy" class="hyperlink">Cookie Policy</a> e nella
+                    <a href="/privacy-policy" class="hyperlink">Privacy Policy</a>.
                 </p>
             </div>
 
             <div class="cookie-banner__actions">
-                <button type="button" class="btn cookie-btn" id="acceptAllCookies">Accetta</button>
-                <button type="button" class="cookie-btn-secondary" id="rejectAllCookies">Rifiuta</button>
-                <button type="button" class="cookie-btn-secondary" id="openCookieSettings">Personalizza</button>
+                <button type="button" class="cookie-choice" id="rejectAllCookies">Rifiuta</button>
+                <button type="button" class="cookie-choice" id="acceptAllCookies">Accetta</button>
+                <button type="button" class="cookie-link" id="openCookieSettings" aria-haspopup="dialog">Personalizza</button>
             </div>
         </div>
-    </div>
+    </section>
 
     <div id="cookieModal" class="cookie-modal" aria-hidden="true">
         <div class="cookie-modal__overlay" id="cookieModalOverlay"></div>
 
         <div class="cookie-modal__box" role="dialog" aria-modal="true" aria-labelledby="cookieModalTitle">
             <div class="cookie-modal__header">
-                <h4 id="cookieModalTitle">Preferenze cookie</h4>
-                <button type="button" class="cookie-modal__close" id="closeCookieSettings" aria-label="Chiudi">&times;</button>
+                <h2 class="cookie-title" id="cookieModalTitle">Preferenze cookie</h2>
+                <button type="button" class="cookie-modal__close" id="closeCookieSettings" aria-label="Chiudi le preferenze cookie"><span aria-hidden="true">&times;</span></button>
             </div>
 
             <div class="cookie-modal__body">
@@ -36,41 +33,41 @@
 
                 <div class="cookie-option top-margin-large">
                     <div>
-                        <h6>Cookie tecnici</h6>
+                        <p class="cookie-option__title">Cookie tecnici</p>
                         <p class="top-margin-small">Sempre attivi. Servono al funzionamento del sito.</p>
                     </div>
                     <label class="cookie-switch cookie-switch--disabled">
-                        <input type="checkbox" checked disabled>
+                        <input type="checkbox" checked disabled aria-label="Cookie tecnici, sempre attivi">
                         <span class="cookie-slider"></span>
                     </label>
                 </div>
 
                 <div class="cookie-option top-margin-large">
                     <div>
-                        <h6>Cookie statistici</h6>
+                        <p class="cookie-option__title">Cookie statistici</p>
                         <p class="top-margin-small">Ci aiutano a capire come viene usato il sito.</p>
                     </div>
                     <label class="cookie-switch">
-                        <input type="checkbox" id="analyticsCookies">
+                        <input type="checkbox" id="analyticsCookies" aria-label="Cookie statistici">
                         <span class="cookie-slider"></span>
                     </label>
                 </div>
 
                 <div class="cookie-option top-margin-large">
                     <div>
-                        <h6>Cookie marketing</h6>
+                        <p class="cookie-option__title">Cookie marketing</p>
                         <p class="top-margin-small">Utilizzati per tracciamento, advertising o remarketing.</p>
                     </div>
                     <label class="cookie-switch">
-                        <input type="checkbox" id="marketingCookies">
+                        <input type="checkbox" id="marketingCookies" aria-label="Cookie marketing">
                         <span class="cookie-slider"></span>
                     </label>
                 </div>
             </div>
 
             <div class="cookie-modal__footer">
-                <button type="button" class="cookie-btn-secondary" id="saveCustomCookies">Salva preferenze</button>
-                <button type="button" class="btn cookie-btn" id="acceptAllFromModal">Accetta tutto</button>
+                <button type="button" class="cookie-choice" id="saveCustomCookies">Salva preferenze</button>
+                <button type="button" class="cookie-choice" id="acceptAllFromModal">Accetta tutto</button>
             </div>
         </div>
     </div>
@@ -111,19 +108,46 @@
         hideBannerAndModal();
     }
 
+    let returnFocus = null;
+
     function openModal() {
         const modal = document.getElementById('cookieModal');
         if (!modal) return;
+        returnFocus = document.activeElement;
         modal.classList.add('is-active');
         modal.setAttribute('aria-hidden', 'false');
+        document.getElementById('closeCookieSettings').focus();
     }
 
     function closeModal() {
         const modal = document.getElementById('cookieModal');
-        if (!modal) return;
+        if (!modal || !modal.classList.contains('is-active')) return;
         modal.classList.remove('is-active');
         modal.setAttribute('aria-hidden', 'true');
+        if (returnFocus) returnFocus.focus();
     }
+
+    // Esc chiude le preferenze; Tab resta dentro la finestra finché è aperta
+    document.addEventListener('keydown', function (event) {
+        const modal = document.getElementById('cookieModal');
+        if (!modal || !modal.classList.contains('is-active')) return;
+        if (event.key === 'Escape') {
+            closeModal();
+            return;
+        }
+        if (event.key === 'Tab') {
+            const items = [...modal.querySelectorAll('button, input:not([disabled]), a[href]')];
+            const first = items[0];
+            const last = items[items.length - 1];
+            if (event.shiftKey && document.activeElement === first) {
+                event.preventDefault();
+                last.focus();
+            } else if (!event.shiftKey && document.activeElement === last) {
+                event.preventDefault();
+                first.focus();
+            }
+        }
+    });
 
     document.addEventListener('DOMContentLoaded', function () {
         const existingConsent = getCookie(consentCookieName);
