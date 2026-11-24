@@ -152,8 +152,8 @@
                     <span>Ci iscriviamo come associazione sportiva</span>
                 </label>
                 <div class="label-box" id="assoc_name_div" style="display:{{ old('is_sports_association') ? 'block' : 'none' }}">
-                    <label>Nome associazione</label>
-                    <input type="text" name="association_name" value="{{ old('association_name') }}">
+                    <label for="association_name">Nome associazione</label>
+                    <input type="text" id="association_name" name="association_name" value="{{ old('association_name') }}">
                 </div>
             </div>
 
@@ -167,8 +167,8 @@
 
             <div class="stack-mid">
               <div class="label-box top-margin-xl">
-                  <label>Metodo di pagamento</label>
-                  <select name="payment_method">
+                  <label for="payment_method">Metodo di pagamento</label>
+                  <select id="payment_method" name="payment_method">
                       <option value="stripe" @selected(old('payment_method') !== 'paypal')>Carta</option>
                       <option value="paypal" @selected(old('payment_method') === 'paypal')>PayPal</option>
                   </select>
@@ -363,6 +363,17 @@
             });
 
             clone.querySelectorAll('.field-error').forEach(el => { if (el.classList.contains('certificate-error')) { el.hidden = true; } else { el.remove(); } });
+
+            // Id del nuovo partecipante (t0-email -> t3-email) per etichette, suggerimenti ed errori
+            const prefix = id => id.replace(/^t\d+-/, 't' + participantCount + '-');
+            clone.querySelectorAll('[id]').forEach(el => { el.id = prefix(el.id); });
+            clone.querySelectorAll('label[for]').forEach(el => { el.htmlFor = prefix(el.htmlFor); });
+            clone.querySelectorAll('[aria-invalid]').forEach(el => el.removeAttribute('aria-invalid'));
+            clone.querySelectorAll('[aria-describedby]').forEach(el => {
+                // Gli errori del server sono stati tolti: restano solo suggerimento ed errore del certificato
+                const ids = el.getAttribute('aria-describedby').split(' ').map(prefix).filter(id => clone.querySelector('#' + CSS.escape(id)));
+                ids.length ? el.setAttribute('aria-describedby', ids.join(' ')) : el.removeAttribute('aria-describedby');
+            });
             clone.querySelectorAll('[data-selected]').forEach(el => { el.dataset.selected = ''; });
             clone.querySelector('.country-select').value = "Italia";
             clone.querySelector('.country-hidden').value = "Italia";
@@ -393,7 +404,7 @@
                 if (index === 0) {
                     h3.innerHTML = "Partecipante #1";
                 } else {
-                    h3.innerHTML = `Partecipante #${index + 1} <button class="remove-btn" type="button" onclick="removeParticipant(this)">Rimuovi</button>`;
+                    h3.innerHTML = `Partecipante #${index + 1} <button class="remove-btn" type="button" onclick="removeParticipant(this)" aria-label="Rimuovi il partecipante ${index + 1}">Rimuovi</button>`;
                 }
             });
         }
