@@ -5,6 +5,41 @@ use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 
+// Certificato medico mancante: un promemoria ogni 10 giorni dall'iscrizione, fino al giorno dell'evento.
+// Gira ogni giorno con lo scheduler (sul server: cron con php artisan schedule:run ogni minuto).
+Artisan::command('certificates:remind', function () {
+    $today = \App\Services\Registration::today();
+    if ($today->gt(\Illuminate\Support\Carbon::parse(config('event.date_iso'), 'Europe/Rome'))) {
+        $this->info("Evento passato: nessun promemoria.");
+
+        return self::SUCCESS;
+    }
+
+    $due = now()->subDays(10);
+    $tickets = \App\Models\Ticket::query()
+        ->where('status', 'active')
+        ->whereNotNull('unique_ticket_code')
+        ->whereNotNull('email')
+        ->where(fn ($q) => $q->whereNull('medical_certificate_path')->orWhere('medical_certificate_path', ''))
+        ->whereHas('order', fn ($q) => $q->where('status', 'paid'))
+        ->where(fn ($q) => $q
+            ->where(fn ($q) => $q->whereNull('certificate_reminded_at')->where('created_at', '<=', $due))
+            ->orWhere('certificate_reminded_at', '<=', $due))
+        ->get();
+
+    foreach ($tickets as $ticket) {
+        // Segnato subito, così un secondo giro nello stesso giorno non lo rimanda
+        $ticket->update(['certificate_reminded_at' => now()]);
+        \App\Jobs\SendCertificateReminder::dispatch($ticket);
+    }
+
+    $this->info($tickets->count() . ' promemoria per il certificato medico in coda.');
+
+    return self::SUCCESS;
+})->purpose('Manda il promemoria a chi non ha ancora caricato il certificato medico');
+
+\Illuminate\Support\Facades\Schedule::command('certificates:remind')->dailyAt('10:00')->timezone('Europe/Rome');
+
 Artisan::command('inspire', function () {
     $this->comment(Inspiring::quote());
 })->purpose('Display an inspiring quote');

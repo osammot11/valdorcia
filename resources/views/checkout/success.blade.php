@@ -54,9 +54,15 @@
                                 <h3>{{ $ticket->first_name }} {{ $ticket->last_name }}</h3>
                                 <p>{{ $route ? $route['name'] : $ticket->route_choice }} · {{ $ticket->day_card ? 'Tessera giornaliera' : ($ticket->membership ?? '') }}</p>
                                 <p class="ticket__code mono">{{ $ticket->unique_ticket_code }}</p>
+                                @if ($ticket->missingCertificate())
+                                    <p class="ticket__certificate ticket__certificate--missing">Certificato medico da caricare</p>
+                                @else
+                                    <p class="ticket__certificate">Certificato medico caricato</p>
+                                @endif
                             </div>
                             <div class="ticket__actions">
                                 <a href="{{ route('ticket.download', $ticket->unique_ticket_code) }}" class="btn">Scarica PDF</a>
+                                <a href="{{ route('certificate.show', [$order->group_code, $ticket->unique_ticket_code]) }}" class="hyperlink">{{ $ticket->missingCertificate() ? 'Carica il certificato' : 'Certificato medico' }}</a>
                                 <a href="{{ route('route-change.show', [$order->group_code, $ticket->unique_ticket_code]) }}" class="hyperlink">Cambia percorso</a>
                             </div>
                         </article>

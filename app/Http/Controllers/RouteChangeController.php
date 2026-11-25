@@ -42,13 +42,10 @@ class RouteChangeController extends Controller
 
         $validated = $request->validate([
             'route_choice' => ['required', Rule::in($allowed)],
-            'medical_certificate' => [
-                Rule::requiredIf(fn () => $options[$request->input('route_choice')]['needs_certificate'] ?? false),
-                'nullable', 'file', 'mimes:pdf,jpg,jpeg,png', 'max:5120',
-            ],
+            // Facoltativo: se manca, si carica dopo dal portale del certificato
+            'medical_certificate' => ['nullable', 'file', 'mimes:pdf,jpg,jpeg,png', 'max:5120'],
         ], [
             'route_choice.in' => 'Questo percorso non si può scegliere: forse nel frattempo è andato al completo.',
-            'medical_certificate.required' => 'Per questo percorso serve il certificato medico agonistico: caricalo qui.',
             'medical_certificate.mimes' => 'Il certificato medico deve essere un PDF o una foto (JPG, PNG).',
             'medical_certificate.max' => 'Il certificato medico non può superare i 5 MB.',
         ]);
@@ -57,7 +54,7 @@ class RouteChangeController extends Controller
         $target = $validated['route_choice'];
 
         try {
-            DB::transaction(function () use ($request, $order, $ticket, $target) {
+            DB::transaction(function () use ($request, $order, $ticket, $target, $options) {
                 // Il posto attuale si libera e se ne occupa uno sul nuovo percorso: il totale non cambia
                 if (Registration::remainingByRoute()[$target] < 1) {
                     throw new RuntimeException('Il percorso ' . config("event.routes.$target.name") . ' è al completo.');
@@ -66,6 +63,11 @@ class RouteChangeController extends Controller
                 $data = ['route_choice' => $target];
                 if ($request->hasFile('medical_certificate')) {
                     $data['medical_certificate_path'] = $request->file('medical_certificate')->store('certificates/' . $order->group_code, 'local');
+                    $data['certificate_reminded_at'] = null;
+                } elseif ($options[$target]['needs_certificate']) {
+                    // Il certificato non agonistico non vale più per il nuovo percorso: torna "da caricare"
+                    $data['medical_certificate_path'] = null;
+                    $data['certificate_reminded_at'] = null;
                 }
                 $ticket->update($data);
             });

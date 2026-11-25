@@ -8,8 +8,6 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Log;
 
 class SendTicketEmail implements ShouldQueue
 {
@@ -47,6 +45,14 @@ class SendTicketEmail implements ShouldQueue
         $button = "<p><a href='{$thankYouLink}' style='padding: 10px 20px; background-color: #a9501f; color: white; text-decoration: none; border-radius: 0; display: inline-block; margin-top: 10px;'>Scarica il biglietto</a></p>";
         $fallback = "<p>Se il pulsante non funziona, copia e incolla nel browser questo link:</p><p>{$thankYouLink}</p>";
 
+        // Certificato non ancora caricato: link al portale (poi arriva un promemoria ogni 10 giorni)
+        $certificateNote = '';
+        if ($this->ticket->missingCertificate() && $this->ticket->unique_ticket_code) {
+            $certificateUrl = e($this->ticket->certificateUrl());
+            $certificateType = ($route['certificate'] ?? 'agonistico') === 'agonistico' ? 'di idoneità agonistica per il ciclismo' : 'per attività sportiva non agonistica';
+            $certificateNote = "<p><strong>Manca il certificato medico</strong> {$certificateType}. Caricalo qui appena ce l'hai: <a href='{$certificateUrl}'>{$certificateUrl}</a>. Finché manca ti mandiamo un promemoria ogni 10 giorni.</p>";
+        }
+
         if ($this->previousRoute) {
             $previous = e(config("event.routes.{$this->previousRoute}.name", $this->previousRoute));
             $subject = 'Percorso modificato - ' . config('event.name');
@@ -68,39 +74,13 @@ class SendTicketEmail implements ShouldQueue
                 <p><strong>Percorso:</strong> {$routeLine}<br><strong>Quando e dove:</strong> {$when}</p>
                 <p>Puoi scaricare il tuo biglietto nominativo in PDF quando vuoi. Dalla stessa pagina puoi anche cambiare percorso fino al " . e(config('event.online_closes_label')) . ".</p>
                 {$button}
+                {$certificateNote}
                 <p>Ricorda casco omologato, kit per le forature, pompa e borraccia{$lights}. Il programma completo è su " . e(url('/programma')) . ".</p>
                 <p>A presto in Val d'Orcia!</p>
                 {$fallback}
             ";
         }
 
-        // Chiamata API diretta e leggerissima a Brevo
-        $response = Http::withHeaders([
-            "api-key" => config("services.brevo.key"),
-            "Content-Type" => "application/json",
-            "Accept" => "application/json",
-        ])->post("https://api.brevo.com/v3/smtp/email", [
-            "sender" => [
-                "name" => config("services.brevo.sender_name"),
-                "email" => config("services.brevo.sender_email"),
-            ],
-            "to" => [
-                [
-                    "email" => $this->ticket->email,
-                    "name" =>
-                        $this->ticket->first_name .
-                        " " .
-                        $this->ticket->last_name,
-                ],
-            ],
-            "subject" => $subject,
-            "htmlContent" => $htmlContent,
-        ]);
-
-        // Controllo errori
-        if ($response->failed()) {
-            Log::error("Errore invio Brevo: " . $response->body());
-            throw new \Exception("Chiamata API Brevo fallita.");
-        }
+        \App\Services\Brevo::send($this->ticket->email, $this->ticket->first_name . ' ' . $this->ticket->last_name, $subject, $htmlContent);
     }
 }

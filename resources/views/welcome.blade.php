@@ -175,7 +175,7 @@
               </div>
 
               <label>
-                  <input type="checkbox" name="truthful_declaration" value="1" required @checked(old('truthful_declaration'))><span>Dichiaro, ai sensi del D.P.R. 445/2000, che i documenti caricati sono veritieri e corrispondono agli originali in mio possesso.</span>
+                  <input type="checkbox" name="truthful_declaration" value="1" required @checked(old('truthful_declaration'))><span>Dichiaro, ai sensi del D.P.R. 445/2000, che i documenti che carico, ora o in seguito, sono veritieri e corrispondono agli originali in mio possesso.</span>
               </label>
 
               <label>
@@ -290,8 +290,8 @@
         const euro = new Intl.NumberFormat('it-IT', { style: 'currency', currency: 'EUR' });
         const dayCardPrice = {{ $dayCardPrice }};
         const certificateHints = {
-            'agonistico': 'Per questo percorso serve il certificato di idoneità agonistica per il ciclismo (per chi risiede all\'estero va bene quello rilasciato nel proprio paese). PDF o foto, massimo 5 MB.',
-            'non agonistico': 'Per questo percorso basta il certificato per attività sportiva non agonistica. PDF o foto, massimo 5 MB.'
+            'agonistico': 'Per questo percorso serve il certificato di idoneità agonistica per il ciclismo (per chi risiede all\'estero va bene quello rilasciato nel proprio paese). PDF o foto, massimo 5 MB. Se non l\'hai ancora, lo carichi dopo dal link che ricevi via email.',
+            'non agonistico': 'Per questo percorso basta il certificato per attività sportiva non agonistica. PDF o foto, massimo 5 MB. Se non l\'hai ancora, lo carichi dopo dal link che ricevi via email.'
         };
 
         // Il totale è la somma di percorsi ed eventuali tessere giornaliere (il server lo ricalcola comunque)
@@ -380,7 +380,7 @@
             toggleCountry(clone.querySelector('.country-select'));
             populateRegions(clone);
             updateBlock(clone);
-            clone.querySelector('.certificate-hint').textContent = 'PDF o foto, massimo 5 MB. Il tipo di certificato dipende dal percorso: scegli prima il percorso.';
+            clone.querySelector('.certificate-hint').textContent = "PDF o foto, massimo 5 MB. Il tipo di certificato dipende dal percorso: scegli prima il percorso. Se non l'hai ancora, iscriviti lo stesso: lo carichi dopo dal link che ricevi via email.";
 
             container.appendChild(clone);
 

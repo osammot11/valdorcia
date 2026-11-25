@@ -23,6 +23,12 @@ Route::post('/ordine/{order}/biglietto/{ticket}/percorso', [\App\Http\Controller
     ->middleware('throttle:10,1')
     ->name('route-change.update');
 
+// Portale del certificato medico: si carica anche dopo l'iscrizione (link da conferma ed email)
+Route::get('/ordine/{order}/biglietto/{ticket}/certificato', [\App\Http\Controllers\CertificateController::class, 'show'])->name('certificate.show');
+Route::post('/ordine/{order}/biglietto/{ticket}/certificato', [\App\Http\Controllers\CertificateController::class, 'update'])
+    ->middleware('throttle:10,1')
+    ->name('certificate.update');
+
 // Rotta per il download on-demand del singolo biglietto PDF (GET)
 Route::get('/ticket/{unique_code}/download', [CheckoutController::class, 'downloadTicket'])->name('ticket.download');
 

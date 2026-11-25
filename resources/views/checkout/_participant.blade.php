@@ -166,9 +166,9 @@
     </div>
 
     <div class="label-box top-margin-mid">
-        <label for="{{ $id('medical_certificate') }}">Certificato medico</label>
-        <input type="file" id="{{ $id('medical_certificate') }}" name="tickets[{{ $i }}][medical_certificate]"{{ $describe('medical_certificate', $id('certificate-hint') . ' ' . $id('certificate-error')) }} class="certificate-input" accept=".pdf,.jpg,.jpeg,.png,application/pdf,image/jpeg,image/png" required>
-        <p class="small-note certificate-hint" id="{{ $id('certificate-hint') }}">PDF o foto, massimo 5 MB. Il tipo di certificato dipende dal percorso: scegli prima il percorso.</p>
+        <label for="{{ $id('medical_certificate') }}">Certificato medico (puoi caricarlo anche dopo)</label>
+        <input type="file" id="{{ $id('medical_certificate') }}" name="tickets[{{ $i }}][medical_certificate]"{{ $describe('medical_certificate', $id('certificate-hint') . ' ' . $id('certificate-error')) }} class="certificate-input" accept=".pdf,.jpg,.jpeg,.png,application/pdf,image/jpeg,image/png">
+        <p class="small-note certificate-hint" id="{{ $id('certificate-hint') }}">PDF o foto, massimo 5 MB. Il tipo di certificato dipende dal percorso: scegli prima il percorso. Se non l'hai ancora, iscriviti lo stesso: lo carichi dopo dal link che ricevi via email.</p>
         {{ $fe('medical_certificate') }}
         <p class="field-error certificate-error" id="{{ $id('certificate-error') }}" role="alert" hidden></p>
     </div>

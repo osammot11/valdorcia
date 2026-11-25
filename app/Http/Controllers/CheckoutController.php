@@ -47,12 +47,12 @@ class CheckoutController extends Controller
             'tickets.*.phone' => 'required|string|max:20',
             'tickets.*.membership' => ['required', Rule::in(array_merge($memberships, ['giornaliera']))],
             'tickets.*.membership_number' => 'exclude_if:tickets.*.membership,giornaliera|required|string|max:50',
-            'tickets.*.medical_certificate' => 'required|file|mimes:pdf,jpg,jpeg,png|max:5120',
+            // Facoltativo: chi non lo carica ora lo fa dal portale del biglietto (promemoria ogni 10 giorni)
+            'tickets.*.medical_certificate' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:5120',
             'tickets.*.celiac' => 'required|boolean',
         ], [
             'truthful_declaration.accepted' => 'Devi dichiarare che i documenti caricati sono veritieri.',
             'tickets.*.membership_number.required' => 'Indica il numero di tessera, oppure scegli la tessera giornaliera.',
-            'tickets.*.medical_certificate.required' => 'Carica il certificato medico di ogni partecipante.',
             'tickets.*.medical_certificate.mimes' => 'Il certificato medico deve essere un PDF o una foto (JPG, PNG).',
             'tickets.*.medical_certificate.max' => 'Il certificato medico non può superare i 5 MB.',
         ]);
@@ -124,7 +124,7 @@ class CheckoutController extends Controller
 
                     $order->tickets()->create(array_merge($data, [
                         'unique_ticket_code' => null,
-                        'medical_certificate_path' => $certificate->store('certificates/' . $order->group_code, 'local'),
+                        'medical_certificate_path' => $certificate?->store('certificates/' . $order->group_code, 'local'),
                         'payment_tag' => ucfirst($validatedData['payment_method']),
                         'status' => 'pending',
                     ]));

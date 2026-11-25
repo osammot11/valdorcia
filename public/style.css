@@ -711,6 +711,10 @@ section { padding: clamp(64px, 9vw, 120px) var(--gutter); }
 .route-option__info em { font-style: normal; font-size: 13px; font-weight: 700; color: var(--clay); }
 .certificate-box { margin-top: 28px; padding: 20px; border: 1px dashed var(--ink); background: var(--surface); }
 .certificate-box p { margin: 6px 0 12px; color: var(--ink-soft); }
+.certificate-declaration { display: flex; gap: 12px; align-items: flex-start; margin-top: 20px; max-width: 720px; font-size: 16px; }
+.certificate-declaration input { margin-top: 4px; }
+.ticket__certificate { margin-top: 6px; font-size: 14px; font-weight: 700; }
+.ticket__certificate--missing { color: var(--clay-dark); }
 @media (max-width: 560px) {
   .route-option { grid-template-columns: 22px 1fr; }
   .route-option__km { display: none; }

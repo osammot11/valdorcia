@@ -61,7 +61,7 @@
 
                         <div class="certificate-box" id="certificate-box" @if (! collect($options)->contains('needs_certificate', true)) hidden @endif>
                             <label for="medical_certificate" class="kicker">Certificato medico agonistico</label>
-                            <p>Il percorso scelto richiede il certificato di idoneità agonistica per il ciclismo. PDF o foto, massimo 5 MB.</p>
+                            <p>Il percorso scelto richiede il certificato di idoneità agonistica per il ciclismo. PDF o foto, massimo 5 MB. Se non l'hai ancora puoi caricarlo dopo dalla pagina del certificato: ti ricordiamo via email ogni 10 giorni.</p>
                             <input type="file" id="medical_certificate" name="medical_certificate" accept=".pdf,.jpg,.jpeg,.png,application/pdf,image/jpeg,image/png">
                         </div>
 
@@ -89,7 +89,6 @@
                 const chosen = document.querySelector('input[name=route_choice]:checked');
                 const needed = chosen && chosen.dataset.needsCertificate === '1';
                 box.hidden = !needed;
-                input.required = needed;
             }
             document.querySelectorAll('input[name=route_choice]').forEach(r => r.addEventListener('change', sync));
             sync();
