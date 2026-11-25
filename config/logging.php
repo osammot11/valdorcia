@@ -71,6 +71,9 @@ return [
             'level' => env('LOG_LEVEL', 'debug'),
             'days' => env('LOG_DAILY_DAYS', 14),
             'replace_placeholders' => true,
+            // Il file lo crea chi scrive per primo (web server o worker della coda, utenti diversi
+            // nello stesso gruppo): con 0664 entrambi possono continuare a scriverci
+            'permission' => 0664,
         ],
 
         'slack' => [
