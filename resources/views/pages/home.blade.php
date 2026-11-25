@@ -29,18 +29,29 @@
     </script>
 @endpush
 
+@push('head')
+    {{-- Prima del rendering: se le animazioni sono ammesse, la home nasconde gli elementi che entrano con GSAP --}}
+    <script>
+        if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            document.documentElement.classList.add('motion');
+            // Se GSAP non arriva, si mostra tutto comunque
+            setTimeout(function () { if (!window.gsap) document.documentElement.classList.remove('motion'); }, 2500);
+        }
+    </script>
+@endpush
+
 @section('content')
     <main>
     <div class="hero">
         <div class="hero__text">
-            <p class="hero__meta">
+            <p class="hero__meta" data-enter>
                 <span>{{ config('event.location') }}</span>
                 <span>{{ config('event.date_label') }}</span>
             </p>
-            <h1 class="hero__title">Val d'Orcia <span>Gravel</span></h1>
-            <p class="lead hero__copy">Pedala sulle strade bianche più belle del mondo, patrimonio UNESCO. La {{ config('event.edition_number') }} edizione parte da {{ config('event.location') }}, con {{ count($routes) }} percorsi tutti rinnovati.</p>
-            <p class="hero__note">Iscrizioni online dal 10 dicembre 2026 a prezzo agevolato: 25 € (70 € per il Luculliano).</p>
-            <div class="hero__actions">
+            <h1 class="hero__title"><span class="hero__line" data-enter>Val d'Orcia</span> <span class="hero__line hero__line--accent" data-enter>Gravel</span></h1>
+            <p class="lead hero__copy" data-enter>Pedala sulle strade bianche più belle del mondo, patrimonio UNESCO. La {{ config('event.edition_number') }} edizione parte da {{ config('event.location') }}, con {{ count($routes) }} percorsi tutti rinnovati.</p>
+            <p class="hero__note" data-enter>Iscrizioni online dal 10 dicembre 2026 a prezzo agevolato: 25 € (70 € per il Luculliano).</p>
+            <div class="hero__actions" data-enter>
                 <a href="/iscrizione" class="btn">Iscrizioni e quote</a>
                 <a href="#edizione-2026" class="btn btn-ghost">Com'è andata nel 2026</a>
             </div>
@@ -62,7 +73,7 @@
             <div class="inner">
                 <span class="kicker">Edizione 2026</span>
                 <h2>Grazie a tutti i partecipanti.</h2>
-                <p class="lead">In 740 avete pedalato tra le strade bianche più belle del mondo!</p>
+                <p class="lead">In <span class="visually-hidden">740</span><span class="count" data-count="740" aria-hidden="true">740</span> avete pedalato tra le strade bianche più belle del mondo!</p>
 
                 <div class="photo-strip">
                     <img src="/images/home/crete-800.jpg" srcset="/images/home/crete-800.jpg 800w, /images/home/crete.jpg 1600w" sizes="(max-width: 768px) 100vw, 40vw" width="1600" height="1066" alt="Due ciclisti in salita su una strada bianca tra le crete" loading="lazy">
@@ -125,7 +136,7 @@
                                 @if ($route['limit'])
                                     <p class="route__stats">Max {{ $route['limit'] }} partecipanti</p>
                                 @endif
-                                <div class="route__bar" style="--len: {{ round($route['km'] / $maxKm, 3) }}" aria-hidden="true"></div>
+                                <div class="route__bar" style="--len: {{ round($route['km'] / $maxKm, 3) }}" data-len="{{ round($route['km'] / $maxKm, 3) }}" aria-hidden="true"></div>
                             </div>
                             <a href="/iscrizione?percorso={{ urlencode($value) }}" class="btn btn-ghost">{{ $registrationOpen ? 'Iscriviti al' : 'Quote del' }} {{ $route['short_name'] ?? $route['name'] }}</a>
                         </article>
@@ -259,4 +270,7 @@
 
 @push('scripts')
     <script src="/accordion.js"></script>
+    <script src="/js/vendor/gsap.min.js?v=3.12.5" defer></script>
+    <script src="/js/vendor/ScrollTrigger.min.js?v=3.12.5" defer></script>
+    <script src="/js/home-motion.js?v=3" defer></script>
 @endpush
